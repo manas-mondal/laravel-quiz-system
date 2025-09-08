@@ -25,5 +25,8 @@ RUN mkdir -p storage/framework storage/logs bootstrap/cache \
 
 EXPOSE 9000
 
+# Run as non-root user (fixes file permission issues)
+USER www-data
+
 # CMD
 CMD ["php-fpm"]
