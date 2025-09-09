@@ -36,4 +36,19 @@ class AdminController extends Controller
         }
        
     }
+    
+    public function categories(){
+        $admin=Session::get('admin');
+        if($admin){
+             return view('admin-categories',compact('admin'));
+           
+        }else{
+            return redirect('/admin-login');
+        }
+    }
+
+    public function logout(){
+        Session::forget('admin');
+        return redirect('/admin-login');
+    }
 }
