@@ -25,5 +25,11 @@ RUN mkdir -p storage/framework storage/logs bootstrap/cache \
 
 EXPOSE 9000
 
+# Match www-data UID/GID with host (avoid permission issues in bind mounts)
+RUN usermod -u 1000 www-data && groupmod -g 1000 www-data
+
+# Run as non-root user (fixes file permission issues)
+USER www-data
+
 # CMD
 CMD ["php-fpm"]
