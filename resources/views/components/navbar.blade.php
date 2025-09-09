@@ -1,4 +1,4 @@
-<nav class="p-4 bg-white shadow-xl flex justify-between items-center">
+<nav class="fixed top-0 left-0 right-0 z-5 p-4 bg-white shadow-md flex justify-between items-center">
     <div class="text-2xl font-bold cursor-pointer">
         Quize System
     </div>
