@@ -56,7 +56,7 @@ class AdminController extends Controller
 
     public function add_category(Request $r){
         $validation=$r->validate([
-            'category_name'=>'required|unique:categories,name'
+            'category_name'=>'required|min:3|unique:categories,name'
         ]);
         $admin=Session::get('admin');
         if(!$admin){
@@ -67,5 +67,19 @@ class AdminController extends Controller
         $category->creator=$admin->name;
         $category->save();
         return redirect('/admin-categories')->with('success', "Category " . $r->category_name . " added successfully");
+    }
+
+    public function delete_category($id){
+        $admin=Session::get('admin');
+        if(!$admin){
+            return redirect('/admin-login');
+        }
+        $category=Category::find($id);
+        if($category){
+            $category->delete();
+            return redirect('/admin-categories')->with('success', "Category " . $category->name . " deleted successfully");
+        }else{
+            return redirect('/admin-categories')->with('error', "Category not found");
+        }
     }
 }
