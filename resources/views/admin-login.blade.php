@@ -15,7 +15,7 @@
         @error('user')
             <div class="text-red-500">{{ $message }}</div>
         @enderror
-        <form action="/admin-login" method="POST" class="space-y-4">
+        <form action="{{ route('admin.login') }}" method="POST" class="space-y-4">
             @csrf
             <div>
                 <label class="text-gray-600 mb-1" for="admin_name">Admin name</label>
