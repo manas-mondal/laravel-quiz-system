@@ -39,9 +39,10 @@ class AdminController extends Controller
     }
     
     public function categories(){
+        $categories = Category::orderBy('created_at', 'desc')->get();
         $admin=Session::get('admin');
         if($admin){
-             return view('admin-categories',compact('admin'));
+             return view('admin-categories',compact('admin','categories'));
            
         }else{
             return redirect('/admin-login');

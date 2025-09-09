@@ -50,6 +50,45 @@
             </form>
         </div>
     </div>
+    <div class="max-w-2xl mx-auto mt-10">
+        <h1 class="text-xl font-bold mb-4">Category List</h1>
+        <table class="min-w-full bg-white rounded-xl shadow-md overflow-hidden">
+            <thead>
+                <tr class="bg-blue-100">
+                    <th class="px-4 py-2 border-b border-blue-100 text-left text-gray-700">SL.NO</th>
+                    <th class="px-4 py-2 border-b border-blue-100 text-left text-gray-700">Name</th>
+                    <th class="px-4 py-2 border-b border-blue-100 text-left text-gray-700">Creator</th>
+                    <th class="px-4 py-2 border-b border-blue-100 text-left text-gray-700">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($categories as $category)
+                    <tr class="{{ $loop->even ? 'bg-blue-50' : 'bg-white' }}">
+                        <td class="px-4 py-2 border-b border-blue-100 text-gray-600">{{ $category->id }}</td>
+                        <td class="px-4 py-2 border-b border-blue-100 text-gray-600">{{ $category->name }}</td>
+                        <td class="px-4 py-2 border-b border-blue-100 text-gray-600">{{ $category->creator }}</td>
+                        <td class="px-4 py-2 border-b border-blue-100">
+                            <form action="" method="POST"
+                                onsubmit="return confirm('Are you sure you want to delete this category?');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit"
+                                    class="bg-transparent border-none p-0 m-0 cursor-pointer inline-flex items-center justify-center text-gray-700 hover:text-red-500 transition-colors"
+                                    title="Delete">
+                                    <!-- Trash SVG icon, lighter weight -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M1 7h22M8 7V5a2 2 0 012-2h2a2 2 0 012 2v2" />
+                                    </svg>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
 </body>
 
 </html>
