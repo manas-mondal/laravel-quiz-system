@@ -111,9 +111,13 @@ class AdminController extends Controller
     {
         $admin = Session::get('admin');
         $categories = Category::orderBy('created_at', 'desc')->get();
-
+        $totalMcqs = 0;
         if ($admin) {
-            return view('add-quiz', compact('admin', 'categories'));
+            if(Session::has('quizDetails')){
+                $quizDetails=Session::get('quizDetails');
+                $totalMcqs=Mcq::where('quiz_id',$quizDetails->id)->count();
+            }
+            return view('add-quiz', compact('admin', 'categories', 'totalMcqs'));
         } else {
             return redirect()->route('admin.login');
         }
