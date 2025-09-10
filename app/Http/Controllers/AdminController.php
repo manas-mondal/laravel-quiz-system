@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Admin;
 use App\Models\Category;
+use App\Models\Mcq;
 use App\Models\Quiz;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
@@ -106,39 +107,86 @@ class AdminController extends Controller
     //         return redirect('/admin-login');
     //     }
     // }
-    public function show_add_quiz_form()
-{
-    $admin = Session::get('admin');
-    $categories = Category::orderBy('created_at', 'desc')->get();
+        public function show_add_quiz_form()
+    {
+        $admin = Session::get('admin');
+        $categories = Category::orderBy('created_at', 'desc')->get();
 
-    if ($admin) {
-        return view('add-quiz', compact('admin', 'categories'));
-    } else {
-        return redirect()->route('admin.login');
-    }
-}
-
-public function add_quiz(Request $r)
-{
-    $admin = Session::get('admin');
-    if ($admin) {
-        $validation = $r->validate([
-            'quiz_name'   => 'required|min:3|unique:quizzes,name',
-            'category_id' => 'required|exists:categories,id'
-        ]);
-        $quiz = new Quiz();
-        $quiz->name = $r->quiz_name;
-        $quiz->category_id = $r->category_id;
-
-        if ($quiz->save()) {
-            Session::put('quizDetails', $quiz);
-            return redirect()->route('admin.quiz.form')
-                             ->with('success', 'Quiz Added Successfully!');
+        if ($admin) {
+            return view('add-quiz', compact('admin', 'categories'));
+        } else {
+            return redirect()->route('admin.login');
         }
-
-    } else {
-        return redirect()->route('admin.login');
     }
-}
+
+    public function add_quiz(Request $r)
+    {
+        $admin = Session::get('admin');
+        if ($admin) {
+            $validation = $r->validate([
+                'quiz_name'   => 'required|min:3|unique:quizzes,name',
+                'category_id' => 'required|exists:categories,id'
+            ]);
+            $quiz = new Quiz();
+            $quiz->name = $r->quiz_name;
+            $quiz->category_id = $r->category_id;
+
+            if ($quiz->save()) {
+                Session::put('quizDetails', $quiz);
+                return redirect()->route('admin.quiz.form')
+                                ->with('success', 'Quiz Added Successfully!');
+            }
+
+        } else {
+            return redirect()->route('admin.login');
+        }
+    }
+    
+    public function add_mcqs(Request $r){
+        $admin=Session::get('admin');
+        if(!$admin){
+            return redirect()->route('admin.login');
+        }
+        $quizDetails=Session::get('quizDetails');
+        if(!$quizDetails){
+            return redirect()->route('admin.quiz.form')->with('error', 'Please add a quiz first.');
+        }
+        $validation=$r->validate([
+            'question'=>'required|min:5',
+            'option_a'=>'required|min:1',
+            'option_b'=>'required|min:1',
+            'option_c'=>'required|min:1',
+            'option_d'=>'required|min:1',
+            'correct_option'=>'required|in:option_a,option_b,option_c,option_d'
+        ]);
+        $mcq=new Mcq();
+        $mcq->question=$r->question;
+        $mcq->option_a=$r->option_a;
+        $mcq->option_b=$r->option_b;
+        $mcq->option_c=$r->option_c;
+        $mcq->option_d=$r->option_d;
+        $mcq->correct_option=$r->correct_option;
+        $mcq->admin_id=$admin->id;
+        $mcq->category_id=$quizDetails->category_id;
+        $mcq->quiz_id=$quizDetails->id;
+        if($mcq->save()){
+            if($r->submit=='add-more'){
+                return redirect()->back()->with('success', 'MCQ Added Successfully! Add more MCQs.');
+            }else{
+                Session::forget('quizDetails');
+                return redirect()->route('admin.quiz.form')->with('success', 'MCQ Added Successfully! Quiz creation completed.');
+            }
+        }
+    }
+
+    public function cancel_quiz(){
+        $admin=Session::get('admin');
+        if(!$admin){
+            return redirect()->route('admin.login');
+        }
+        Session::forget('quizDetails');
+        return redirect()->route('admin.quiz.form')->with('success', 'Quiz creation cancelled.');
+    }
+
 
 }

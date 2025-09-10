@@ -81,68 +81,76 @@
                 <div class="text-green-400 font-bold text-center">Quiz:
                     {{ Session::get('quizDetails')->name }}</div>
                 <h2 class="text-2xl text-center text-gray-800 mb-6">Add MCQs</h2>
-                <form action="" class="space-y-4">
+                <form action="{{ route('admin.mcqs.add') }}" method="POST" class="space-y-4">
+                    @csrf
                     <div>
                         <textarea
                             class="w-full px-4 py-2 border border-gray-300 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition"
-                            name="question_name" id="" cols="30" rows="3" placeholder="Enter question here"></textarea>
-                        @error('question_name')
+                            name="question" id="" cols="30" rows="3" placeholder="Enter question here"></textarea>
+                        @error('question')
                             <div class="text-red-500">{{ $message }}</div>
                         @enderror
                     </div>
                     <div>
                         <input
                             class="w-full px-4 py-2 border border-gray-300 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition"
-                            type="text" name="option1" placeholder="Enter option A">
-                        @error('option1')
+                            type="text" name="option_a" placeholder="Enter option A">
+                        @error('option_a')
                             <div class="text-red-500">{{ $message }}</div>
                         @enderror
                     </div>
                     <div>
                         <input
                             class="w-full px-4 py-2 border border-gray-300 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition"
-                            type="text" name="option2" placeholder="Enter option B">
-                        @error('option2')
+                            type="text" name="option_b" placeholder="Enter option B">
+                        @error('option_b')
                             <div class="text-red-500">{{ $message }}</div>
                         @enderror
                     </div>
                     <div>
                         <input
                             class="w-full px-4 py-2 border border-gray-300 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition"
-                            type="text" name="option3" placeholder="Enter option C">
-                        @error('option3')
+                            type="text" name="option_c" placeholder="Enter option C">
+                        @error('option_c')
                             <div class="text-red-500">{{ $message }}</div>
                         @enderror
                     </div>
                     <div>
                         <input
                             class="w-full px-4 py-2 border border-gray-300 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition"
-                            type="text" name="option4" placeholder="Enter option D">
-                        @error('option4')
+                            type="text" name="option_d" placeholder="Enter option D">
+                        @error('option_d')
                             <div class="text-red-500">{{ $message }}</div>
                         @enderror
                     </div>
                     <div>
                         <select
                             class="w-full px-4 py-2 border border-gray-300 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition"
-                            type="text" name="category_id">
+                            type="text" name="correct_option">
                             <option value="" disabled selected>Right answer</option>
-                            <option value="a">Option A</option>
-                            <option value="b">Option B</option>
-                            <option value="c">Option C</option>
-                            <option value="d">Option D</option>
+                            <option value="option_a">Option A</option>
+                            <option value="option_b">Option B</option>
+                            <option value="option_c">Option C</option>
+                            <option value="option_d">Option D</option>
                         </select>
-                        @error('category_id')
+                        @error('correct_option')
                             <div class="text-red-500">{{ $message }}</div>
                         @enderror
                     </div>
                     <div>
-                        <button class="w-full bg-blue-500 rounded-xl py-2 text-white hover:bg-blue-600">Add
+                        <button type="submit" name="submit" value="add-more"
+                            class="w-full bg-blue-500 rounded-xl py-2 text-white hover:bg-blue-600">Add
                             More</button>
                     </div>
                     <div>
-                        <button class="w-full bg-green-500 rounded-xl py-2 text-white hover:bg-green-600"
-                            type="submit">Add & Submit</button>
+                        <button type="submit" name="submit" value="done"
+                            class="w-full bg-green-500 rounded-xl py-2 text-white hover:bg-green-600">Add &
+                            Submit</button>
+                    </div>
+                    <div>
+                        <a href="{{ route('admin.quiz.cancel') }}"
+                            class="w-full block text-center bg-red-500 rounded-xl py-2 text-white hover:bg-red-600">Cancel
+                            Quiz</a>
                     </div>
                 </form>
             @endif
