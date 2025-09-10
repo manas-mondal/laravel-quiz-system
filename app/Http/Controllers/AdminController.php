@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Admin;
 use App\Models\Category;
+use App\Models\Quiz;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
@@ -33,7 +34,7 @@ class AdminController extends Controller
              return view('admin',compact('admin'));
            
         }else{
-            return redirect('/admin-login');
+            return redirect()->route('admin.login');
         }
        
     }
@@ -51,7 +52,7 @@ class AdminController extends Controller
 
     public function logout(){
         Session::forget('admin');
-        return redirect('/admin-login');
+        return redirect()->route('admin.login');
     }
 
     public function add_category(Request $r){
@@ -60,7 +61,7 @@ class AdminController extends Controller
         ]);
         $admin=Session::get('admin');
         if(!$admin){
-            return redirect('/admin-login');
+            return redirect()->route('admin.login');
         }
         $category=new Category();
         $category->name=$r->category_name;
@@ -72,7 +73,7 @@ class AdminController extends Controller
     public function delete_category($id){
         $admin=Session::get('admin');
         if(!$admin){
-            return redirect('/admin-login');
+            return redirect()->route('admin.login');
         }
         $category=Category::find($id);
         if($category){
@@ -82,4 +83,62 @@ class AdminController extends Controller
             return redirect('/admin-categories')->with('error', "Category not found");
         }
     }
+
+    // public function add_quiz(Request $r){
+    //     $admin=Session::get('admin');
+    //     $categories = Category::orderBy('created_at', 'desc')->get();
+    //     if($admin){
+    //         if($r->category_id && $r->quiz_name && !Session::has('quizDetails')){
+    //             $validation=$r->validate([
+    //                 'quiz_name'=>'required|min:3|unique:quizzes,name',
+    //                 'category_id'=>'required|exists:categories,id'
+    //             ]);
+    //             $quiz=new Quiz();
+    //             $quiz->name=$r->quiz_name;
+    //             $quiz->category_id=$r->category_id;
+    //             if($quiz->save()){
+    //                 Session::put('quizDetails',$quiz);
+    //                 return view('add-quiz');
+    //             }
+    //         }
+    //          return view('add-quiz',compact('admin','categories'));
+    //     }else{
+    //         return redirect('/admin-login');
+    //     }
+    // }
+    public function show_add_quiz_form()
+{
+    $admin = Session::get('admin');
+    $categories = Category::orderBy('created_at', 'desc')->get();
+
+    if ($admin) {
+        return view('add-quiz', compact('admin', 'categories'));
+    } else {
+        return redirect()->route('admin.login');
+    }
+}
+
+public function add_quiz(Request $r)
+{
+    $admin = Session::get('admin');
+    if ($admin) {
+        $validation = $r->validate([
+            'quiz_name'   => 'required|min:3|unique:quizzes,name',
+            'category_id' => 'required|exists:categories,id'
+        ]);
+        $quiz = new Quiz();
+        $quiz->name = $r->quiz_name;
+        $quiz->category_id = $r->category_id;
+
+        if ($quiz->save()) {
+            Session::put('quizDetails', $quiz);
+            return redirect()->route('admin.quiz.form')
+                             ->with('success', 'Quiz Added Successfully!');
+        }
+
+    } else {
+        return redirect()->route('admin.login');
+    }
+}
+
 }
