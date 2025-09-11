@@ -100,8 +100,8 @@
                                 </button>
                             </form>
                             <!-- View Button -->
-                            <a href="" class="text-gray-700 hover:text-blue-500 transition-colors"
-                                title="View">
+                            <a href="{{ route('admin.quiz.list', ['id' => $category->id, 'category' => $category->name]) }}"
+                                class="text-gray-700 hover:text-blue-500 transition-colors" title="View">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none"
                                     viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                                     <path stroke-linecap="round" stroke-linejoin="round"

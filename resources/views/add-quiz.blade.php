@@ -83,7 +83,7 @@
                 <div class="text-green-400 font-bold text-center">Total MCQs: {{ $totalMcqs }}
                     @if ($totalMcqs > 0)
                         <span class="text-blue-400 text-sm"><a
-                                href="{{ route('admin.quiz.show', ['id' => Session::get('quizDetails')->id]) }}">Show
+                                href="{{ route('admin.quiz.show', ['id' => Session::get('quizDetails')->id, 'quiz_name' => Session::get('quizDetails')->name]) }}">Show
                                 MCQs</a></span>
                     @endif
                 </div>
