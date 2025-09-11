@@ -19,3 +19,4 @@ Route::get('/add-quiz', [AdminController::class, 'show_add_quiz_form'])->name('a
 Route::post('/add-quiz', [AdminController::class, 'add_quiz'])->name('admin.quiz.add');
 Route::post('/add-mcqs', [AdminController::class, 'add_mcqs'])->name('admin.mcqs.add');
 Route::get('/cancel-quiz', [AdminController::class, 'cancel_quiz'])->name('admin.quiz.cancel');
+Route::get('/show-quiz/{id}', [AdminController::class, 'show_quiz'])->name('admin.quiz.show');

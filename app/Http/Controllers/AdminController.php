@@ -191,6 +191,13 @@ class AdminController extends Controller
         Session::forget('quizDetails');
         return redirect()->route('admin.quiz.form')->with('success', 'Quiz creation cancelled.');
     }
-
+    public function show_quiz($id){
+        $admin=Session::get('admin');
+        if(!$admin){
+            return redirect()->route('admin.login');
+        }
+        $mcqs=Mcq::where('quiz_id',$id)->get();
+        return view('show-quiz',compact('admin','mcqs'));
+    }
 
 }

@@ -82,7 +82,9 @@
                     {{ Session::get('quizDetails')->name }}</div>
                 <div class="text-green-400 font-bold text-center">Total MCQs: {{ $totalMcqs }}
                     @if ($totalMcqs > 0)
-                        <span class="text-blue-400"><a href="">Show MCQs</a></span>
+                        <span class="text-blue-400 text-sm"><a
+                                href="{{ route('admin.quiz.show', ['id' => Session::get('quizDetails')->id]) }}">Show
+                                MCQs</a></span>
                     @endif
                 </div>
                 <h2 class="text-2xl text-center text-gray-800 mb-6">Add MCQs</h2>
