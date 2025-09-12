@@ -39,12 +39,16 @@ jobs:
       - name: Run Migrations
         run: php artisan migrate --force
 
+      - name: Prepare storage folder
+        run: |
+          mkdir -p storage/framework/cache/data
+          mkdir -p storage/framework/sessions
+          mkdir -p storage/framework/views
+          mkdir -p storage/logs
+          chmod -R 777 storage
+
       - name: Run PHPUnit Tests
         run: ./vendor/bin/phpunit --colors=always
-
-      # Ensure log file exists before uploading artifact
-      - name: Ensure PHPUnit log file exists
-        run: mkdir -p storage/logs && touch storage/logs/laravel.log
 
       # Cache Composer dependencies
       - name: Cache Composer dependencies
@@ -61,4 +65,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: phpunit-logs
-          path: storage/logs/laravel.log
+          path: storage/logs/
