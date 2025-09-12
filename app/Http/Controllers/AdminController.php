@@ -111,9 +111,13 @@ class AdminController extends Controller
     {
         $admin = Session::get('admin');
         $categories = Category::orderBy('created_at', 'desc')->get();
-
+        $totalMcqs = 0;
         if ($admin) {
-            return view('add-quiz', compact('admin', 'categories'));
+            if(Session::has('quizDetails')){
+                $quizDetails=Session::get('quizDetails');
+                $totalMcqs=Mcq::where('quiz_id',$quizDetails->id)->count();
+            }
+            return view('add-quiz', compact('admin', 'categories', 'totalMcqs'));
         } else {
             return redirect()->route('admin.login');
         }
@@ -187,6 +191,22 @@ class AdminController extends Controller
         Session::forget('quizDetails');
         return redirect()->route('admin.quiz.form')->with('success', 'Quiz creation cancelled.');
     }
+    public function show_quiz($id,$quiz_name){
+        $admin=Session::get('admin');
+        if(!$admin){
+            return redirect()->route('admin.login');
+        }
+        $mcqs=Mcq::where('quiz_id',$id)->get();
+        return view('show-quiz',compact('admin','mcqs','quiz_name'));
+    }
 
+    public function quiz_list($id,$category){
+        $admin=Session::get('admin');
+        if(!$admin){
+            return redirect()->route('admin.login');
+        }
+        $quizzes=Quiz::where('category_id',$id)->get();
+        return view('quiz-list',compact('admin','quizzes','category'));
+    }
 
 }
