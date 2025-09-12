@@ -28,6 +28,7 @@ jobs:
 
       - name: Install Composer Dependencies
         run: composer install --no-interaction --prefer-dist
+
       - name: Setup SQLite Database
         run: |
           cp .env.example .env
@@ -39,10 +40,13 @@ jobs:
         run: php artisan migrate --force
 
       - name: Run PHPUnit Tests
-        run:
-          ./vendor/bin/phpunit --colors=always
+        run: ./vendor/bin/phpunit --colors=always
 
-          # Cache Composer
+      # Ensure log file exists before uploading artifact
+      - name: Ensure PHPUnit log file exists
+        run: mkdir -p storage/logs && touch storage/logs/laravel.log
+
+      # Cache Composer dependencies
       - name: Cache Composer dependencies
         uses: actions/cache@v3
         with:
