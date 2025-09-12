@@ -59,10 +59,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-composer-
 
-      # Save PHPUnit logs as artifact
+      # Save PHPUnit logs as artifact (latest v4)
       - name: Upload PHPUnit Logs
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: phpunit-logs
           path: storage/logs/
