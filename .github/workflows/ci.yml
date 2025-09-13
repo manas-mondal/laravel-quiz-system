@@ -26,6 +26,12 @@ jobs:
         with:
           node-version: 22
 
+      - name: Install Node Dependencies
+        run: npm install
+
+      - name: Build Assets
+        run: npm run build
+
       - name: Install Composer Dependencies
         run: composer install --no-interaction --prefer-dist
 
