@@ -3,7 +3,7 @@
         Quiz System
     </div>
     <div class="space-x-4">
-        <a class="text-green-900 font-medium hover:text-blue-500" href="{{ route('dashboard') }}">Home</a>
+        <a class="text-green-900 font-medium hover:text-blue-500" href="{{ route('welcome') }}">Home</a>
         <a class="text-green-900 font-medium hover:text-blue-500" href="{{ route('admin.categories') }}">Categories</a>
         <a class="text-green-900 font-medium hover:text-blue-500" href="">Login</a>
         <a class="text-green-900 font-medium hover:text-blue-500" href="{{ route('admin.logout') }}">Blog</a>
