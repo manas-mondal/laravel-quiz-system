@@ -32,22 +32,22 @@
             <table class="min-w-full bg-white rounded-xl shadow-md overflow-hidden">
                 <thead>
                     <tr class="bg-green-200">
-                        <th class="px-4 py-2 border-b border-green-100 text-left text-green-700">SL.NO</th>
-                        <th class="px-4 py-2 border-b border-green-100 text-left text-green-700">Name</th>
-                        <th class="px-4 py-2 border-b border-green-100 text-left text-green-700">Total Quiz</th>
-                        <th class="px-4 py-2 border-b border-green-100 text-left text-green-700">Action</th>
+                        <th class="px-4 py-2 border-green-100 text-left text-green-700">SL.NO</th>
+                        <th class="px-4 py-2 border-green-100 text-left text-green-700">Name</th>
+                        <th class="px-4 py-2 border-green-100 text-left text-green-700">Total Quiz</th>
+                        <th class="px-4 py-2 border-green-100 text-left text-green-700">Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($categories as $key => $category)
                         <tr class="{{ $loop->even ? 'bg-green-50' : 'bg-white' }}">
-                            <td class="px-4 py-2 border-b border-green-100 text-gray-600">{{ $key + 1 }}</td>
-                            <td class="px-4 py-2 border-b border-green-100 text-gray-600">{{ $category->name }}</td>
-                            <td class="px-4 py-2 border-b border-green-100 text-gray-600">{{ $category->quizzes_count }}
+                            <td class="px-4 py-2 border-green-100 text-gray-600">{{ $key + 1 }}</td>
+                            <td class="px-4 py-2 border-green-100 text-gray-600">{{ $category->name }}</td>
+                            <td class="px-4 py-2 border-green-100 text-gray-600">{{ $category->quizzes_count }}
                             </td>
-                            <td class="px-4 py-2 border-b border-green-100 flex space-x-2">
+                            <td class="px-4 py-2 border-green-100 flex space-x-2">
                                 <!-- View Button -->
-                                <a href="{{ route('admin.quiz.list', ['id' => $category->id, 'category' => $category->name]) }}"
+                                <a href="{{ route('user.quiz.list', ['id' => $category->id, 'category' => $category->name]) }}"
                                     class="text-green-700 hover:text-blue-500 transition-colors" title="View">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none"
                                         viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">

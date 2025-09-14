@@ -23,4 +23,5 @@ Route::get('/cancel-quiz', [AdminController::class, 'cancel_quiz'])->name('admin
 Route::get('/show-quiz/{id}/{quiz_name}', [AdminController::class, 'show_quiz'])->name('admin.quiz.show');
 Route::get('/quiz-list/{id}/{category}', [AdminController::class, 'quiz_list'])->name('admin.quiz.list');
 
-Route::get('/',[UserController::class,'welcome']);
+Route::get('/',[UserController::class,'welcome'])->name('welcome');
+Route::get('user-quiz-list/{id}/{category}',[UserController::class,'quiz_list'])->name('user.quiz.list');

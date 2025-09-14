@@ -11,4 +11,9 @@ class UserController extends Controller
         $categories=Category::withCount('quizzes')->get();
         return view('welcome',compact('categories'));
     }
+
+    public function quiz_list($id,$category){
+        $quizzes=Category::find($id)->quizzes;
+        return view('user-quiz-list',compact('id','category','quizzes'));
+    }
 }
