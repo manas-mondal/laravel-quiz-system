@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 class UserController extends Controller
 {
     public function welcome(){
-        $categories=Category::all();
+        $categories=Category::withCount('quizzes')->get();
         return view('welcome',compact('categories'));
     }
 }

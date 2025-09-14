@@ -34,6 +34,7 @@
                     <tr class="bg-green-200">
                         <th class="px-4 py-2 border-b border-green-100 text-left text-green-700">SL.NO</th>
                         <th class="px-4 py-2 border-b border-green-100 text-left text-green-700">Name</th>
+                        <th class="px-4 py-2 border-b border-green-100 text-left text-green-700">Total Quiz</th>
                         <th class="px-4 py-2 border-b border-green-100 text-left text-green-700">Action</th>
                     </tr>
                 </thead>
@@ -42,6 +43,8 @@
                         <tr class="{{ $loop->even ? 'bg-green-50' : 'bg-white' }}">
                             <td class="px-4 py-2 border-b border-green-100 text-gray-600">{{ $key + 1 }}</td>
                             <td class="px-4 py-2 border-b border-green-100 text-gray-600">{{ $category->name }}</td>
+                            <td class="px-4 py-2 border-b border-green-100 text-gray-600">{{ $category->quizzes_count }}
+                            </td>
                             <td class="px-4 py-2 border-b border-green-100 flex space-x-2">
                                 <!-- View Button -->
                                 <a href="{{ route('admin.quiz.list', ['id' => $category->id, 'category' => $category->name]) }}"

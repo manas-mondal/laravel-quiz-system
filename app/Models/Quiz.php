@@ -6,5 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Quiz extends Model
 {
-    //
+    protected $fillable = ['name','category_id'];
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
 }
