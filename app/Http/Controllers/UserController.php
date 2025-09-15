@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Quiz;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -25,5 +26,21 @@ class UserController extends Controller
     public function start_quiz($id,$quiz_name){
         $mcqCount=Quiz::find($id)->mcqs->count();
         return view('start-quiz',compact('id','quiz_name','mcqCount'));
+    }
+
+    public function signup(Request $request){
+        $request->validate([
+            'name'=>'required|string|max:255',
+            'email'=>'required|email',
+            'password'=>'required|min:6|confirmed',
+        ]);
+
+        $user=new User();
+        $user->name=$request->name;
+        $user->email=$request->email;
+        $user->password=bcrypt($request->password);
+        $user->save();
+
+        return redirect()->route('welcome')->with('success','User registered successfully. Please login to continue.');
     }
 }
