@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Admin Quiz</title>
+    <title>User Quiz</title>
     @vite('resources/css/app.css')
 </head>
 
@@ -22,6 +22,7 @@
                     <tr class="bg-green-200">
                         <th class="px-4 py-2 border-b border-green-100 text-left text-green-700">SL.No.</th>
                         <th class="px-4 py-2 border-b border-green-100 text-left text-green-700">Name</th>
+                        <th class="px-4 py-2 border-b border-green-100 text-left text-green-700">Total Mcq</th>
                         <th class="px-4 py-2 border-b border-green-100 text-left text-green-700">Attempt Quiz</th>
                     </tr>
                 </thead>
@@ -30,8 +31,9 @@
                         <tr class="{{ $loop->even ? 'bg-blue-50' : 'bg-white' }}">
                             <td class="px-4 py-2 border-blue-100 text-gray-600">{{ $key + 1 }}</td>
                             <td class="px-4 py-2 border-blue-100 text-gray-600">{{ $quiz->name }}</td>
+                            <td class="px-4 py-2 border-blue-100 text-gray-600">{{ $quiz->mcqs->count() }}</td>
                             <td class="px-4 py-2 border-blue-100">
-                                <a href=""
+                                <a href="{{ route('user.quiz.start', ['id' => $quiz->id, 'quiz_name' => $quiz->name]) }}"
                                     class="bg-green-500 text-sm text-white px-4 py-1.5 rounded-lg hover:bg-green-600 transition">Start
                                     Quiz</a>
                             </td>
