@@ -16,4 +16,8 @@ class UserController extends Controller
         $quizzes=Category::find($id)->quizzes;
         return view('user-quiz-list',compact('id','category','quizzes'));
     }
+
+    public function signup_form(){
+        return view('user-signup');
+    }
 }

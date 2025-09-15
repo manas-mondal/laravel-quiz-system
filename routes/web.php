@@ -25,3 +25,4 @@ Route::get('/quiz-list/{id}/{category}', [AdminController::class, 'quiz_list'])-
 
 Route::get('/',[UserController::class,'welcome'])->name('welcome');
 Route::get('user-quiz-list/{id}/{category}',[UserController::class,'quiz_list'])->name('user.quiz.list');
+Route::get('user-signup',[UserController::class,'signup_form'])->name('user.signup.form');
