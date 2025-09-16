@@ -31,16 +31,8 @@ class UserController extends Controller
     public function signup(Request $request){
         $request->validate([
             'name'=>'required|string|max:255',
-            'email'=>'required|email',
+            'email'=>'required|email|',
             'password'=>'required|min:6|confirmed',
         ]);
-
-        $user=new User();
-        $user->name=$request->name;
-        $user->email=$request->email;
-        $user->password=bcrypt($request->password);
-        $user->save();
-
-        return redirect()->route('welcome')->with('success','User registered successfully. Please login to continue.');
     }
 }
