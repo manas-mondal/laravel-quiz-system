@@ -24,8 +24,9 @@ Route::get('/show-quiz/{id}/{quiz_name}', [AdminController::class, 'show_quiz'])
 Route::get('/quiz-list/{id}/{category}', [AdminController::class, 'quiz_list'])->name('admin.quiz.list');
 
 Route::get('/',[UserController::class,'welcome'])->name('welcome');
-Route::get('user-quiz-list/{id}/{category}',[UserController::class,'quiz_list'])->name('user.quiz.list');
-Route::get('start-quiz/{id}/{quiz_name}',[UserController::class,'start_quiz'])->name('user.quiz.start');
-Route::get('user-signup',[UserController::class,'signup_form'])->name('user.signup.form');
-Route::post('user-signup',[UserController::class,'signup'])->name('user.signup');
-Route::get('user-logout',[UserController::class,'user_logout'])->name('user.logout');
+Route::get('/user-quiz-list/{id}/{category}',[UserController::class,'quiz_list'])->name('user.quiz.list');
+Route::get('/start-quiz/{id}/{quiz_name}',[UserController::class,'start_quiz'])->name('user.quiz.start');
+Route::get('/user-signup',[UserController::class,'signup_form'])->name('user.signup.form');
+Route::post('/user-signup',[UserController::class,'signup'])->name('user.signup');
+Route::get('/user-signup-quiz',[UserController::class,'signup_form_quiz'])->name('user.signup.quiz');
+Route::get('/user-logout',[UserController::class,'user_logout'])->name('user.logout');

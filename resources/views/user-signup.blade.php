@@ -17,7 +17,7 @@
             @error('user')
                 <div class="text-red-500">{{ $message }}</div>
             @enderror
-            <form action="" method="POST" class="space-y-4">
+            <form action="{{ route('user.signup') }}" method="POST" class="space-y-4">
                 @csrf
                 <div>
                     <label class="text-gray-600 mb-1" for="user_name">User Name</label>

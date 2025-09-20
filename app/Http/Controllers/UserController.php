@@ -62,8 +62,18 @@ class UserController extends Controller
 
             if($user){
                 Session::put('user',$user);
+                if(Session::has('quiz-url')){
+                    $url=Session::get('quiz-url');
+                    Session::forget('quiz-url');
+                    return redirect($url)->with('success','User registered successfully');
+                }
                 return redirect()->route('welcome')->with('success','User registered successfully');
             }
+    }
+
+    public function signup_form_quiz(){
+        Session::put('quiz-url',url()->previous());
+        return view('user-signup');
     }
 
     public function user_logout(){
