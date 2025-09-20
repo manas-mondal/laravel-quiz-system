@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\Quiz;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 
 class UserController extends Controller
@@ -79,5 +80,40 @@ class UserController extends Controller
     public function user_logout(){
         Session::forget('user');
         return redirect()->route('welcome')->with('success','User logged out successfully');
+    }
+
+    public function user_login_form(){
+        return view('user-login');
+    }
+
+    public function user_login(Request $request){
+        $request->validate([
+            'email'=>'required|email',
+            'password'=>'required|min:6',
+        ]);
+
+        $user=User::where('email',$request->email)->first();
+    
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            return back()
+                ->with('error', 'Invalid email or password')
+                ->withInput();
+        }
+
+        Session::put('user',$user);
+
+        if (Session::has('quiz-url')) {
+            $url = Session::pull('quiz-url'); // pull = get + forget
+            return redirect($url)->with('success', 'User logged in successfully');
+        }
+
+        return redirect()
+            ->route('welcome')
+            ->with('success', 'User logged in successfully');
+        }
+
+    public function user_login_form_quiz(){
+        Session::put('quiz-url',url()->previous());
+        return view('user-login');  
     }
 }
