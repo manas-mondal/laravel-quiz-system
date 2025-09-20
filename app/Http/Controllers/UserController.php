@@ -65,5 +65,9 @@ class UserController extends Controller
                 return redirect()->route('welcome')->with('success','User registered successfully');
             }
     }
-    
+
+    public function user_logout(){
+        Session::forget('user');
+        return redirect()->route('welcome')->with('success','User logged out successfully');
+    }
 }

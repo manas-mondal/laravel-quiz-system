@@ -28,3 +28,4 @@ Route::get('user-quiz-list/{id}/{category}',[UserController::class,'quiz_list'])
 Route::get('start-quiz/{id}/{quiz_name}',[UserController::class,'start_quiz'])->name('user.quiz.start');
 Route::get('user-signup',[UserController::class,'signup_form'])->name('user.signup.form');
 Route::post('user-signup',[UserController::class,'signup'])->name('user.signup');
+Route::get('user-logout',[UserController::class,'user_logout'])->name('user.logout');
