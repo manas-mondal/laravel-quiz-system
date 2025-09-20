@@ -27,10 +27,16 @@
                 <li>Good luck and do your best!</li>
             </ul>
             <div class="mt-6 text-center">
-                <a href="{{ route('user.signup.form') }}"
-                    class="bg-green-600 text-white px-6 py-2 rounded-full hover:bg-green-700 transition duration-300">Login/SignUp
-                    for Start
-                    Quiz</a>
+                @if (session()->has('user'))
+                    <a href=""
+                        class="bg-green-600 text-white px-6 py-2 rounded-full hover:bg-green-700 transition duration-300">Start
+                        Quiz</a>
+                @else
+                    <a href="{{ route('user.signup.form') }}"
+                        class="bg-green-600 text-white px-6 py-2 rounded-full hover:bg-green-700 transition duration-300">Login/SignUp
+                        for Start
+                        Quiz</a>
+                @endif
             </div>
         </div>
     </div>
