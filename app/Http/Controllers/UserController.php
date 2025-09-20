@@ -6,6 +6,8 @@ use App\Models\Category;
 use App\Models\Quiz;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
 
 class UserController extends Controller
 {
@@ -31,16 +33,87 @@ class UserController extends Controller
     public function signup(Request $request){
         $request->validate([
             'name'=>'required|string|max:255',
-            'email'=>'required|email',
+            'email'=>'required|email|unique:users,email',
             'password'=>'required|min:6|confirmed',
         ]);
 
-        $user=new User();
-        $user->name=$request->name;
-        $user->email=$request->email;
-        $user->password=bcrypt($request->password);
-        $user->save();
+        // $user=new User();
+        // $user->name=$request->name;
+        // $user->email=$request->email;
+        // $user->password=$request->password;  // Laravel auto hash for casted attributes in User model
+        // $user->save();
 
-        return redirect()->route('welcome')->with('success','User registered successfully. Please login to continue.');
+
+        // or use mass assignment
+    //     User::create([
+    //     'name' => $request->name,
+    //     'email' => $request->email,
+    //     'password' => $request->password, // Laravel auto hash for casted attributes in User model
+    // ]);
+
+
+        // or use fill method
+            // $user = new User();
+            // $user->fill($request->only('name','email','password')); 
+            // $user->save();
+
+
+        // or use mass assignment with validated data
+            $user=User::create($request->only('name','email','password'));
+
+            if($user){
+                Session::put('user',$user);
+                if(Session::has('quiz-url')){
+                    $url=Session::get('quiz-url');
+                    Session::forget('quiz-url');
+                    return redirect($url)->with('success','User registered successfully');
+                }
+                return redirect()->route('welcome')->with('success','User registered successfully');
+            }
+    }
+
+    public function signup_form_quiz(){
+        Session::put('quiz-url',url()->previous());
+        return view('user-signup');
+    }
+
+    public function user_logout(){
+        Session::forget('user');
+        return redirect()->route('welcome')->with('success','User logged out successfully');
+    }
+
+    public function user_login_form(){
+        return view('user-login');
+    }
+
+    public function user_login(Request $request){
+        $request->validate([
+            'email'=>'required|email',
+            'password'=>'required|min:6',
+        ]);
+
+        $user=User::where('email',$request->email)->first();
+    
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            return back()
+                ->with('error', 'Invalid email or password')
+                ->withInput();
+        }
+
+        Session::put('user',$user);
+
+        if (Session::has('quiz-url')) {
+            $url = Session::pull('quiz-url'); // pull = get + forget
+            return redirect($url)->with('success', 'User logged in successfully');
+        }
+
+        return redirect()
+            ->route('welcome')
+            ->with('success', 'User logged in successfully');
+        }
+
+    public function user_login_form_quiz(){
+        Session::put('quiz-url',url()->previous());
+        return view('user-login');  
     }
 }

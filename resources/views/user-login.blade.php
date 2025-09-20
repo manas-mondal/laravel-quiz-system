@@ -5,13 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Admin Quiz</title>
+    <title>User Login</title>
     @vite('resources/css/app.css')
 </head>
 
 <body>
     <x-user-nav />
-    <div class=" bg-green-100 flex flex-col items-center pt-24 pb-5">
+    <div class="bg-green-100 flex flex-col items-center justify-center min-h-screen pt-24 pb-10">
         @if (Session::has('success'))
             <div class="bg-green-200 border border-green-500 text-green-800 px-4 py-3 rounded relative max-w-md mx-auto mb-4"
                 role="alert">
@@ -28,7 +28,7 @@
                 </span>
             </div>
         @elseif (Session::has('error'))
-            <div class="bg-red-200 border border-red-400 text-red-700 px-4 py-3 rounded relative max-w-md mx-auto mb-2"
+            <div class="bg-red-200 border border-red-400 text-red-700 px-4 py-3 rounded relative max-w-md mx-auto mb-4"
                 role="alert">
                 <strong class="font-bold">Error!</strong>
                 <span class="block sm:inline pr-6">{{ Session::get('error') }}</span>
@@ -44,40 +44,36 @@
             </div>
         @endif
         <div class="bg-white p-8 rounded-2xl shadow-md w-full max-w-md">
-            <h2 class="text-2xl text-center font-bold text-green-800">{{ $quiz_name }} </h2>
-            <p class="text-center text-gray-600 mt-2">Get ready to test your knowledge!</p>
-        </div>
-        <div class="bg-white p-8 rounded-2xl shadow-md w-full max-w-md mt-6 mb-6">
-            <h3 class="text-lg font-semibold mb-4 text-green-700">Quiz Instructions:</h3>
-            <ul class="list-disc list-inside text-gray-700 space-y-2">
-                <li>Total Questions: {{ $mcqCount }}</li>
-                <li>Time Limit: No</li>
-                <li>Each question carries equal marks.</li>
-                <li>No negative marking for wrong answers.</li>
-                <li>Make sure to read each question carefully before answering.</li>
-                <li>Good luck and do your best!</li>
-            </ul>
-            <div class="mt-6 text-center">
-                @if (session()->has('user'))
-                    <a href=""
-                        class="bg-green-600 text-white px-6 py-2 rounded-full hover:bg-green-700 transition duration-300">Start
-                        Quiz</a>
-                @else
-                    <div>
-                        <a href="{{ route('user.signup.quiz') }}"
-                            class="bg-green-600 text-white px-6 py-2 rounded-full hover:bg-green-700 transition duration-300">SignUp
-                            for Start
-                            Quiz</a>
-                    </div>
-
-                    <div class="mt-6">
-                        <a href="{{ route('user.login.form.quiz') }}"
-                            class="bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700 transition duration-300">Login
-                            for Start
-                            Quiz</a>
-                    </div>
-                @endif
-            </div>
+            <h2 class="text-2xl text-center font-medium text-green-800 mb-6">User Login</h2>
+            @error('user')
+                <div class="text-red-500">{{ $message }}</div>
+            @enderror
+            <form action="{{ route('user.login') }}" method="POST" class="space-y-4">
+                @csrf
+                <div>
+                    <label class="text-gray-600 mb-1" for="user_email">User Email</label>
+                    <input
+                        class="w-full px-4 py-2 border border-green-300 rounded-xl focus:border-green-500 focus:ring-2 focus:ring-green-200 outline-none transition"
+                        type="text" name="email" placeholder="Enter User email" id="user_email"
+                        value="{{ old('email') }}">
+                    @error('email')
+                        <div class="text-red-500">{{ $message }}</div>
+                    @enderror
+                </div>
+                <div>
+                    <label class="text-gray-600 mb-1" for="user_password">Password</label>
+                    <input
+                        class="w-full px-4 py-2 border border-green-300 rounded-xl focus:border-green-500 focus:ring-2 focus:ring-green-200 outline-none transition"
+                        type="password" name="password" placeholder="Enter User password" id="user_password">
+                    @error('password')
+                        <div class="text-red-500">{{ $message }}</div>
+                    @enderror
+                </div>
+                <div>
+                    <button class="w-full bg-green-500 rounded-xl py-2 text-white hover:bg-green-600"
+                        type="submit">Login</button>
+                </div>
+            </form>
         </div>
     </div>
     <x-footer-user />
