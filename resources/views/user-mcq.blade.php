@@ -45,32 +45,35 @@
         @endif
         <div class="bg-white p-8 rounded-2xl shadow-md w-full max-w-md">
             <h2 class="text-2xl text-center font-bold text-green-800">{{ $quiz_name }}</h2>
-            <h3 class="text-xl text-center font-bold text-green-800">Question No. 3</h3>
+            <h3 class="text-xl text-center font-bold text-green-800">Total Question.
+                {{ Session::get('current_quiz')['total_mcqs'] }}</h3>
         </div>
         <div class="bg-white p-8 rounded-2xl shadow-md w-full max-w-2xl mt-6 mb-6">
-            <h3 class="text-lg font-semibold mb-4 text-green-700">Q>1. What is the capital of France?</h3>
-            <form action="" method="POST">
+            <h3 class="text-lg font-semibold mb-4 text-green-700">Q.{{ Session::get('current_quiz')['current_mcq'] }})
+                {{ $mcq->question }}</h3>
+            <form action="{{ route('user.quiz.submit.next') }}" method="POST">
                 @csrf
+                <input type="hidden" name="mcq_id" value="{{ $mcq->id }}">
                 <div class="space-y-4">
                     <label for="option1"
                         class="flex items-center border border-green-300 p-3 rounded-lg bg-gray-100 cursor-pointer hover:bg-gray-200 hover:shadow-md transition duration-300 hover:border-green-400 hover:scale-105">
-                        <input type="radio" id="option1" name="answer" value="Berlin" class="mr-2">
-                        <span class="text-gray-700">Berlin</span>
+                        <input type="radio" id="option1" name="option" class="mr-2">
+                        <span class="text-gray-700">{{ $mcq->option_a }}</span>
                     </label>
                     <label for="option2"
                         class="flex items-center border border-green-300 p-3 rounded-lg bg-gray-100 cursor-pointer hover:bg-gray-200 hover:shadow-md transition duration-300 hover:border-green-400 hover:scale-105">
-                        <input type="radio" id="option2" name="answer" value="Madrid" class="mr-2">
-                        <span class="text-gray-700">Madrid</span>
+                        <input type="radio" id="option2" name="option" class="mr-2">
+                        <span class="text-gray-700">{{ $mcq->option_b }}</span>
                     </label>
                     <label for="option3"
                         class="flex items-center border border-green-300 p-3 rounded-lg bg-gray-100 cursor-pointer hover:bg-gray-200 hover:shadow-md transition duration-300 hover:border-green-400 hover:scale-105">
-                        <input type="radio" id="option3" name="answer" value="Paris" class="mr-2">
-                        <span class="text-gray-700">Paris</span>
+                        <input type="radio" id="option3" name="option" class="mr-2">
+                        <span class="text-gray-700">{{ $mcq->option_c }}</span>
                     </label>
                     <label for="option4"
                         class="flex items-center border border-green-300 p-3 rounded-lg bg-gray-100 cursor-pointer hover:bg-gray-200 hover:shadow-md transition duration-300 hover:border-green-400 hover:scale-105">
-                        <input type="radio" id="option4" name="answer" value="Rome" class="mr-2">
-                        <span class="text-gray-700">Rome</span>
+                        <input type="radio" id="option4" name="option" class="mr-2">
+                        <span class="text-gray-700">{{ $mcq->option_d }}</span>
                     </label>
                 </div>
                 <div class="mt-6 text-center">

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Mcq;
 use App\Models\Quiz;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -26,11 +27,11 @@ class UserController extends Controller
     }
 
     public function start_quiz($id,$quiz_name){
-        $mcqs=Quiz::withCount('mcqs')->with('mcqs')->findOrFail($id);
-        if($mcqs->mcqs_count<1){
+        $mcqs=Mcq::where('quiz_id',$id)->get();
+        if($mcqs->count()<1){
             return back()->with('error','No MCQs found for this quiz. Please contact admin.');
         }
-        Session::put('first_mcq_id',$mcqs->first()->id);
+        Session::put('first_mcq',$mcqs->first());
         return view('start-quiz',compact('quiz_name','mcqs'));
     }
 
@@ -122,7 +123,23 @@ class UserController extends Controller
     }
 
     public function mcq($id,$quiz_name){
-        $mcq=Quiz::with('mcqs')->findOrFail($id);
+        $firstMcq=Session('first_mcq');
+        $quizId=$firstMcq->quiz_id;
+        if(!$quizId){
+            return back()->with('error','Quiz session expired. Please restart.');
+        }
+        $total_mcqs=Mcq::where('quiz_id',$quizId)->count();
+        Session::put('current_quiz',[
+            'total_mcqs'=>$total_mcqs,
+            'current_mcq'=>1,
+            'quiz_name'=>$quiz_name,
+            'quiz_id'=>$quizId
+        ]);
+        $mcq=Mcq::findOrFail($id);
         return view('user-mcq',compact('mcq','quiz_name'));
+    }
+
+    public function quiz_submit_next(Request $request){
+        return $request->all();
     }
 }
