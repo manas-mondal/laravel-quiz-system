@@ -26,8 +26,12 @@ class UserController extends Controller
     }
 
     public function start_quiz($id,$quiz_name){
-        $mcqCount=Quiz::find($id)->mcqs->count();
-        return view('start-quiz',compact('id','quiz_name','mcqCount'));
+        $mcqs=Quiz::withCount('mcqs')->with('mcqs')->findOrFail($id);
+        if($mcqs->mcqs_count<1){
+            return back()->with('error','No MCQs found for this quiz. Please contact admin.');
+        }
+        Session::put('first_mcq_id',$mcqs->first()->id);
+        return view('start-quiz',compact('quiz_name','mcqs'));
     }
 
     public function signup(Request $request){
@@ -115,5 +119,10 @@ class UserController extends Controller
     public function user_login_form_quiz(){
         Session::put('quiz-url',url()->previous());
         return view('user-login');  
+    }
+
+    public function mcq($id,$quiz_name){
+        $mcq=Quiz::with('mcqs')->findOrFail($id);
+        return view('user-mcq',compact('mcq','quiz_name'));
     }
 }

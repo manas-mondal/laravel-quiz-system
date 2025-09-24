@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Start Quiz</title>
+    <title>MCQ</title>
     @vite('resources/css/app.css')
 </head>
 
@@ -44,40 +44,41 @@
             </div>
         @endif
         <div class="bg-white p-8 rounded-2xl shadow-md w-full max-w-md">
-            <h2 class="text-2xl text-center font-bold text-green-800">{{ $quiz_name }} </h2>
-            <p class="text-center text-gray-600 mt-2">Get ready to test your knowledge!</p>
+            <h2 class="text-2xl text-center font-bold text-green-800">{{ $quiz_name }}</h2>
+            <h3 class="text-xl text-center font-bold text-green-800">Question No. 3</h3>
         </div>
-        <div class="bg-white p-8 rounded-2xl shadow-md w-full max-w-md mt-6 mb-6">
-            <h3 class="text-lg font-semibold mb-4 text-green-700">Quiz Instructions:</h3>
-            <ul class="list-disc list-inside text-gray-700 space-y-2">
-                <li>Total Questions: {{ $mcqs->mcqs_count }}</li>
-                <li>Time Limit: No</li>
-                <li>Each question carries equal marks.</li>
-                <li>No negative marking for wrong answers.</li>
-                <li>Make sure to read each question carefully before answering.</li>
-                <li>Good luck and do your best!</li>
-            </ul>
-            <div class="mt-6 text-center">
-                @if (session()->has('user'))
-                    <a href="{{ route('user.mcq', ['id' => Session('first_mcq_id'), $quiz_name]) }}"
-                        class="bg-green-600 text-white px-6 py-2 rounded-full hover:bg-green-700 transition duration-300">Start
-                        Quiz</a>
-                @else
-                    <div>
-                        <a href="{{ route('user.signup.quiz') }}"
-                            class="bg-green-600 text-white px-6 py-2 rounded-full hover:bg-green-700 transition duration-300">SignUp
-                            for Start
-                            Quiz</a>
-                    </div>
-
-                    <div class="mt-6">
-                        <a href="{{ route('user.login.form.quiz') }}"
-                            class="bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700 transition duration-300">Login
-                            for Start
-                            Quiz</a>
-                    </div>
-                @endif
-            </div>
+        <div class="bg-white p-8 rounded-2xl shadow-md w-full max-w-2xl mt-6 mb-6">
+            <h3 class="text-lg font-semibold mb-4 text-green-700">Q>1. What is the capital of France?</h3>
+            <form action="" method="POST">
+                @csrf
+                <div class="space-y-4">
+                    <label for="option1"
+                        class="flex items-center border border-green-300 p-3 rounded-lg bg-gray-100 cursor-pointer hover:bg-gray-200 hover:shadow-md transition duration-300 hover:border-green-400 hover:scale-105">
+                        <input type="radio" id="option1" name="answer" value="Berlin" class="mr-2">
+                        <span class="text-gray-700">Berlin</span>
+                    </label>
+                    <label for="option2"
+                        class="flex items-center border border-green-300 p-3 rounded-lg bg-gray-100 cursor-pointer hover:bg-gray-200 hover:shadow-md transition duration-300 hover:border-green-400 hover:scale-105">
+                        <input type="radio" id="option2" name="answer" value="Madrid" class="mr-2">
+                        <span class="text-gray-700">Madrid</span>
+                    </label>
+                    <label for="option3"
+                        class="flex items-center border border-green-300 p-3 rounded-lg bg-gray-100 cursor-pointer hover:bg-gray-200 hover:shadow-md transition duration-300 hover:border-green-400 hover:scale-105">
+                        <input type="radio" id="option3" name="answer" value="Paris" class="mr-2">
+                        <span class="text-gray-700">Paris</span>
+                    </label>
+                    <label for="option4"
+                        class="flex items-center border border-green-300 p-3 rounded-lg bg-gray-100 cursor-pointer hover:bg-gray-200 hover:shadow-md transition duration-300 hover:border-green-400 hover:scale-105">
+                        <input type="radio" id="option4" name="answer" value="Rome" class="mr-2">
+                        <span class="text-gray-700">Rome</span>
+                    </label>
+                </div>
+                <div class="mt-6 text-center">
+                    <button type="submit"
+                        class="bg-green-600 text-white px-6 py-2 rounded-full hover:bg-green-700 transition duration-300">Submit
+                        Answer</button>
+                </div>
+            </form>
         </div>
     </div>
     <x-footer-user />
