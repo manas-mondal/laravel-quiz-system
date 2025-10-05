@@ -124,22 +124,56 @@ class UserController extends Controller
 
     public function mcq($id,$quiz_name){
         $firstMcq=Session('first_mcq');
-        $quizId=$firstMcq->quiz_id;
-        if(!$quizId){
+        if(!$firstMcq){
             return back()->with('error','Quiz session expired. Please restart.');
         }
-        $total_mcqs=Mcq::where('quiz_id',$quizId)->count();
-        Session::put('current_quiz',[
+        $quizId=$firstMcq->quiz_id;
+        $current_quiz=Session::get('current_quiz');
+        if(!$current_quiz){
+           $total_mcqs=Mcq::where('quiz_id',$quizId)->count();
+           Session::put('current_quiz',[
             'total_mcqs'=>$total_mcqs,
             'current_mcq'=>1,
             'quiz_name'=>$quiz_name,
             'quiz_id'=>$quizId
-        ]);
+           ]);
+        }
+        
         $mcq=Mcq::findOrFail($id);
         return view('user-mcq',compact('mcq','quiz_name'));
     }
 
     public function quiz_submit_next(Request $request){
-        return $request->all();
+        $request->validate([
+            'option'=>'required|string',
+        ]);
+
+        $current_quiz=Session::get('current_quiz');
+        $quiz_id=$current_quiz['quiz_id'];
+        $current_mcq_number=$current_quiz['current_mcq'];
+        $total_mcqs=$current_quiz['total_mcqs'];
+        $quiz_name=$current_quiz['quiz_name'];
+
+        $mcq=Mcq::find($request->mcq_id);
+        if(!$mcq){
+            return back()->with('error','MCQ not found. Please try again.');
+        }
+
+        // // Here you can store the user's answer in the database if needed
+        // // For example, you might want to create a UserAnswer model and save the answer
+
+        if($current_mcq_number >= $total_mcqs){
+            Session::forget('current_quiz');
+            Session::forget('first_mcq');
+            return redirect()->route('welcome')->with('success','Quiz completed. Thank you for participating!');
+        }else{
+            $next_mcq_number=$current_mcq_number + 1;
+            $next_mcq=Mcq::where('quiz_id',$quiz_id)->skip($next_mcq_number - 1)->first();
+            if(!$next_mcq){
+                return back()->with('error','Next MCQ not found. Please try again.');
+            }
+            Session::put('current_quiz.current_mcq',$next_mcq_number);
+            return redirect()->route('user.mcq',[$next_mcq->id,$quiz_name]);
+        }
     }
 }

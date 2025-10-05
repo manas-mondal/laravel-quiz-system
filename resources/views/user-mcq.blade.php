@@ -45,12 +45,16 @@
         @endif
         <div class="bg-white p-8 rounded-2xl shadow-md w-full max-w-md">
             <h2 class="text-2xl text-center font-bold text-green-800">{{ $quiz_name }}</h2>
-            <h3 class="text-xl text-center font-bold text-green-800">Total Question.
-                {{ Session::get('current_quiz')['total_mcqs'] }}</h3>
+            <h3 class="text-xl text-center font-bold text-green-800 mt-2">Question.
+                {{ Session::get('current_quiz')['current_mcq'] }} of {{ Session::get('current_quiz')['total_mcqs'] }}
+            </h3>
         </div>
         <div class="bg-white p-8 rounded-2xl shadow-md w-full max-w-2xl mt-6 mb-6">
             <h3 class="text-lg font-semibold mb-4 text-green-700">Q.{{ Session::get('current_quiz')['current_mcq'] }})
                 {{ $mcq->question }}</h3>
+            @error('option')
+                <div class="text-red-500">{{ $message }}</div>
+            @enderror
             <form action="{{ route('user.quiz.submit.next') }}" method="POST">
                 @csrf
                 <input type="hidden" name="mcq_id" value="{{ $mcq->id }}">
