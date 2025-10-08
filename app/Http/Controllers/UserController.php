@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Mcq;
 use App\Models\Quiz;
+use App\Models\Record;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -123,7 +124,12 @@ class UserController extends Controller
     }
 
     public function mcq($id,$quiz_name){
-        $firstMcq=Session('first_mcq');
+        $record= new Record();
+        $record->user_id=Session::get('user')->id;
+        $record->quiz_id= Session('first_mcq')->quiz_id;
+        $record->status=1;
+        if($record->save()){
+         $firstMcq=Session('first_mcq');
         if(!$firstMcq){
             return back()->with('error','Quiz session expired. Please restart.');
         }
@@ -141,6 +147,10 @@ class UserController extends Controller
         
         $mcq=Mcq::findOrFail($id);
         return view('user-mcq',compact('mcq','quiz_name'));
+        }else{
+            return back()->with('error','Unable to start quiz. Please try again.');
+        }
+        
     }
 
     public function quiz_submit_next(Request $request){
