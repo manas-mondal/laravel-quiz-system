@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Admin Quiz</title>
+    <title>Start Quiz</title>
     @vite('resources/css/app.css')
 </head>
 
@@ -50,7 +50,7 @@
         <div class="bg-white p-8 rounded-2xl shadow-md w-full max-w-md mt-6 mb-6">
             <h3 class="text-lg font-semibold mb-4 text-green-700">Quiz Instructions:</h3>
             <ul class="list-disc list-inside text-gray-700 space-y-2">
-                <li>Total Questions: {{ $mcqCount }}</li>
+                <li>Total Questions: {{ $mcqs->count() }}</li>
                 <li>Time Limit: No</li>
                 <li>Each question carries equal marks.</li>
                 <li>No negative marking for wrong answers.</li>
@@ -59,7 +59,7 @@
             </ul>
             <div class="mt-6 text-center">
                 @if (session()->has('user'))
-                    <a href=""
+                    <a href="{{ route('user.mcq', ['id' => Session('first_mcq')->id, $quiz_name]) }}"
                         class="bg-green-600 text-white px-6 py-2 rounded-full hover:bg-green-700 transition duration-300">Start
                         Quiz</a>
                 @else
