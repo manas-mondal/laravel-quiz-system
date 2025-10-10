@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Mcq;
+use App\Models\McqRecord;
 use App\Models\Quiz;
 use App\Models\Record;
 use App\Models\User;
@@ -124,33 +125,54 @@ class UserController extends Controller
     }
 
     public function mcq($id,$quiz_name){
-        $record= new Record();
-        $record->user_id=Session::get('user')->id;
-        $record->quiz_id= Session('first_mcq')->quiz_id;
-        $record->status=1;
-        if($record->save()){
-         $firstMcq=Session('first_mcq');
-        if(!$firstMcq){
-            return back()->with('error','Quiz session expired. Please restart.');
+        $firstMcq = Session::get('first_mcq');
+        if (!$firstMcq) {
+            return back()->with('error', 'Quiz session expired. Please restart.');
         }
-        $quizId=$firstMcq->quiz_id;
-        $current_quiz=Session::get('current_quiz');
-        if(!$current_quiz){
-           $total_mcqs=Mcq::where('quiz_id',$quizId)->count();
-           Session::put('current_quiz',[
-            'total_mcqs'=>$total_mcqs,
-            'current_mcq'=>1,
-            'quiz_name'=>$quiz_name,
-            'quiz_id'=>$quizId
-           ]);
+
+        $quizId = $firstMcq->quiz_id;
+        $userId = Session::get('user')->id;
+
+        //If user switched to a different quiz, reset previous quiz session
+        if (Session::has('current_quiz') && Session::get('current_quiz.quiz_id') != $quizId) {
+            Session::forget('current_quiz');
         }
-        
-        $mcq=Mcq::findOrFail($id);
-        return view('user-mcq',compact('mcq','quiz_name'));
-        }else{
-            return back()->with('error','Unable to start quiz. Please try again.');
+
+        //Get or create Record for this user and quiz
+        $record = Record::where('user_id', $userId)
+                        ->where('quiz_id', $quizId)
+                        ->latest()
+                        ->first();
+
+        if (!$record) {
+            $record = new Record();
+            $record->user_id = $userId;
+            $record->quiz_id = $quizId;
+            $record->status = 1;
+            $record->save();
         }
-        
+
+        //Set current_quiz session if not already set (or reset above)
+        if (!Session::has('current_quiz')) {
+            $total_mcqs = Mcq::where('quiz_id', $quizId)->count();
+            Session::put('current_quiz', [
+                'total_mcqs'    => $total_mcqs,
+                'current_mcq'   => 1,
+                'quiz_name'     => $quiz_name,
+                'quiz_id'       => $quizId,
+                'record_id'     => $record->id,
+            ]);
+        }
+
+        // Show the current MCQ (based on session)
+        $mcqNumber = Session::get('current_quiz.current_mcq');
+        $mcq = Mcq::where('quiz_id', $quizId)
+                ->orderBy('id', 'asc')
+                ->skip($mcqNumber - 1)
+                ->firstOrFail();
+
+        return view('user-mcq', compact('mcq', 'quiz_name'));
+               
     }
 
     public function quiz_submit_next(Request $request){
@@ -169,19 +191,37 @@ class UserController extends Controller
             return back()->with('error','MCQ not found. Please try again.');
         }
 
-        // // Here you can store the user's answer in the database if needed
-        // // For example, you might want to create a UserAnswer model and save the answer
+        // Save MCQ answer
+        $mcq_record= new McqRecord();
+        $mcq_record->user_id=Session::get('user')->id;
+        $mcq_record->record_id=$current_quiz['record_id'];
+        $mcq_record->mcq_id=$mcq->id;
+        $mcq_record->selected_answer=$request->option;
+        $mcq_record->is_correct=$mcq->correct_option === $request->option ? 1 : 0;
+        if(!$mcq_record->save()){
+            return back()->with('error','Unable to save your answer. Please try again.');
+        }
 
-        if($current_mcq_number >= $total_mcqs){
+         // If last MCQ, finish the quiz
+         if($current_mcq_number >= $total_mcqs){
             Session::forget('current_quiz');
             Session::forget('first_mcq');
+
+            // Update record status to completed
+            $record=Record::find($current_quiz['record_id']);
+            if($record){
+                $record->status=2; // completed
+                $record->save();
+         }
             return redirect()->route('welcome')->with('success','Quiz completed. Thank you for participating!');
         }else{
+            // Move to next question
             $next_mcq_number=$current_mcq_number + 1;
-            $next_mcq=Mcq::where('quiz_id',$quiz_id)->skip($next_mcq_number - 1)->first();
+            $next_mcq=Mcq::where('quiz_id',$quiz_id)->orderBy('id','asc')->skip($next_mcq_number - 1)->first();
             if(!$next_mcq){
                 return back()->with('error','Next MCQ not found. Please try again.');
             }
+             // Update session for next question
             Session::put('current_quiz.current_mcq',$next_mcq_number);
             return redirect()->route('user.mcq',[$next_mcq->id,$quiz_name]);
         }

@@ -61,22 +61,22 @@
                 <div class="space-y-4">
                     <label for="option1"
                         class="flex items-center border border-green-300 p-3 rounded-lg bg-gray-100 cursor-pointer hover:bg-gray-200 hover:shadow-md transition duration-300 hover:border-green-400 hover:scale-105">
-                        <input type="radio" id="option1" name="option" class="mr-2">
+                        <input type="radio" id="option1" name="option" value="option_a" class="mr-2">
                         <span class="text-gray-700">{{ $mcq->option_a }}</span>
                     </label>
                     <label for="option2"
                         class="flex items-center border border-green-300 p-3 rounded-lg bg-gray-100 cursor-pointer hover:bg-gray-200 hover:shadow-md transition duration-300 hover:border-green-400 hover:scale-105">
-                        <input type="radio" id="option2" name="option" class="mr-2">
+                        <input type="radio" id="option2" name="option" value="option_b" class="mr-2">
                         <span class="text-gray-700">{{ $mcq->option_b }}</span>
                     </label>
                     <label for="option3"
                         class="flex items-center border border-green-300 p-3 rounded-lg bg-gray-100 cursor-pointer hover:bg-gray-200 hover:shadow-md transition duration-300 hover:border-green-400 hover:scale-105">
-                        <input type="radio" id="option3" name="option" class="mr-2">
+                        <input type="radio" id="option3" name="option" value="option_c" class="mr-2">
                         <span class="text-gray-700">{{ $mcq->option_c }}</span>
                     </label>
                     <label for="option4"
                         class="flex items-center border border-green-300 p-3 rounded-lg bg-gray-100 cursor-pointer hover:bg-gray-200 hover:shadow-md transition duration-300 hover:border-green-400 hover:scale-105">
-                        <input type="radio" id="option4" name="option" class="mr-2">
+                        <input type="radio" id="option4" name="option" value="option_d" class="mr-2">
                         <span class="text-gray-700">{{ $mcq->option_d }}</span>
                     </label>
                 </div>
