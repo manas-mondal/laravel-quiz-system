@@ -35,3 +35,4 @@ Route::post('/user-login', [UserController::class,'user_login'])->name('user.log
 Route::get('/user-login-quiz', [UserController::class,'user_login_form_quiz'])->name('user.login.form.quiz');
 Route::get('/mcq/{id}/{quiz_name}',[UserController::class,'mcq'])->name('user.mcq');
 Route::post('/quiz-submit-next',[UserController::class,'quiz_submit_next'])->name('user.quiz.submit.next');
+Route::get('/user-details',[UserController::class,'user_details'])->name('user.details');

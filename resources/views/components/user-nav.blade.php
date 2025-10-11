@@ -7,7 +7,7 @@
         <a class="text-green-900 font-medium hover:text-blue-500" href="">Categories</a>
         <a class="text-green-900 font-medium hover:text-blue-500" href="">Blog</a>
         @if (session()->has('user'))
-            <a class="text-green-900 font-medium hover:text-blue-500" href="">Welcome,
+            <a class="text-green-900 font-medium hover:text-blue-500" href="{{ route('user.details') }}">Welcome,
                 {{ session()->get('user')->name }}</a>
             <a class="text-green-900 font-medium hover:text-blue-500" href="{{ route('user.logout') }}">Logout</a>
         @else
