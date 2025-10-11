@@ -229,7 +229,7 @@ class UserController extends Controller
             // Create new record
             $mcq_record= new McqRecord();
             $mcq_record->user_id=Session::get('user')->id;
-            $mcq_record->record_id=$current_quiz['record_id'];
+            $mcq_record->record_id=$record_id;
             $mcq_record->mcq_id=$mcq->id;
             $mcq_record->selected_answer=$request->option;
             $mcq_record->is_correct=$mcq->correct_option === $request->option ? 1 : 0;
@@ -241,12 +241,15 @@ class UserController extends Controller
             Session::forget('first_mcq');
 
             // Update record status to completed
-            $record=Record::find($current_quiz['record_id']);
+            $record=Record::find($record_id);
             if($record){
                 $record->status=2; // completed
                 $record->save();
          }
-            return redirect()->route('welcome')->with('success','Quiz completed. Thank you for participating!');
+         $resultData = McqRecord::with('mcq')->where('record_id', $record_id)->get();
+         $correctAnswers = $resultData->where('is_correct', 1)->count();
+         $totalQuestions = $resultData->count();
+         return view('quiz-result', compact('resultData','correctAnswers', 'totalQuestions', 'quiz_name'));
         }
 
         // Identify actual MCQ for current session number
