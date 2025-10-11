@@ -278,4 +278,19 @@ class UserController extends Controller
 
         return redirect()->route('user.mcq',[$next_mcq->id,$quiz_name]);
     }
+
+    public function user_details(){
+        $user_id = Session::get('user')->id;
+        $records = Record::where('user_id', $user_id)
+                         ->with('quiz','quiz.category') // Eager load quiz and its category
+                         ->withCount([ 
+                            'mcq_records as correct_answers' => function($query) {
+                                $query->where('is_correct', 1);
+                            },
+                            'mcq_records as total_questions'
+                         ])
+                         ->get();
+
+        return view('user-details', compact('records'));     
+    }
 }

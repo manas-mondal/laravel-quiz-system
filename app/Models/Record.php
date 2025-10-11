@@ -25,4 +25,8 @@ class Record extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function mcq_records(){
+        return $this->hasMany(McqRecord::class);
+    }
 }
