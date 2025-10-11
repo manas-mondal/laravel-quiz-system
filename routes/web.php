@@ -23,6 +23,7 @@ Route::get('/cancel-quiz', [AdminController::class, 'cancel_quiz'])->name('admin
 Route::get('/show-quiz/{id}/{quiz_name}', [AdminController::class, 'show_quiz'])->name('admin.quiz.show');
 Route::get('/quiz-list/{id}/{category}', [AdminController::class, 'quiz_list'])->name('admin.quiz.list');
 
+
 Route::get('/',[UserController::class,'welcome'])->name('welcome');
 Route::get('/user-quiz-list/{id}/{category}',[UserController::class,'quiz_list'])->name('user.quiz.list');
 Route::get('/start-quiz/{id}/{quiz_name}',[UserController::class,'start_quiz'])->name('user.quiz.start');
@@ -33,6 +34,9 @@ Route::get('/user-logout',[UserController::class,'user_logout'])->name('user.log
 Route::get('/user-login', [UserController::class,'user_login_form'])->name('user.login.form');
 Route::post('/user-login', [UserController::class,'user_login'])->name('user.login');
 Route::get('/user-login-quiz', [UserController::class,'user_login_form_quiz'])->name('user.login.form.quiz');
-Route::get('/mcq/{id}/{quiz_name}',[UserController::class,'mcq'])->name('user.mcq');
-Route::post('/quiz-submit-next',[UserController::class,'quiz_submit_next'])->name('user.quiz.submit.next');
-Route::get('/user-details',[UserController::class,'user_details'])->name('user.details');
+
+Route::middleware('user-auth')->group(function (){
+    Route::get('/mcq/{id}/{quiz_name}',[UserController::class,'mcq'])->name('user.mcq');
+    Route::post('/quiz-submit-next',[UserController::class,'quiz_submit_next'])->name('user.quiz.submit.next');
+    Route::get('/user-details',[UserController::class,'user_details'])->name('user.details');
+});
