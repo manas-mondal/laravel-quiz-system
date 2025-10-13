@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Session;
 class UserController extends Controller
 {
     public function welcome(){
-        $categories=Category::withCount('quizzes')->get();
+        $categories=Category::withCount('quizzes')->paginate(3);
         return view('welcome',compact('categories'));
     }
 
