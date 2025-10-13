@@ -14,8 +14,14 @@ use Illuminate\Support\Facades\Session;
 
 class UserController extends Controller
 {
-    public function welcome(){
-        $categories=Category::withCount('quizzes')->paginate(3);
+    public function welcome(Request $request){
+        $query=Category::withCount('quizzes');
+
+        if($request->has('search')){
+            $search=$request->input('search');
+            $query->where('name','like',"%$search%");
+        }
+        $categories=$query->paginate(5)->appends($request->only('search'));
         return view('welcome',compact('categories'));
     }
 
