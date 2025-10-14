@@ -3,7 +3,6 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Mail;
 
 Route::get('/', function () {
     return view('welcome');
@@ -46,17 +45,5 @@ Route::middleware('user-auth')->group(function (){
     Route::get('/user-details',[UserController::class,'user_details'])->name('user.details');
 });
 
+Route::get('/verify-user/{token}',[UserController::class,'verify_user'])->name('user.verify');
 
-
-Route::get('/test-mail', function () {
-    try {
-        Mail::raw('This is a test email from Laravel Quiz System!', function ($message) {
-            $message->to('manasmondal035@gmail.com') // 👉 এখানে তোমার নিজের Gmail দাও
-                    ->subject('Test Email from Laravel');
-        });
-
-        return '✅ Email sent successfully!';
-    } catch (Exception $e) {
-        return '❌ Failed to send email: ' . $e->getMessage();
-    }
-});

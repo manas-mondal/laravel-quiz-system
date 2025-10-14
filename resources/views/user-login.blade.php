@@ -74,6 +74,15 @@
                         type="submit">Login</button>
                 </div>
             </form>
+            <div class="text-center mt-4">
+                <p class="text-gray-600">
+                    Don't have an account?
+                    <a href="{{ route('user.signup.form') }}" class="text-green-600 font-semibold hover:underline">
+                        Create one here
+                    </a>
+                </p>
+            </div>
+
         </div>
     </div>
     <x-footer-user />
