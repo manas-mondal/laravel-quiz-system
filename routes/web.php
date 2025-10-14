@@ -44,3 +44,6 @@ Route::middleware('user-auth')->group(function (){
     Route::post('/quiz-submit-next',[UserController::class,'quiz_submit_next'])->name('user.quiz.submit.next');
     Route::get('/user-details',[UserController::class,'user_details'])->name('user.details');
 });
+
+Route::get('/verify-user/{token}',[UserController::class,'verify_user'])->name('user.verify');
+

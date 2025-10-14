@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\VerifyUserMail;
 use App\Models\Category;
 use App\Models\Mcq;
 use App\Models\McqRecord;
@@ -10,7 +11,9 @@ use App\Models\Record;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
@@ -30,17 +33,23 @@ class UserController extends Controller
         return view('user-quiz-list',compact('id','category','quizzes'));
     }
 
+    public function start_quiz($id,$quiz_name){
+        $mcqs=Mcq::where('quiz_id',$id)->get();
+        if($mcqs->count()<1){
+            return back()
+            ->with('error','No MCQs found for this quiz. Please contact admin.');
+        }
+        Session::put('first_mcq',$mcqs->first());
+        return view('start-quiz',compact('quiz_name','mcqs'));
+    }
+
     public function signup_form(){
         return view('user-signup');
     }
 
-    public function start_quiz($id,$quiz_name){
-        $mcqs=Mcq::where('quiz_id',$id)->get();
-        if($mcqs->count()<1){
-            return back()->with('error','No MCQs found for this quiz. Please contact admin.');
-        }
-        Session::put('first_mcq',$mcqs->first());
-        return view('start-quiz',compact('quiz_name','mcqs'));
+    public function signup_form_quiz(){
+        Session::put('quiz-url',url()->previous());
+        return view('user-signup');
     }
 
     public function signup(Request $request){
@@ -50,12 +59,13 @@ class UserController extends Controller
             'password'=>'required|min:6|confirmed',
         ]);
 
-        // $user=new User();
-        // $user->name=$request->name;
-        // $user->email=$request->email;
-        // $user->password=$request->password;  // Laravel auto hash for casted attributes in User model
-        // $user->save();
-
+        $user=new User();
+        $user->name=$request->name;
+        $user->email=$request->email;
+        $user->password=$request->password;  // Laravel auto hash for casted attributes in User model
+        $user->active=1;        // 1 = not verified
+        $user->verification_token= Str::random(64);
+        $user->save();
 
         // or use mass assignment
     //     User::create([
@@ -64,39 +74,32 @@ class UserController extends Controller
     //     'password' => $request->password, // Laravel auto hash for casted attributes in User model
     // ]);
 
-
         // or use fill method
             // $user = new User();
             // $user->fill($request->only('name','email','password')); 
             // $user->save();
 
-
         // or use mass assignment with validated data
-            $user=User::create($request->only('name','email','password'));
+            // $user=User::create($request->only('name','email','password'));
 
-            if($user){
-                Session::put('user',$user);
-                if(Session::has('quiz-url')){
-                    $url=Session::get('quiz-url');
-                    Session::forget('quiz-url');
-                    return redirect($url)->with('success','User registered successfully');
-                }
-                return redirect()->route('welcome')->with('success','User registered successfully');
-            }
-    }
+        // send verification email 
+        Mail::to($user->email)->send(new VerifyUserMail($user));
 
-    public function signup_form_quiz(){
-        Session::put('quiz-url',url()->previous());
-        return view('user-signup');
-    }
-
-    public function user_logout(){
+        // Do not log in until verified
         Session::forget('user');
-        return redirect()->route('welcome')->with('success','User logged out successfully');
+
+        return redirect()
+               ->route('user.login.form')
+               ->with('success', 'Account created successfully! Please check your email to verify your account before logging in.');
     }
 
     public function user_login_form(){
         return view('user-login');
+    }
+
+    public function user_login_form_quiz(){
+        Session::put('quiz-url',url()->previous());
+        return view('user-login');  
     }
 
     public function user_login(Request $request){
@@ -113,21 +116,54 @@ class UserController extends Controller
                 ->withInput();
         }
 
+        if($user->active != 2){  // not verified
+            return back()
+                ->with('error', 'Please verify your email before logging in.')
+                ->withInput();
+        }
+
         Session::put('user',$user);
 
+        // Redirect to previous quiz URL if exists
         if (Session::has('quiz-url')) {
             $url = Session::pull('quiz-url'); // pull = get + forget
-            return redirect($url)->with('success', 'User logged in successfully');
+            return redirect($url)
+            ->with('success', 'User logged in successfully');
         }
 
         return redirect()
             ->route('welcome')
             ->with('success', 'User logged in successfully');
+    }
+
+    public function user_logout(){
+        Session::forget('user');
+        return redirect()
+        ->route('welcome')
+        ->with('success','User logged out successfully');
+    }
+
+    public function verify_user($token){
+        $user=User::where('verification_token',$token)->first();
+        if(!$user){
+            return redirect()
+            ->route('welcome')
+            ->with('error','Invalid verification token.');
         }
 
-    public function user_login_form_quiz(){
-        Session::put('quiz-url',url()->previous());
-        return view('user-login');  
+        if($user->active == 2){
+            return redirect()
+            ->route('user.login.form')
+            ->with('success','Your email is already verified. Please login below.');
+        }
+
+        $user->active=2; // mark as verified
+        $user->verification_token=null;
+        $user->save();
+
+        return redirect()
+        ->route('user.login.form')
+        ->with('success', 'Your email has been verified. You can now login.');
     }
 
     public function mcq($id,$quiz_name){
@@ -204,7 +240,9 @@ class UserController extends Controller
 
         $current_quiz=Session::get('current_quiz');
         if (!$current_quiz) {
-        return redirect()->route('welcome')->with('error', 'Session expired. Please restart the quiz.');
+        return redirect()
+        ->route('welcome')
+        ->with('error', 'Session expired. Please restart the quiz.');
         }
 
         $quiz_id=$current_quiz['quiz_id'];
@@ -266,7 +304,9 @@ class UserController extends Controller
 
         // Check if user is re-answering an older question
         if($mcq->id != $expected_mcq_id){
-            return back()->with('error','Please answer the questions in order.')->withInput();
+            return back()
+            ->with('error','Please answer the questions in order.')
+            ->withInput();
         }
 
         // Move to next question
@@ -276,13 +316,15 @@ class UserController extends Controller
                          ->skip($next_mcq_number - 1)
                          ->first();
         if(!$next_mcq){
-            return back()->with('error','Next MCQ not found. Please try again.');
+            return back()
+            ->with('error','Next MCQ not found. Please try again.');
         }
 
         // Update session for next question
         Session::put('current_quiz.current_mcq',$next_mcq_number);
 
-        return redirect()->route('user.mcq',[$next_mcq->id,$quiz_name]);
+        return redirect()
+        ->route('user.mcq',[$next_mcq->id,$quiz_name]);
     }
 
     public function user_details(){
