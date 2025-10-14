@@ -16,7 +16,7 @@ return new class extends Migration
              $table->string('name');
             $table->string('email')->unique();
             $table->string('password');
-            $table->tinyInteger('active')->default(1); // 0, 1, 2 allowed
+            $table->tinyInteger('active')->default(1); // 0=deleted, 1=create, 2=varified are allowed
             $table->timestamps();
         });
     }
