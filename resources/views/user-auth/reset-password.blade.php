@@ -33,7 +33,7 @@
             @error('user')
                 <div class="text-red-500">{{ $message }}</div>
             @enderror
-            <form action="" method="POST" class="space-y-4">
+            <form action="{{ route('user.password.update') }}" method="POST" class="space-y-4">
                 @csrf
                 <input type="hidden" name="token" value="{{ $token }}">
                 <input type="hidden" name="email" value="{{ $email }}">

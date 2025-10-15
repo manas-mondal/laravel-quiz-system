@@ -218,6 +218,48 @@ class UserController extends Controller
         return view('user-auth.reset-password', compact('token', 'email'))->with('success_message', 'Please enter your new password to reset your account password.');
     }
 
+    public function reset_password(Request $request){
+        // validate request
+        $request->validate([
+            'email'=>'required|email|exists:users,email',
+            'token'=>'required',
+            'password'=>'required|min:6|confirmed',
+        ]);
+
+        // verify token
+        $tokenData=PasswordResetToken::where('email',$request->email)
+                                     ->where('token',$request->token)
+                                     ->first();
+        if(!$tokenData){
+            return redirect()
+            ->route('user.password.request')
+            ->with('error','Invalid or expired password reset token. Please request a new one.')
+            ->withInput();
+        }
+
+        // find user by email
+        $user=User::where('email',$request->email)->first();
+        if(!$user){
+            return redirect()
+            ->route('user.password.request')
+            ->with('error','No user found with this email address.')
+            ->withInput();
+        }
+
+        // update user password
+        $user->password=$request->password; // Laravel auto hash for casted attributes in User model
+        $user->save();
+
+        // delete password reset token
+        if ($tokenData) {
+        $tokenData->delete();
+        }
+
+        return redirect()
+               ->route('user.login.form')
+               ->with('success','Your password has been reset successfully. You can now login with your new password.');
+    }
+
     public function mcq($id,$quiz_name){
         // Ensure quiz session is active
         $firstMcq = Session::get('first_mcq');
