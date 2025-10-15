@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ForgotPasswordMail;
 use App\Mail\VerifyUserMail;
 use App\Models\Category;
 use App\Models\Mcq;
@@ -168,7 +169,7 @@ class UserController extends Controller
     }
 
     public function show_forgot_password_form(){
-        return view('userAuth.forgot-password');
+        return view('user-auth.forgot-password');
     }
 
     public function sent_reset_link_email(Request $request){
@@ -190,10 +191,31 @@ class UserController extends Controller
         );
 
         // send reset link to user email
-        Mail::to($request->email)->send(new ResetPasswordMail($token, $request->email));
+        Mail::to($request->email)->send(new ForgotPasswordMail($token, $request->email));
 
         return back()->with('success','We have emailed your password reset link!');
 
+    }
+
+    public function show_reset_password_form(Request $request, $token){
+        $email = $request->query('email');
+        if (!$email) {
+            return redirect()
+                ->route('user.password.request')
+                ->with('error', 'Email is missing. Please request a new password reset link.');
+        }
+
+        $tokenData = PasswordResetToken::where('email', $email)
+            ->where('token', $token)
+            ->first();
+
+        if (!$tokenData) {
+            return redirect()
+                ->route('user.password.request')
+                ->with('error', 'Invalid or expired password reset token. Please request a new one.');
+        }
+        
+        return view('user-auth.reset-password', compact('token', 'email'));
     }
 
     public function mcq($id,$quiz_name){
