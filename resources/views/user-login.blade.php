@@ -70,10 +70,16 @@
                     @enderror
                 </div>
                 <div>
-                    <button class="w-full bg-green-500 rounded-xl py-2 text-white hover:bg-green-600"
+                    <button
+                        class="w-full bg-green-500 rounded-xl py-2 text-white hover:bg-green-600 hover:cursor-pointer"
                         type="submit">Login</button>
                 </div>
             </form>
+            <div class="text-center mt-2">
+                <a href="{{ route('user.password.request') }}" class="text-green-600 font-semibold hover:underline">
+                    Forgot Password?
+                </a>
+            </div>
             <div class="text-center mt-4">
                 <p class="text-gray-600">
                     Don't have an account?
