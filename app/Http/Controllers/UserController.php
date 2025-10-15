@@ -6,6 +6,7 @@ use App\Mail\VerifyUserMail;
 use App\Models\Category;
 use App\Models\Mcq;
 use App\Models\McqRecord;
+use App\Models\PasswordResetToken;
 use App\Models\Quiz;
 use App\Models\Record;
 use App\Models\User;
@@ -164,6 +165,35 @@ class UserController extends Controller
         return redirect()
         ->route('user.login.form')
         ->with('success', 'Your email has been verified. You can now login.');
+    }
+
+    public function show_forgot_password_form(){
+        return view('userAuth.forgot-password');
+    }
+
+    public function sent_reset_link_email(Request $request){
+        // validate email 
+        $request->validate([
+            'email'=>'required|email|exists:users,email',
+        ]);
+
+        // generate random token 
+        $token=Str::random(64);
+
+        // save token in password_resets table
+        PasswordResetToken::updateOrCreate(
+        ['email' => $request->email],        // search criteria
+        [
+        'token' => $token,               // update / insert values
+        'created_at' => now()
+        ]
+        );
+
+        // send reset link to user email
+        Mail::to($request->email)->send(new ResetPasswordMail($token, $request->email));
+
+        return back()->with('success','We have emailed your password reset link!');
+
     }
 
     public function mcq($id,$quiz_name){
