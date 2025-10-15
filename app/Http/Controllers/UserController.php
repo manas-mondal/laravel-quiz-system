@@ -215,7 +215,7 @@ class UserController extends Controller
                 ->with('error', 'Invalid or expired password reset token. Please request a new one.');
         }
         
-        return view('user-auth.reset-password', compact('token', 'email'));
+        return view('user-auth.reset-password', compact('token', 'email'))->with('success_message', 'Please enter your new password to reset your account password.');
     }
 
     public function mcq($id,$quiz_name){
