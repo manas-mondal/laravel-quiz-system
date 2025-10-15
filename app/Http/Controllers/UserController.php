@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ForgotPasswordMail;
 use App\Mail\VerifyUserMail;
 use App\Models\Category;
 use App\Models\Mcq;
 use App\Models\McqRecord;
+use App\Models\PasswordResetToken;
 use App\Models\Quiz;
 use App\Models\Record;
 use App\Models\User;
@@ -164,6 +166,98 @@ class UserController extends Controller
         return redirect()
         ->route('user.login.form')
         ->with('success', 'Your email has been verified. You can now login.');
+    }
+
+    public function show_forgot_password_form(){
+        return view('user-auth.forgot-password');
+    }
+
+    public function sent_reset_link_email(Request $request){
+        // validate email 
+        $request->validate([
+            'email'=>'required|email|exists:users,email',
+        ]);
+
+        // generate random token 
+        $token=Str::random(64);
+
+        // save token in password_resets table
+        PasswordResetToken::updateOrCreate(
+        ['email' => $request->email],        // search criteria
+        [
+        'token' => $token,               // update / insert values
+        'created_at' => now()
+        ]
+        );
+
+        // send reset link to user email
+        Mail::to($request->email)->send(new ForgotPasswordMail($token, $request->email));
+
+        return back()->with('success','We have emailed your password reset link!');
+
+    }
+
+    public function show_reset_password_form(Request $request, $token){
+        $email = $request->query('email');
+        if (!$email) {
+            return redirect()
+                ->route('user.password.request')
+                ->with('error', 'Email is missing. Please request a new password reset link.');
+        }
+
+        $tokenData = PasswordResetToken::where('email', $email)
+            ->where('token', $token)
+            ->first();
+
+        if (!$tokenData) {
+            return redirect()
+                ->route('user.password.request')
+                ->with('error', 'Invalid or expired password reset token. Please request a new one.');
+        }
+        
+        return view('user-auth.reset-password', compact('token', 'email'))->with('success_message', 'Please enter your new password to reset your account password.');
+    }
+
+    public function reset_password(Request $request){
+        // validate request
+        $request->validate([
+            'email'=>'required|email|exists:users,email',
+            'token'=>'required',
+            'password'=>'required|min:6|confirmed',
+        ]);
+
+        // verify token
+        $tokenData=PasswordResetToken::where('email',$request->email)
+                                     ->where('token',$request->token)
+                                     ->first();
+        if(!$tokenData){
+            return redirect()
+            ->route('user.password.request')
+            ->with('error','Invalid or expired password reset token. Please request a new one.')
+            ->withInput();
+        }
+
+        // find user by email
+        $user=User::where('email',$request->email)->first();
+        if(!$user){
+            return redirect()
+            ->route('user.password.request')
+            ->with('error','No user found with this email address.')
+            ->withInput();
+        }
+
+        // update user password
+        $user->password=$request->password; // Laravel auto hash for casted attributes in User model
+        $user->save();
+
+        // delete password reset token
+        if ($tokenData) {
+        $tokenData->delete();
+        }
+
+        return redirect()
+               ->route('user.login.form')
+               ->with('success','Your password has been reset successfully. You can now login with your new password.');
     }
 
     public function mcq($id,$quiz_name){

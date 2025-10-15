@@ -45,5 +45,12 @@ Route::middleware('user-auth')->group(function (){
     Route::get('/user-details',[UserController::class,'user_details'])->name('user.details');
 });
 
+// User email verification routes 
 Route::get('/verify-user/{token}',[UserController::class,'verify_user'])->name('user.verify');
+
+// Forgot password routes
+Route::get('/forgot-password',[UserController::class,'show_forgot_password_form'])->name('user.password.request');
+Route::post('/forgot-password',[UserController::class,'sent_reset_link_email'])->name('user.password.email');
+Route::get('/reset-password/{token}',[UserController::class,'show_reset_password_form'])->name('user.password.reset');
+Route::post('/reset-password',[UserController::class,'reset_password'])->name('user.password.update');
 
