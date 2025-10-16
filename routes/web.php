@@ -29,15 +29,20 @@ Route::middleware('admin-auth')->group(function (){
 
 // For USER
 Route::get('/',[UserController::class,'welcome'])->name('welcome');
+
 Route::get('/user-quiz-list/{id}/{category}',[UserController::class,'quiz_list'])->name('user.quiz.list');
 Route::get('/start-quiz/{id}/{quiz_name}',[UserController::class,'start_quiz'])->name('user.quiz.start');
-Route::get('/user-signup',[UserController::class,'signup_form'])->name('user.signup.form');
-Route::post('/user-signup',[UserController::class,'signup'])->name('user.signup');
-Route::get('/user-signup-quiz',[UserController::class,'signup_form_quiz'])->name('user.signup.quiz');
+
+Route::middleware('guest-user')->group(function (){
+    Route::get('/user-signup',[UserController::class,'signup_form'])->name('user.signup.form');
+    Route::post('/user-signup',[UserController::class,'signup'])->name('user.signup');
+    Route::get('/user-signup-quiz',[UserController::class,'signup_form_quiz'])->name('user.signup.quiz');
+    Route::get('/user-login', [UserController::class,'user_login_form'])->name('user.login.form');
+    Route::post('/user-login', [UserController::class,'user_login'])->name('user.login');
+    Route::get('/user-login-quiz', [UserController::class,'user_login_form_quiz'])->name('user.login.form.quiz');
+});
+
 Route::get('/user-logout',[UserController::class,'user_logout'])->name('user.logout');
-Route::get('/user-login', [UserController::class,'user_login_form'])->name('user.login.form');
-Route::post('/user-login', [UserController::class,'user_login'])->name('user.login');
-Route::get('/user-login-quiz', [UserController::class,'user_login_form_quiz'])->name('user.login.form.quiz');
 
 Route::middleware('user-auth')->group(function (){
     Route::get('/mcq/{id}/{quiz_name}',[UserController::class,'mcq'])->name('user.mcq');
