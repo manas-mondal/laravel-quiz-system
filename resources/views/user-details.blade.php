@@ -46,6 +46,10 @@
                                     <span class="text-green-600 font-semibold">Completed</span>
                                 @else
                                     <span class="text-red-600 font-semibold">Incomplete</span>
+                                    <a href="{{ route('user.mcq', [$record->quiz->mcqs->first()->id, $record->quiz->name]) }}"
+                                        class="text-xs ml-2 text-white bg-green-600 hover:bg-green-700 px-2.5 py-0.5 rounded-md shadow-sm transition duration-200">
+                                        Continue →
+                                    </a>
                                 @endif
                             </td>
                         </tr>
