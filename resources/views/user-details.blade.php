@@ -30,7 +30,7 @@
                 <tbody>
                     @foreach ($records as $key => $record)
                         <tr class="{{ $loop->even ? 'bg-blue-50' : 'bg-white' }}">
-                            <td class="px-4 py-2 border-blue-100 text-gray-600">{{ $key + 1 }}</td>
+                            <td class="px-4 py-2 border-blue-100 text-gray-600">{{ $key + $records->firstItem() }}</td>
                             <td class="px-4 py-2 border-blue-100 text-gray-600 hover:text-blue-800"><a
                                     href="{{ route('user.quiz.list', ['id' => $record->quiz->category->id, 'category' => $record->quiz->name]) }}">{{ $record->quiz->name }}</a>
                             </td>
@@ -56,6 +56,10 @@
                     @endforeach
                 </tbody>
             </table>
+            <div class="mt-5">
+                {{ $records->links() }}
+            </div>
+
         </div>
     </div>
     <x-footer-user />

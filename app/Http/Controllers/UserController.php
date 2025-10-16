@@ -430,7 +430,8 @@ class UserController extends Controller
                             },
                             'mcq_records as total_questions'
                          ])
-                         ->get();
+                         ->orderBy('created_at', 'desc')
+                         ->paginate(5);
 
         return view('user-details', compact('records'));     
     }
