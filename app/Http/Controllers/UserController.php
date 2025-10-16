@@ -20,7 +20,7 @@ use Illuminate\Support\Str;
 class UserController extends Controller
 {
     public function welcome(Request $request){
-        $query=Category::withCount('quizzes');
+        $query=Category::withCount('quizzes')->orderBy('quizzes_count','desc');
 
         if($request->has('search')){
             $search=$request->input('search');
