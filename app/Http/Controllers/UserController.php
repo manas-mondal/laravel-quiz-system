@@ -288,20 +288,19 @@ class UserController extends Controller
                         ->latest()
                         ->first();
 
-        if($record){
-            if($record->status == 2){
-                // Reset status to active again
-                $record->status = 1;
-                $record->save();
-            }
-        }else{
-            // No record found at all → create new one
-             $record = new Record();
-             $record->user_id = $userId;
-             $record->quiz_id = $quizId;
-             $record->status = 1;
-             $record->save();
-        }               
+        if ($record && $record->status == 1) {
+        // Continue existing incomplete attempt
+        $activeRecord = $record;
+        } else {
+        // Previous attempt completed or no record → create a new one
+        $activeRecord = new Record();
+        $activeRecord->user_id = $userId;
+        $activeRecord->quiz_id = $quizId;
+        $activeRecord->status = 1;
+        $activeRecord->save();
+        }
+
+        $record = $activeRecord;               
 
         //Set current_quiz session if not already set (or reset above)
         if (!Session::has('current_quiz')) {
