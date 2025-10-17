@@ -50,7 +50,7 @@
                     @csrf
                     <input
                         class="w-full px-4 py-2 shadow-sm text-gray-700 border border-green-300 rounded-xl focus:border-green-500 focus:ring-2 focus:ring-green-200 outline-none transition"
-                        type="text" name="search" placeholder="Search quiz..." value="{{ request('search') }}"
+                        type="text" name="search" placeholder="Search category..." value="{{ request('search') }}"
                         id="">
                     <button type="submit" class="absolute right-3 text-green-500 hover:text-green-700">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 -ml-8 mt-2 text-green-400 cursor-pointer"
@@ -63,7 +63,7 @@
             </div>
         </div>
         <div class="min-w-3xl mx-auto mt-10">
-            <h1 class="text-xl text-green-700 font-bold mb-4">Category List</h1>
+            <h1 class="text-xl text-green-700 font-bold mb-4">Top Category</h1>
             <table class="min-w-full bg-white rounded-xl shadow-md overflow-hidden">
                 <thead>
                     <tr class="bg-green-200">
