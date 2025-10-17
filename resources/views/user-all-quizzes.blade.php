@@ -82,7 +82,7 @@
                             <td class="px-4 py-2 text-gray-600">{{ $quiz->category->name ?? 'N/A' }}</td>
                             <td class="px-4 py-2 text-gray-600">{{ $quiz->mcqs_count }}</td>
                             <td class="px-4 py-2">
-                                <a href="{{ route('user.quiz.start', ['id' => $quiz->id, 'quiz_name' => $quiz->name]) }}"
+                                <a href="{{ route('user.quiz.start', ['id' => $quiz->id, 'quiz_name' => str_replace(' ', '-', $quiz->name)]) }}"
                                     class="bg-green-500 text-sm text-white px-4 py-1.5 rounded-lg hover:bg-green-600 transition">
                                     Start Quiz
                                 </a>

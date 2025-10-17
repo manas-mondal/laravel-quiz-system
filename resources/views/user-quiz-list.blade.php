@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>User Quiz</title>
+    <title>Category : {{ $category }}</title>
     @vite('resources/css/app.css')
 </head>
 
@@ -33,7 +33,7 @@
                             <td class="px-4 py-2 border-blue-100 text-gray-600">{{ $quiz->name }}</td>
                             <td class="px-4 py-2 border-blue-100 text-gray-600">{{ $quiz->mcqs->count() }}</td>
                             <td class="px-4 py-2 border-blue-100">
-                                <a href="{{ route('user.quiz.start', ['id' => $quiz->id, 'quiz_name' => $quiz->name]) }}"
+                                <a href="{{ route('user.quiz.start', ['id' => $quiz->id, 'quiz_name' => str_replace(' ', '-', $quiz->name)]) }}"
                                     class="bg-green-500 text-sm text-white px-4 py-1.5 rounded-lg hover:bg-green-600 transition">Start
                                     Quiz</a>
                             </td>

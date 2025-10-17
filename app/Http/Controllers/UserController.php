@@ -43,11 +43,13 @@ class UserController extends Controller
     }
 
     public function quiz_list($id,$category){
+        $category=str_replace('-',' ',$category);
         $quizzes=Quiz::withCount('mcqs')->where('category_id',$id)->get();
         return view('user-quiz-list',compact('id','category','quizzes'));
     }
 
     public function start_quiz($id,$quiz_name){
+        $quiz_name=str_replace('-',' ',$quiz_name);
         $mcqs=Mcq::where('quiz_id',$id)->get();
         if($mcqs->count()<1){
             return back()
@@ -291,6 +293,8 @@ class UserController extends Controller
     }
 
     public function mcq($id,$quiz_name){
+        $quiz_name=str_replace('-',' ',$quiz_name);
+        
         // Ensure quiz session is active
         $firstMcq = Session::get('first_mcq');
         if (!$firstMcq) {

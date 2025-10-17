@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Home Page</title>
+    <title>Quiz System Home Page</title>
     @vite('resources/css/app.css')
 </head>
 
@@ -83,7 +83,7 @@
                             </td>
                             <td class="px-4 py-2 border-green-100 flex space-x-2">
                                 <!-- View Button -->
-                                <a href="{{ route('user.quiz.list', ['id' => $category->id, 'category' => $category->name]) }}"
+                                <a href="{{ route('user.quiz.list', ['id' => $category->id, 'category' => str_replace(' ', '-', $category->name)]) }}"
                                     class="text-green-700 hover:text-blue-500 transition-colors" title="View">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none"
                                         viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">

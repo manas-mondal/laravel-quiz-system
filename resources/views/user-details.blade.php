@@ -32,7 +32,7 @@
                         <tr class="{{ $loop->even ? 'bg-blue-50' : 'bg-white' }}">
                             <td class="px-4 py-2 border-blue-100 text-gray-600">{{ $key + $records->firstItem() }}</td>
                             <td class="px-4 py-2 border-blue-100 text-gray-600 hover:text-blue-800"><a
-                                    href="{{ route('user.quiz.list', ['id' => $record->quiz->category->id, 'category' => $record->quiz->name]) }}">{{ $record->quiz->name }}</a>
+                                    href="{{ route('user.quiz.list', ['id' => $record->quiz->category->id, 'category' => str_replace(' ', '-', $record->quiz->name)]) }}">{{ $record->quiz->name }}</a>
                             </td>
                             <td class="px-4 py-2 border-blue-100 text-gray-600">
                                 @if ($record->status == 2)
@@ -46,7 +46,7 @@
                                     <span class="text-green-600 font-semibold">Completed</span>
                                 @else
                                     <span class="text-red-600 font-semibold">Incomplete</span>
-                                    <a href="{{ route('user.mcq', [$record->quiz->mcqs->first()->id, $record->quiz->name]) }}"
+                                    <a href="{{ route('user.mcq', [$record->quiz->mcqs->first()->id, str_replace(' ', '-', $record->quiz->name)]) }}"
                                         class="text-xs ml-2 text-white bg-green-600 hover:bg-green-700 px-2.5 py-0.5 rounded-md shadow-sm transition duration-200">
                                         Continue →
                                     </a>

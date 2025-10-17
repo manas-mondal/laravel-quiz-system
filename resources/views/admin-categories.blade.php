@@ -65,7 +65,7 @@
             </form>
         </div>
     </div>
-    <div class="max-w-2xl mx-auto mt-10">
+    <div class="max-w-2xl mx-auto mt-10 mb-10">
         <h1 class="text-xl font-bold mb-4">Category List</h1>
         <table class="min-w-full bg-white rounded-xl shadow-md overflow-hidden">
             <thead>
