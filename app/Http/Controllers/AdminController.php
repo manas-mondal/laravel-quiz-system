@@ -31,13 +31,13 @@ class AdminController extends Controller
     
     public function dashboard(){
         $admin=Session::get('admin');
-        return view('admin',compact('admin'));
+        return view('admin.dashboard',compact('admin'));
     }
     
     public function categories(){
         $categories = Category::orderBy('created_at', 'desc')->get();
         $admin=Session::get('admin');
-             return view('admin-categories',compact('admin','categories'));
+             return view('admin.categories',compact('admin','categories'));
     }
 
     public function logout(){
@@ -99,7 +99,7 @@ class AdminController extends Controller
             $quizDetails=Session::get('quizDetails');
             $totalMcqs=Mcq::where('quiz_id',$quizDetails->id)->count();
         }
-        return view('add-quiz', compact('admin', 'categories', 'totalMcqs'));
+        return view('admin.add-quiz', compact('admin', 'categories', 'totalMcqs'));
     }
 
     public function add_quiz(Request $r)
@@ -162,13 +162,13 @@ class AdminController extends Controller
     public function show_quiz($id,$quiz_name){
         $admin=Session::get('admin');
         $mcqs=Mcq::where('quiz_id',$id)->get();
-        return view('show-quiz',compact('admin','mcqs','quiz_name'));
+        return view('admin.show-quiz',compact('admin','mcqs','quiz_name'));
     }
 
     public function quiz_list($id,$category){
         $admin=Session::get('admin');
         $quizzes=Quiz::where('category_id',$id)->get();
-        return view('quiz-list',compact('admin','quizzes','category'));
+        return view('admin.quiz-list',compact('admin','quizzes','category'));
     }
 
 }

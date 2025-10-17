@@ -9,7 +9,7 @@ Route::get('/', function () {
 });
 
 // For ADMIN 
-Route::view('admin-login', 'admin-login');
+Route::view('admin-login', 'admin-auth.login');
 Route::post('/admin-login',[AdminController::class,'login'])->name('admin.login');
 Route::get('/admin-logout',[AdminController::class,'logout'])->name('admin.logout');
 

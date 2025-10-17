@@ -28,7 +28,7 @@ class UserController extends Controller
             $query->where('name','like',"%$search%");
         }
         $categories=$query->paginate(5)->appends($request->only('search'));
-        return view('welcome',compact('categories'));
+        return view('user.welcome',compact('categories'));
     }
 
     public function all_quizzes(Request $request){
@@ -39,13 +39,13 @@ class UserController extends Controller
             $query->where('name','like',"%$search%");
         }
         $quizzes=$query->paginate(5)->appends($request->only('search'));
-        return view('user-all-quizzes',compact('quizzes'));
+        return view('user.all-quizzes',compact('quizzes'));
     }
 
     public function quiz_list($id,$category){
         $category=str_replace('-',' ',$category);
         $quizzes=Quiz::withCount('mcqs')->where('category_id',$id)->get();
-        return view('user-quiz-list',compact('id','category','quizzes'));
+        return view('user.quiz-list',compact('id','category','quizzes'));
     }
 
     public function start_quiz($id,$quiz_name){
@@ -56,16 +56,16 @@ class UserController extends Controller
             ->with('error','No MCQs found for this quiz. Please contact admin.');
         }
         Session::put('first_mcq',$mcqs->first());
-        return view('start-quiz',compact('quiz_name','mcqs'));
+        return view('user.start-quiz',compact('quiz_name','mcqs'));
     }
 
     public function signup_form(){
-        return view('user-signup');
+        return view('user-auth.signup');
     }
 
     public function signup_form_quiz(){
         Session::put('quiz-url',url()->previous());
-        return view('user-signup');
+        return view('user-auth.signup');
     }
 
     public function signup(Request $request){
@@ -128,12 +128,12 @@ class UserController extends Controller
     }
 
     public function user_login_form(){
-        return view('user-login');
+        return view('user-auth.login');
     }
 
     public function user_login_form_quiz(){
         Session::put('quiz-url',url()->previous());
-        return view('user-login');  
+        return view('user-auth.login');  
     }
 
     public function user_login(Request $request){
@@ -294,7 +294,7 @@ class UserController extends Controller
 
     public function mcq($id,$quiz_name){
         $quiz_name=str_replace('-',' ',$quiz_name);
-        
+
         // Ensure quiz session is active
         $firstMcq = Session::get('first_mcq');
         if (!$firstMcq) {
@@ -355,7 +355,7 @@ class UserController extends Controller
                 ->skip($mcqNumber - 1)
                 ->firstOrFail();
 
-        return view('user-mcq', compact('mcq', 'quiz_name'));
+        return view('user.mcq', compact('mcq', 'quiz_name'));
                
     }
 
@@ -420,7 +420,7 @@ class UserController extends Controller
          $resultData = McqRecord::with('mcq')->where('record_id', $record_id)->get();
          $correctAnswers = $resultData->where('is_correct', 1)->count();
          $totalQuestions = $resultData->count();
-         return view('quiz-result', compact('resultData','correctAnswers', 'totalQuestions', 'quiz_name'));
+         return view('user.quiz-result', compact('resultData','correctAnswers', 'totalQuestions', 'quiz_name'));
         }
 
         // Identify actual MCQ for current session number
@@ -467,6 +467,6 @@ class UserController extends Controller
                          ->orderBy('created_at', 'desc')
                          ->paginate(5);
 
-        return view('user-details', compact('records'));     
+        return view('user.details', compact('records'));     
     }
 }
