@@ -13,6 +13,7 @@ use App\Models\Record;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
@@ -72,6 +73,14 @@ class UserController extends Controller
             'password'=>'required|min:6|confirmed',
         ]);
 
+         // Check if email domain exists (MX record)
+        $domain = explode('@', $request->email)[1] ?? '';
+        if (!checkdnsrr($domain, 'MX')) {
+            return redirect()->route('user.signup.form')
+                ->with('error', 'Invalid email domain. Please enter a valid email address.')
+                ->withInput();
+        }
+
         $user=new User();
         $user->name=$request->name;
         $user->email=$request->email;
@@ -95,8 +104,18 @@ class UserController extends Controller
         // or use mass assignment with validated data
             // $user=User::create($request->only('name','email','password'));
 
-        // send verification email 
-        Mail::to($user->email)->send(new VerifyUserMail($user));
+        // send verification email synchronously
+        try{
+            Mail::to($user->email)->send(new VerifyUserMail($user));
+        } catch (\Exception $e){
+             // Log the exception (optional)
+            Log::error('Verification email failed for user ID '.$user->id.' - '.$e->getMessage());
+
+            return redirect()
+            ->route('user.signup.form')
+            ->with('error', 'Failed to send verification email. Please entre a valid email address or try again.')
+            ->withInput();
+        }
 
         // Do not log in until verified
         Session::forget('user');
