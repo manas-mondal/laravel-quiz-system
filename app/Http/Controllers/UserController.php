@@ -30,6 +30,17 @@ class UserController extends Controller
         return view('welcome',compact('categories'));
     }
 
+    public function all_quizzes(Request $request){
+        $query=Quiz::withCount(['mcqs','records'])->with(['category','mcqs'])->orderByDesc('records_count');
+
+        if($request->has('search')){
+            $search=$request->input('search');
+            $query->where('name','like',"%$search%");
+        }
+        $quizzes=$query->paginate(5)->appends($request->only('search'));
+        return view('user-all-quizzes',compact('quizzes'));
+    }
+
     public function quiz_list($id,$category){
         $quizzes=Quiz::withCount('mcqs')->where('category_id',$id)->get();
         return view('user-quiz-list',compact('id','category','quizzes'));

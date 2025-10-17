@@ -30,6 +30,7 @@ Route::middleware('admin-auth')->group(function (){
 // For USER
 Route::get('/',[UserController::class,'welcome'])->name('welcome');
 
+Route::get('/quizzes',[UserController::class,'all_quizzes'])->name('user.all.quizzes');
 Route::get('/user-quiz-list/{id}/{category}',[UserController::class,'quiz_list'])->name('user.quiz.list');
 Route::get('/start-quiz/{id}/{quiz_name}',[UserController::class,'start_quiz'])->name('user.quiz.start');
 

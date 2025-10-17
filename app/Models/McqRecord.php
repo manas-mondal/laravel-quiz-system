@@ -22,7 +22,7 @@ class McqRecord extends Model
     }
 
     public function record(){
-        return $this->belongdTo(Record::class);
+        return $this->belongsTo(Record::class);
     }
 
     public function mcq(){
