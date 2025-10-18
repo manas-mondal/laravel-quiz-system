@@ -12,7 +12,7 @@
 <body>
     <x-navbar :admin="$admin"></x-navbar>
     @if (Session::has('success'))
-        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative max-w-md mx-auto mt-24"
+        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative max-w-md mx-auto mt-20 mb-5"
             role="alert">
             <strong class="font-bold">Success!</strong>
             <span class="block sm:inline">{{ Session::get('success') }}</span>
@@ -27,7 +27,7 @@
             </span>
         </div>
     @elseif (Session::has('error'))
-        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative max-w-md mx-auto mt-24"
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative max-w-md mx-auto mt-20 mb-5"
             role="alert">
             <strong class="font-bold">Error!</strong>
             <span class="block sm:inline">{{ Session::get('error') }}</span>
@@ -53,7 +53,8 @@
                 <div>
                     <input
                         class="w-full px-4 py-2 border border-gray-300 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition"
-                        type="text" name="category_name" placeholder="Enter Category name">
+                        type="text" name="category_name" placeholder="Enter Category name"
+                        value="{{ old('category_name') }}">
                     @error('category_name')
                         <div class="text-red-500">{{ $message }}</div>
                     @enderror
@@ -84,6 +85,28 @@
                         <td class="px-4 py-2 border-b border-blue-100 text-gray-600">{{ $category->name }}</td>
                         <td class="px-4 py-2 border-b border-blue-100 text-gray-600">{{ $category->creator }}</td>
                         <td class="px-4 py-2 border-b border-blue-100 flex space-x-2">
+                            <!-- View Button -->
+                            <a href="{{ route('admin.quiz.list', ['id' => $category->id, 'category' => $category->name]) }}"
+                                class="text-gray-700 hover:text-blue-500 transition-colors" title="View">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                </svg>
+                            </a>
+                            <!-- Edit/Update Button -->
+                            <a href="{{ route('admin.category.edit', ['id' => $category->id]) }}"
+                                class="text-gray-700 hover:text-green-500 transition-colors" title="Edit">
+                                <!-- Pencil SVG icon, lighter weight -->
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.93z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 7.125L14.25 11.25" />
+                                </svg>
+                            </a>
                             <!-- Delete Button -->
                             <form action="{{ route('admin.category.delete', ['id' => $category->id]) }}" method="POST"
                                 onsubmit="return confirm('Are you sure you want to delete this category?');">
@@ -100,17 +123,6 @@
                                     </svg>
                                 </button>
                             </form>
-                            <!-- View Button -->
-                            <a href="{{ route('admin.quiz.list', ['id' => $category->id, 'category' => $category->name]) }}"
-                                class="text-gray-700 hover:text-blue-500 transition-colors" title="View">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none"
-                                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                </svg>
-                            </a>
                         </td>
                     </tr>
                 @endforeach

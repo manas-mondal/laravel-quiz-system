@@ -87,6 +87,42 @@ class AdminController extends Controller
         }
     }
 
+    public function edit_category($id){
+        $admin=Session::get('admin');
+
+        $category=Category::find($id);
+
+        if($category){
+            return view('admin.edit-category',compact('admin','category'));
+        }else{
+            return redirect()
+                ->route('admin.categories')
+                ->with('error', "Category not found");
+        }
+    }
+
+    public function update_category(Request $r, $id){
+        $validation=$r->validate([
+            'category_name'=>'required|min:3|unique:categories,name,'.$id
+        ]);
+        $admin=Session::get('admin');
+
+        $category=Category::find($id);
+
+        if($category){
+            $category->name=$r->category_name;
+            $category->save();
+
+            return redirect()
+                ->route('admin.categories')
+                ->with('success', "Category " . $r->category_name . " updated successfully");
+        }else{
+            return redirect()
+                ->route('admin.categories')
+                ->with('error', "Category not found");
+        }
+    }
+
     // public function add_quiz(Request $r){
     //     $admin=Session::get('admin');
     //     $categories = Category::orderBy('created_at', 'desc')->get();
