@@ -181,6 +181,44 @@ class AdminController extends Controller
                 ->with('success', 'Quiz Added Successfully!');
         }
     }
+
+    public function edit_quiz($id){
+        $admin=Session::get('admin');
+
+        $quiz=Quiz::find($id);
+        $categories = Category::orderBy('created_at', 'desc')->get();
+
+        if($quiz){
+            return view('admin.edit-quiz',compact('admin','quiz','categories'));
+        }else{
+            return redirect()
+                ->route('admin.quiz.form')
+                ->with('error', "Quiz not found");
+        }
+    }
+
+    public function update_quiz(Request $r, $id){
+        $validation=$r->validate([
+            'quiz_name'=>'required|min:3|unique:quizzes,name,'.$id,
+            'category_id'=>'required|exists:categories,id'
+        ]);
+
+        $quiz=Quiz::find($id);
+
+        if($quiz){
+            $quiz->name=$r->quiz_name;
+            $quiz->category_id=$r->category_id;
+            $quiz->save();
+
+            return redirect()
+                ->route('admin.quiz.form')
+                ->with('success', "Quiz " . $r->quiz_name . " updated successfully");
+        }else{
+            return redirect()
+                ->route('admin.quiz.form')
+                ->with('error', "Quiz not found");
+        }
+    }
     
     public function add_mcqs(Request $r){
         $admin=Session::get('admin');

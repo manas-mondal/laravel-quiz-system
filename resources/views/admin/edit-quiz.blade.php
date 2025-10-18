@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Category</title>
+    <title>Edit Quiz</title>
     @vite('resources/css/app.css')
 </head>
 
@@ -45,18 +45,32 @@
 
     <div class="bg-gray-100 flex justify-center pt-24 pb-5">
         <div class="bg-white p-8 rounded-2xl shadow-md w-full max-w-md">
-            <h2 class="text-2xl text-center text-gray-800 mb-6">Edit Category</h2>
+            <h2 class="text-2xl text-center text-gray-800 mb-6">Edit Quiz</h2>
 
-            <form action="{{ route('admin.category.update', ['id' => $category->id]) }}" method="POST"
-                class="space-y-4">
+            <form action="{{ route('admin.quiz.update', ['id' => $quiz->id]) }}" method="POST" class="space-y-4">
                 @csrf
                 @method('PUT')
 
                 <div>
-                    <input type="text" name="category_name" value="{{ old('category_name', $category->name) }}"
+                    <input type="text" name="quiz_name" value="{{ old('quiz_name', $quiz->name) }}"
                         class="w-full px-4 py-2 border border-gray-300 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition"
-                        placeholder="Enter Category name">
-                    @error('category_name')
+                        placeholder="Enter Quiz name">
+                    @error('quiz_name')
+                        <div class="text-red-500">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div>
+                    <select name="category_id"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition">
+                        @foreach ($categories as $category)
+                            <option value="{{ $category->id }}"
+                                {{ old('category_id', $quiz->category_id) == $category->id ? 'selected' : '' }}>
+                                {{ $category->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                    @error('category_id')
                         <div class="text-red-500">{{ $message }}</div>
                     @enderror
                 </div>

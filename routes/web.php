@@ -22,6 +22,8 @@ Route::middleware('admin-auth')->group(function (){
     Route::put('/update-category/{id}',[AdminController::class,'update_category'])->name('admin.category.update');
     Route::get('/add-quiz', [AdminController::class, 'show_add_quiz_form'])->name('admin.quiz.form');
     Route::post('/add-quiz', [AdminController::class, 'add_quiz'])->name('admin.quiz.add');
+    Route::get('/edit-quiz/{id}', [AdminController::class, 'edit_quiz'])->name('admin.quiz.edit');
+    Route::put('/update-quiz/{id}', [AdminController::class, 'update_quiz'])->name('admin.quiz.update');
     Route::post('/add-mcqs', [AdminController::class, 'add_mcqs'])->name('admin.mcqs.add');
     Route::get('/cancel-quiz', [AdminController::class, 'cancel_quiz'])->name('admin.quiz.cancel');
     Route::get('/show-quiz/{id}/{quiz_name}', [AdminController::class, 'show_quiz'])->name('admin.quiz.show');
