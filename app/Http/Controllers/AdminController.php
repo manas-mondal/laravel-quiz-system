@@ -6,6 +6,7 @@ use App\Models\Admin;
 use App\Models\Category;
 use App\Models\Mcq;
 use App\Models\Quiz;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
@@ -34,7 +35,9 @@ class AdminController extends Controller
     public function dashboard(){
         $admin=Session::get('admin');
 
-        return view('admin.dashboard',compact('admin'));
+        $users= User::orderBy('created_at', 'desc')->paginate(10);
+
+        return view('admin.dashboard',compact('admin','users'));
     }
     
     public function categories(){
