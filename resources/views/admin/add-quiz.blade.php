@@ -124,7 +124,7 @@
                                     </svg>
                                 </a>
                                 <!-- Delete Button -->
-                                <form action="" method="POST"
+                                <form action="{{ route('admin.quiz.delete', ['id' => $quiz->id]) }}" method="POST"
                                     onsubmit="return confirm('Are you sure you want to delete this category?');">
                                     @csrf
                                     @method('DELETE')

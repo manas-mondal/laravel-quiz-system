@@ -219,6 +219,25 @@ class AdminController extends Controller
                 ->with('error', "Quiz not found");
         }
     }
+
+    public function delete_quiz($id){
+        $quiz=Quiz::find($id);
+
+        if($quiz){
+            // Delete associated MCQs first
+            Mcq::where('quiz_id', $quiz->id)->delete();
+
+            $quiz->delete();
+
+            return redirect()
+                ->route('admin.quiz.form')
+                ->with('success', "Quiz " . $quiz->name . " deleted successfully");
+        }else{
+            return redirect()
+                ->route('admin.quiz.form')
+                ->with('error', "Quiz not found");
+        }
+    }
     
     public function add_mcqs(Request $r){
         $admin=Session::get('admin');
