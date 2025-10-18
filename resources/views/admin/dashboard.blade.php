@@ -13,7 +13,7 @@
     <x-navbar :admin="$admin"></x-navbar>
     <div class="bg-gray-100 flex  justify-center pt-24 pb-5">
         <div class="bg-white p-8 rounded-2xl shadow-md w-full max-w-md">
-            <h2 class="text-2xl text-center text-gray-800">All Users</h2>
+            <h2 class="text-2xl font-bold text-center text-gray-800">All Users</h2>
         </div>
     </div>
     <div class="max-w-2xl mx-auto mt-10">

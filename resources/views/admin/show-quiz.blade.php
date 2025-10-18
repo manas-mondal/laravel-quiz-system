@@ -13,11 +13,10 @@
     <x-navbar :admin="$admin"></x-navbar>
     <div class="bg-gray-100 flex  justify-center pt-24 pb-5">
         <div class="bg-white p-8 rounded-2xl shadow-md w-full max-w-md">
-            <h2 class="text-2xl text-center text-gray-800">Quiz: {{ $quiz_name }} <a
-                    class="text-blue-500 hover:underline text-sm" href="{{ route('admin.quiz.form') }}">Back</a></h2>
+            <h2 class="text-2xl text-center text-gray-800">Quiz: {{ $quiz_name }}</h2>
         </div>
     </div>
-    <div class="max-w-4xl mx-auto mt-10">
+    <div class="max-w-4xl mx-auto mt-10 mb-10">
         <table class="min-w-full bg-white rounded-xl shadow-md overflow-hidden">
             <thead>
                 <tr class="bg-blue-100">

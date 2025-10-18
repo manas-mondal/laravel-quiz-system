@@ -113,6 +113,7 @@ class AdminController extends Controller
     {
         $admin = Session::get('admin');
         $categories = Category::orderBy('created_at', 'desc')->get();
+        $quizzes = Quiz::with('category')->orderBy('created_at', 'desc')->paginate(8);
         $totalMcqs = 0;
 
         if(Session::has('quizDetails')){
@@ -120,7 +121,7 @@ class AdminController extends Controller
             $totalMcqs=Mcq::where('quiz_id',$quizDetails->id)->count();
         }
 
-        return view('admin.add-quiz', compact('admin', 'categories', 'totalMcqs'));
+        return view('admin.add-quiz', compact('admin', 'categories', 'totalMcqs', 'quizzes'));
     }
 
     public function add_quiz(Request $r)
