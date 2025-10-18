@@ -26,23 +26,29 @@ class AdminController extends Controller
             ]);
         }
         Session::put('admin',$admin);
-        return redirect('/dashboard',);
+
+        return redirect()
+            ->route('dashboard');
     }
     
     public function dashboard(){
         $admin=Session::get('admin');
+
         return view('admin.dashboard',compact('admin'));
     }
     
     public function categories(){
         $categories = Category::orderBy('created_at', 'desc')->get();
+
         $admin=Session::get('admin');
              return view('admin.categories',compact('admin','categories'));
     }
 
     public function logout(){
         Session::forget('admin');
-        return redirect()->route('admin.login');
+
+        return redirect()
+            ->route('admin.login');
     }
 
     public function add_category(Request $r){
@@ -54,17 +60,27 @@ class AdminController extends Controller
         $category->name=$r->category_name;
         $category->creator=$admin->name;
         $category->save();
-        return redirect('/admin-categories')->with('success', "Category " . $r->category_name . " added successfully");
+
+        return redirect()
+            ->route('admin.categories')
+            ->with('success', "Category " . $r->category_name . " added successfully");
     }
 
     public function delete_category($id){
         $admin=Session::get('admin');
+
         $category=Category::find($id);
+
         if($category){
             $category->delete();
-            return redirect('/admin-categories')->with('success', "Category " . $category->name . " deleted successfully");
+
+            return redirect()
+                ->route('admin.categories')
+                ->with('success', "Category " . $category->name . " deleted successfully");
         }else{
-            return redirect('/admin-categories')->with('error', "Category not found");
+            return redirect()
+                ->route('admin.categories')
+                ->with('error', "Category not found");
         }
     }
 
@@ -95,37 +111,47 @@ class AdminController extends Controller
         $admin = Session::get('admin');
         $categories = Category::orderBy('created_at', 'desc')->get();
         $totalMcqs = 0;
+
         if(Session::has('quizDetails')){
             $quizDetails=Session::get('quizDetails');
             $totalMcqs=Mcq::where('quiz_id',$quizDetails->id)->count();
         }
+
         return view('admin.add-quiz', compact('admin', 'categories', 'totalMcqs'));
     }
 
     public function add_quiz(Request $r)
     {
         $admin = Session::get('admin');
+
         $validation = $r->validate([
             'quiz_name'   => 'required|min:3|unique:quizzes,name',
             'category_id' => 'required|exists:categories,id'
         ]);
+
         $quiz = new Quiz();
         $quiz->name = $r->quiz_name;
         $quiz->category_id = $r->category_id;
 
         if ($quiz->save()) {
             Session::put('quizDetails', $quiz);
-            return redirect()->route('admin.quiz.form')
-                            ->with('success', 'Quiz Added Successfully!');
+
+            return redirect()
+                ->route('admin.quiz.form')
+                ->with('success', 'Quiz Added Successfully!');
         }
     }
     
     public function add_mcqs(Request $r){
         $admin=Session::get('admin');
         $quizDetails=Session::get('quizDetails');
+
         if(!$quizDetails){
-            return redirect()->route('admin.quiz.form')->with('error', 'Please add a quiz first.');
+            return redirect()
+                ->route('admin.quiz.form')
+                ->with('error', 'Please add a quiz first.');
         }
+
         $validation=$r->validate([
             'question'=>'required|min:5',
             'option_a'=>'required|min:1',
@@ -134,6 +160,7 @@ class AdminController extends Controller
             'option_d'=>'required|min:1',
             'correct_option'=>'required|in:option_a,option_b,option_c,option_d'
         ]);
+
         $mcq=new Mcq();
         $mcq->question=$r->question;
         $mcq->option_a=$r->option_a;
@@ -144,30 +171,43 @@ class AdminController extends Controller
         $mcq->admin_id=$admin->id;
         $mcq->category_id=$quizDetails->category_id;
         $mcq->quiz_id=$quizDetails->id;
+
         if($mcq->save()){
             if($r->submit=='add-more'){
-                return redirect()->back()->with('success', 'MCQ Added Successfully! Add more MCQs.');
+                return redirect()
+                    ->back()
+                    ->with('success', 'MCQ Added Successfully! Add more MCQs.');
             }else{
                 Session::forget('quizDetails');
-                return redirect()->route('admin.quiz.form')->with('success', 'MCQ Added Successfully! Quiz creation completed.');
+
+                return redirect()
+                    ->route('admin.quiz.form')
+                    ->with('success', 'MCQ Added Successfully! Quiz creation completed.');
             }
         }
     }
 
     public function cancel_quiz(){
         $admin=Session::get('admin');
+
         Session::forget('quizDetails');
-        return redirect()->route('admin.quiz.form')->with('success', 'Quiz creation cancelled.');
+
+        return redirect()
+            ->route('admin.quiz.form')
+            ->with('success', 'Quiz creation cancelled.');
     }
+
     public function show_quiz($id,$quiz_name){
         $admin=Session::get('admin');
-        $mcqs=Mcq::where('quiz_id',$id)->get();
+        $mcqs=Mcq::where('quiz_id',$id)->get()
+        ;
         return view('admin.show-quiz',compact('admin','mcqs','quiz_name'));
     }
 
     public function quiz_list($id,$category){
         $admin=Session::get('admin');
         $quizzes=Quiz::where('category_id',$id)->get();
+
         return view('admin.quiz-list',compact('admin','quizzes','category'));
     }
 
