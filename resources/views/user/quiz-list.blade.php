@@ -29,7 +29,7 @@
                 <tbody>
                     @foreach ($quizzes as $key => $quiz)
                         <tr class="{{ $loop->even ? 'bg-blue-50' : 'bg-white' }}">
-                            <td class="px-4 py-2 border-blue-100 text-gray-600">{{ $key + 1 }}</td>
+                            <td class="px-4 py-2 border-blue-100 text-gray-600">{{ $key + $quizzes->firstItem() }}</td>
                             <td class="px-4 py-2 border-blue-100 text-gray-600">{{ $quiz->name }}</td>
                             <td class="px-4 py-2 border-blue-100 text-gray-600">{{ $quiz->mcqs->count() }}</td>
                             <td class="px-4 py-2 border-blue-100">
@@ -41,6 +41,9 @@
                     @endforeach
                 </tbody>
             </table>
+            <div class="mt-2">
+                {{ $quizzes->links() }}
+            </div>
         </div>
     </div>
     <x-footer-user />

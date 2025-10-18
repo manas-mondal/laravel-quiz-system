@@ -38,7 +38,7 @@ class AdminController extends Controller
     }
     
     public function categories(){
-        $categories = Category::orderBy('created_at', 'desc')->get();
+        $categories = Category::orderBy('created_at', 'desc')->paginate(8);
 
         $admin=Session::get('admin');
              return view('admin.categories',compact('admin','categories'));

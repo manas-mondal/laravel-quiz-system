@@ -77,9 +77,10 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($categories as $category)
+                @foreach ($categories as $key => $category)
                     <tr class="{{ $loop->even ? 'bg-blue-50' : 'bg-white' }}">
-                        <td class="px-4 py-2 border-b border-blue-100 text-gray-600">{{ $category->id }}</td>
+                        <td class="px-4 py-2 border-b border-blue-100 text-gray-600">
+                            {{ $key + $categories->firstItem() }}</td>
                         <td class="px-4 py-2 border-b border-blue-100 text-gray-600">{{ $category->name }}</td>
                         <td class="px-4 py-2 border-b border-blue-100 text-gray-600">{{ $category->creator }}</td>
                         <td class="px-4 py-2 border-b border-blue-100 flex space-x-2">
@@ -115,6 +116,9 @@
                 @endforeach
             </tbody>
         </table>
+        <div class="mt-2">
+            {{ $categories->links() }}
+        </div>
     </div>
 </body>
 

@@ -27,7 +27,7 @@ class UserController extends Controller
             $search=$request->input('search');
             $query->where('name','like',"%$search%");
         }
-        $categories=$query->paginate(5)->appends($request->only('search'));
+        $categories=$query->paginate(8)->appends($request->only('search'));
         return view('user.welcome',compact('categories'));
     }
 
@@ -38,13 +38,13 @@ class UserController extends Controller
             $search=$request->input('search');
             $query->where('name','like',"%$search%");
         }
-        $quizzes=$query->paginate(5)->appends($request->only('search'));
+        $quizzes=$query->paginate(8)->appends($request->only('search'));
         return view('user.all-quizzes',compact('quizzes'));
     }
 
     public function quiz_list($id,$category){
         $category=str_replace('-',' ',$category);
-        $quizzes=Quiz::withCount('mcqs')->where('category_id',$id)->get();
+        $quizzes=Quiz::withCount('mcqs')->where('category_id',$id)->paginate(5);
         return view('user.quiz-list',compact('id','category','quizzes'));
     }
 
@@ -465,7 +465,7 @@ class UserController extends Controller
                             'mcq_records as total_questions'
                          ])
                          ->orderBy('created_at', 'desc')
-                         ->paginate(5);
+                         ->paginate(8);
 
         return view('user.details', compact('records'));     
     }
