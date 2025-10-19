@@ -63,6 +63,8 @@
                 <div>
                     <select name="category_id"
                         class="w-full px-4 py-2 border border-gray-300 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition">
+                        <option value="" disabled {{ old('category_id') ? '' : 'selected' }}>Select Category
+                        </option>
                         @foreach ($categories as $category)
                             <option value="{{ $category->id }}"
                                 {{ old('category_id', $quiz->category_id) == $category->id ? 'selected' : '' }}>

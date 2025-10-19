@@ -64,9 +64,12 @@
                         <select
                             class="w-full px-4 py-2 border border-gray-300 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition"
                             type="text" name="category_id">
-                            <option value="" disabled selected>Select Category</option>
+                            <option value="" disabled {{ old('category_id') ? '' : 'selected' }}>Select Category
+                            </option>
                             @foreach ($categories as $category)
-                                <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                <option value="{{ $category->id }}"
+                                    {{ old('category_id') == $category->id ? 'selected' : '' }}>{{ $category->name }}
+                                </option>
                             @endforeach
                         </select>
                         @error('category_id')
@@ -166,7 +169,7 @@
                     <div>
                         <textarea
                             class="w-full px-4 py-2 border border-gray-300 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition"
-                            name="question" id="" cols="30" rows="3" placeholder="Enter question here"></textarea>
+                            name="question" id="" cols="30" rows="3" placeholder="Enter question here">{{ old('question') }}</textarea>
                         @error('question')
                             <div class="text-red-500">{{ $message }}</div>
                         @enderror
@@ -211,11 +214,17 @@
                         <select
                             class="w-full px-4 py-2 border border-gray-300 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition"
                             type="text" name="correct_option">
-                            <option value="" disabled selected>Right answer</option>
-                            <option value="option_a">Option A</option>
-                            <option value="option_b">Option B</option>
-                            <option value="option_c">Option C</option>
-                            <option value="option_d">Option D</option>
+                            <option value="" disabled {{ old('correct_option') ? '' : 'selected' }}>Right answer
+                            </option>
+                            <option value="option_a" {{ old('correct_option') == 'option_a' ? 'selected' : '' }}>
+                                Option
+                                A</option>
+                            <option value="option_b" {{ old('correct_option') == 'option_b' ? 'selected' : '' }}>
+                                Option B</option>
+                            <option value="option_c" {{ old('correct_option') == 'option_c' ? 'selected' : '' }}>
+                                Option C</option>
+                            <option value="option_d" {{ old('correct_option') == 'option_d' ? 'selected' : '' }}>
+                                Option D</option>
                         </select>
                         @error('correct_option')
                             <div class="text-red-500">{{ $message }}</div>
