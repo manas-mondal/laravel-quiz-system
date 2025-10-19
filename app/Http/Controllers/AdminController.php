@@ -301,6 +301,51 @@ class AdminController extends Controller
         return view('admin.show-quiz',compact('admin','mcqs','quiz_name'));
     }
 
+    public function edit_mcq($id){
+        $admin=Session::get('admin');
+
+        $mcq=Mcq::findOrFail($id);
+
+        if($mcq){
+            return view('admin.edit-mcq',compact('admin','mcq'));
+        }else{
+            return redirect()
+                ->back()
+                ->with('error', "MCQ not found");
+        }
+    }
+
+    public function update_mcq(Request $r, $id){
+        $validation=$r->validate([
+            'question'=>'required|min:5',
+            'option_a'=>'required|min:1',
+            'option_b'=>'required|min:1',
+            'option_c'=>'required|min:1',
+            'option_d'=>'required|min:1',
+            'correct_option'=>'required|in:option_a,option_b,option_c,option_d'
+        ]);
+
+        $mcq=Mcq::with('quiz')->findOrFail($id);
+
+        if($mcq){
+            $mcq->question=$r->question;
+            $mcq->option_a=$r->option_a;
+            $mcq->option_b=$r->option_b;
+            $mcq->option_c=$r->option_c;
+            $mcq->option_d=$r->option_d;
+            $mcq->correct_option=$r->correct_option;
+            $mcq->save();
+
+            return redirect()
+                ->route('admin.quiz.show', ['id' => $mcq->quiz->id, 'quiz_name' => $mcq->quiz->name])
+                ->with('success', "MCQ updated successfully");
+        }else{
+            return redirect()
+                ->back()
+                ->with('error', "MCQ not found");
+        }
+    }
+
     public function quiz_list($id,$category){
         $admin=Session::get('admin');
         $quizzes=Quiz::where('category_id',$id)->get();

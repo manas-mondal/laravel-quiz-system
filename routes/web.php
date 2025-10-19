@@ -29,6 +29,8 @@ Route::middleware('admin-auth')->group(function (){
     Route::get('/cancel-quiz', [AdminController::class, 'cancel_quiz'])->name('admin.quiz.cancel');
     Route::get('/show-quiz/{id}/{quiz_name}', [AdminController::class, 'show_quiz'])->name('admin.quiz.show');
     Route::get('/quiz-list/{id}/{category}', [AdminController::class, 'quiz_list'])->name('admin.quiz.list');
+    Route::get('/edit-mcq/{id}', [AdminController::class, 'edit_mcq'])->name('admin.mcq.edit');
+    Route::put('/update-mcq/{id}', [AdminController::class, 'update_mcq'])->name('admin.mcq.update');
 });
 
 
