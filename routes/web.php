@@ -31,6 +31,7 @@ Route::middleware('admin-auth')->group(function (){
     Route::get('/quiz-list/{id}/{category}', [AdminController::class, 'quiz_list'])->name('admin.quiz.list');
     Route::get('/edit-mcq/{id}', [AdminController::class, 'edit_mcq'])->name('admin.mcq.edit');
     Route::put('/update-mcq/{id}', [AdminController::class, 'update_mcq'])->name('admin.mcq.update');
+    Route::delete('/delete-mcq/{id}', [AdminController::class, 'delete_mcq'])->name('admin.mcq.delete');
 });
 
 

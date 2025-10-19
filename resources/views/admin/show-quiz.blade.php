@@ -51,15 +51,15 @@
         <table class="min-w-full bg-white rounded-xl shadow-md overflow-hidden">
             <thead>
                 <tr class="bg-blue-100">
-                    <th class="px-4 py-2 border-b border-blue-100 text-left text-gray-700">MCQ Id</th>
+                    <th class="px-4 py-2 border-b border-blue-100 text-left text-gray-700">SL. No.</th>
                     <th class="px-4 py-2 border-b border-blue-100 text-left text-gray-700">Question</th>
                     <th class="px-4 py-2 border-b border-blue-100 text-left text-gray-700">Action</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach ($mcqs as $mcq)
+                @foreach ($mcqs as $key => $mcq)
                     <tr class="{{ $loop->even ? 'bg-blue-50' : 'bg-white' }}">
-                        <td class="px-4 py-2 border-b border-blue-100 text-gray-600">{{ $mcq->id }}</td>
+                        <td class="px-4 py-2 border-b border-blue-100 text-gray-600">{{ $key + 1 }}</td>
                         <td class="px-4 py-2 border-b border-blue-100 text-gray-600">{{ $mcq->question }}</td>
                         <td class=" flex gap-2 px-4 py-5 border-b border-blue-100">
                             <!-- Edit/Update Button -->
@@ -74,7 +74,7 @@
                                 </svg>
                             </a>
                             <!-- Delete Button -->
-                            <form action="" method="POST"
+                            <form action="{{ route('admin.mcq.delete', ['id' => $mcq->id]) }}" method="POST"
                                 onsubmit="return confirm('Are you sure you want to delete this category?');">
                                 @csrf
                                 @method('DELETE')

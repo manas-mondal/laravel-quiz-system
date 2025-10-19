@@ -353,4 +353,23 @@ class AdminController extends Controller
         return view('admin.quiz-list',compact('admin','quizzes','category'));
     }
 
+    public function delete_mcq($id){
+        $mcq=Mcq::with('quiz')->findOrFail($id);
+
+        if($mcq){
+            $quizId = $mcq->quiz->id;
+            $quizName = $mcq->quiz->name;
+
+            $mcq->delete();
+
+            return redirect()
+                ->route('admin.quiz.show', ['id' => $quizId, 'quiz_name' => $quizName])
+                ->with('success', "MCQ deleted successfully");
+        }else{
+            return redirect()
+                ->back()
+                ->with('error', "MCQ not found");
+        }
+    }
+
 }
