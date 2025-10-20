@@ -42,6 +42,21 @@
                     </svg>
                 </button>
             </div>
+        @elseif (Session::has('info'))
+            <div class="flex items-center bg-blue-200 border border-blue-400 text-blue-800 px-4 py-3 rounded-lg shadow relative max-w-md mx-auto mb-4"
+                role="alert">
+                <span class="flex-1">
+                    <strong class="font-semibold">Info!</strong>
+                    <span class="block sm:inline"> {{ Session::get('info') }} </span>
+                </span>
+                <button type="button" onclick="this.closest('div[role=alert]').remove()"
+                    class="ml-4 text-blue-600 hover:text-blue-800 hover:cursor-pointer focus:outline-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
         @endif
         <div class="bg-white p-8 rounded-2xl shadow-md w-full max-w-md">
             <h2 class="text-2xl text-center font-medium text-green-800 mb-6">User Login</h2>

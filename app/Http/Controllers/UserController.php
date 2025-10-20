@@ -188,7 +188,7 @@ class UserController extends Controller
         if($user->active == 2){
             return redirect()
             ->route('user.login.form')
-            ->with('success','Your email is already verified. Please login below.');
+            ->with('info','Your email is already verified. Please login below.');
         }
 
         $user->active=2; // mark as verified
