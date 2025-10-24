@@ -55,18 +55,6 @@ services:
         networks:
             - laravelnet
 
-    node:
-        image: node:22-alpine
-        container_name: laravel_node
-        working_dir: /var/www/html
-        volumes:
-            - ./:/var/www/html
-        command: ["tail", "-f", "/dev/null"]
-        ports:
-            - "5173:5173"
-        networks:
-            - laravelnet
-
 volumes:
     dbdata:
 

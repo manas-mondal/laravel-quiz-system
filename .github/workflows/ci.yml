@@ -21,16 +21,17 @@ jobs:
         with:
           php-version: 8.2
 
-      - name: Setup Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 22
+      # Node / npm steps are removed because Tailwind CDN is used
+      # - name: Setup Node
+      #   uses: actions/setup-node@v3
+      #   with:
+      #     node-version: 22
 
-      - name: Install Node Dependencies
-        run: npm install
+      # - name: Install Node Dependencies
+      #   run: npm install
 
-      - name: Build Assets
-        run: npm run build
+      # - name: Build Assets
+      #   run: npm run build
 
       - name: Install Composer Dependencies
         run: composer install --no-interaction --prefer-dist

@@ -1,7 +1,18 @@
+# Node & PHP dependencies
 node_modules
 vendor
+
+# Git metadata
 .git
+
+# Environment & config
 .env
 .DS_Store
 npm-debug.log
 storage/*.key
+
+# Optional: Tests, docs, build artifacts
+tests
+docs
+# public/build
+# public/css/app.css
