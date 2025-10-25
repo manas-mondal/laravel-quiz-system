@@ -1,5 +1,5 @@
 <nav
-    class="fixed top-0 left-0 right-0 z-50 px-4 sm:px-6 py-3 bg-white/90 backdrop-blur shadow-md flex justify-between items-center transition-all duration-300">
+    class="fixed top-0 left-0 right-0 z-50 px-4 sm:px-6 py-3 bg-white/90 shadow-md flex justify-between items-center transition-all duration-300">
     <!-- Logo / Brand -->
     <div class="text-2xl sm:text-3xl text-green-900 font-bold cursor-pointer">
         <a href="{{ route('welcome') }}">Quiz System</a>
@@ -17,23 +17,24 @@
 
     <!-- Desktop navigation links -->
     <div class="hidden md:flex md:space-x-6 md:items-center">
-        <a class="text-green-900 font-medium hover:text-blue-600 transition-colors"
+        <a class="{{ request()->routeIs('welcome') ? 'text-white font-semibold py-0.5 px-4 bg-green-500 rounded-md shadow-md' : 'text-green-900 font-medium hover:text-blue-600 hover:font-bold transition-colors' }}"
             href="{{ route('welcome') }}">Home</a>
-        <a class="text-green-900 font-medium hover:text-blue-600 transition-colors"
+        <a class="{{ request()->routeIs('user.all.quizzes') ? 'text-white font-semibold py-0.5 px-4 bg-green-500 rounded-md shadow-md' : 'text-green-900 font-medium hover:text-blue-600 hover:font-bold transition-colors' }}"
             href="{{ route('user.all.quizzes') }}">Quizzes</a>
-        <a class="text-green-900 font-medium hover:text-blue-600 transition-colors" href="#">Blog</a>
+        <a class="text-green-900 font-medium hover:text-blue-600 hover:font-bold transition-colors"
+            href="#">Blog</a>
 
         @if (session()->has('user'))
-            <a class="text-green-900 font-medium hover:text-blue-600 transition-colors"
+            <a class="{{ request()->routeIs('user.details') ? 'underline text-green-900 font-bold' : 'text-green-900 font-medium hover:text-blue-600 hover:font-bold transition-colors' }}"
                 href="{{ route('user.details') }}">
                 Welcome, {{ session()->get('user')->name }}
             </a>
-            <a class="text-green-900 font-medium hover:text-blue-600 transition-colors"
+            <a class="{{ request()->routeIs('user.logout') ? 'text-white font-semibold py-0.5 px-4 bg-green-500 rounded-md shadow-md' : 'text-green-900 font-medium hover:font-bold hover:text-red-600 transition-colors' }}"
                 href="{{ route('user.logout') }}">Logout</a>
         @else
-            <a class="text-green-900 font-medium hover:text-blue-600 transition-colors"
+            <a class="{{ request()->routeIs('user.signup.form') ? 'text-white font-semibold py-0.5 px-4 bg-green-500 rounded-md shadow-md' : 'text-green-900 font-medium hover:font-bold hover:text-blue-600 transition-colors' }}"
                 href="{{ route('user.signup.form') }}">Sign Up</a>
-            <a class="text-green-900 font-medium hover:text-blue-600 transition-colors"
+            <a class="{{ request()->routeIs('user.login.form') ? 'text-white font-semibold py-0.5 px-4 bg-green-500 rounded-md shadow-md' : 'text-green-900 font-medium hover:font-bold hover:text-blue-600 transition-colors' }}"
                 href="{{ route('user.login.form') }}">Login</a>
         @endif
     </div>
@@ -58,11 +59,11 @@
 
         <!-- Links -->
         <a href="{{ route('welcome') }}"
-            class="block text-green-900 text-center font-semibold bg-green-100 rounded-xl px-4 py-3 hover:bg-green-200 hover:text-green-900 transition-all">
+            class="block {{ request()->routeIs('welcome') ? 'text-white font-bold bg-green-500 text-center rounded-md px-4 py-3' : 'text-green-900 text-center font-semibold bg-green-100 rounded-xl px-4 py-3 hover:bg-green-200 hover:text-green-900 transition-all' }}">
             Home
         </a>
         <a href="{{ route('user.all.quizzes') }}"
-            class="block text-green-900 text-center font-semibold bg-green-100 rounded-xl px-4 py-3 hover:bg-green-200 hover:text-green-900 transition-all">
+            class="block {{ request()->routeIs('user.all.quizzes') ? 'text-white font-bold bg-green-500 text-center rounded-md px-4 py-3' : 'text-green-900 text-center font-semibold bg-green-100 rounded-xl px-4 py-3 hover:bg-green-200 hover:text-green-900 transition-all' }}">
             Quizzes
         </a>
         <a href="#"
@@ -72,20 +73,20 @@
 
         @if (session()->has('user'))
             <a href="{{ route('user.details') }}"
-                class="block text-green-900 text-center font-semibold bg-green-100 rounded-xl px-4 py-3 hover:bg-green-200 hover:text-green-900 transition-all">
+                class="block {{ request()->routeIs('user.details') ? 'text-green-900 text-center font-bold underline' : 'text-green-900 text-center font-semibold hover:text-blue-900 transition-all' }}">
                 Welcome, {{ session()->get('user')->name }}
             </a>
             <a href="{{ route('user.logout') }}"
-                class="block text-green-900 text-center font-semibold bg-green-100 rounded-xl px-4 py-3 hover:bg-green-200 hover:text-green-900 transition-all">
+                class="block text-red-900 text-center font-semibold bg-red-100 rounded-xl px-4 py-3 hover:bg-red-200 hover:text-red-900 transition-all">
                 Logout
             </a>
         @else
             <a href="{{ route('user.signup.form') }}"
-                class="block text-green-900 text-center font-semibold bg-green-100 rounded-xl px-4 py-3 hover:bg-green-200 hover:text-green-900 transition-all">
+                class="block {{ request()->routeIs('user.signup.form') ? 'text-white font-bold bg-green-500 text-center rounded-md px-4 py-3' : 'text-green-900 text-center font-semibold bg-green-100 rounded-xl px-4 py-3 hover:bg-green-200 hover:text-green-900 transition-all' }}">
                 Sign Up
             </a>
             <a href="{{ route('user.login.form') }}"
-                class="block text-green-900 text-center font-semibold bg-green-100 rounded-xl px-4 py-3 hover:bg-green-200 hover:text-green-900 transition-all">
+                class="block {{ request()->routeIs('user.login.form') ? 'text-white font-bold bg-green-500 text-center rounded-md px-4 py-3' : 'text-green-900 text-center font-semibold bg-green-100 rounded-xl px-4 py-3 hover:bg-green-200 hover:text-green-900 transition-all' }}">
                 Login
             </a>
         @endif

@@ -29,7 +29,7 @@ class AdminController extends Controller
         Session::put('admin',$admin);
 
         return redirect()
-            ->route('dashboard');
+            ->route('dashboard')->with('success', 'Logged in successfully');
     }
     
     public function dashboard(){
@@ -51,7 +51,7 @@ class AdminController extends Controller
         Session::forget('admin');
 
         return redirect()
-            ->route('admin.login');
+            ->route('admin.login')->with('success', 'Logged out successfully & you can login again');
     }
 
     public function add_category(Request $r){
@@ -149,7 +149,7 @@ class AdminController extends Controller
     {
         $admin = Session::get('admin');
         $categories = Category::orderBy('created_at', 'desc')->get();
-        $quizzes = Quiz::with('category')->orderBy('created_at', 'desc')->paginate(8);
+        $quizzes = Quiz::with('category','mcqs')->orderBy('created_at', 'desc')->paginate(8);
         $totalMcqs = 0;
 
         if(Session::has('quizDetails')){
@@ -348,7 +348,7 @@ class AdminController extends Controller
 
     public function quiz_list($id,$category){
         $admin=Session::get('admin');
-        $quizzes=Quiz::where('category_id',$id)->get();
+        $quizzes=Quiz::with('mcqs')->where('category_id',$id)->get();
 
         return view('admin.quiz-list',compact('admin','quizzes','category'));
     }
