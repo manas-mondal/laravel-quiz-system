@@ -19,11 +19,11 @@ return new class extends Migration
             $table->string('option_c');
             $table->string('option_d');
             $table->string('correct_option');
-            $table->unsignedBigInteger('admin_id');
+            $table->unsignedBigInteger('admin_id')->nullable();
             $table->unsignedBigInteger('category_id');
             $table->unsignedBigInteger('quiz_id');
             $table->timestamps();
-            $table->foreign('admin_id')->references('id')->on('admins')->onDelete('cascade');
+            $table->foreign('admin_id')->references('id')->on('admins')->nullOnDelete();
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
             $table->foreign('quiz_id')->references('id')->on('quizzes')->onDelete('cascade');
         });

@@ -16,6 +16,8 @@ return new class extends Migration
             $table->foreignId('quiz_id')->constrained('quizzes')->onDelete('cascade');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->tinyInteger('status')->default(0)->comment('0=start, 1=in progress, 2=completed');
+            $table->string('certificate_id')->nullable()->unique();
+            $table->float('score')->nullable()->comment('%');
             $table->timestamps();
         });
     }
