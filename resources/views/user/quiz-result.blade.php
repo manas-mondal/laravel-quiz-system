@@ -5,6 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Quiz Result</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ asset('images/quizify-favicon.png') }}">
+
     <!-- Tailwind CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
@@ -105,6 +109,13 @@
 
         <!-- Action Buttons -->
         <div class="mt-10 flex flex-col sm:flex-row gap-4">
+            {{-- Show certificate only if score >= 70% --}}
+            @if (($correctAnswers / $totalQuestions) * 100 >= 70)
+                <a href="{{ route('user.view.certificate', ['quiz_name' => str_replace(' ', '-', $quiz_name)]) }}"
+                    class="bg-blue-500 text-white px-6 py-2 rounded-xl shadow-md hover:bg-blue-600 transition text-center">
+                    View & Download Certificate
+                </a>
+            @endif
             <a href="{{ route('welcome') }}"
                 class="bg-green-500 text-white px-6 py-2 rounded-xl shadow-md hover:bg-green-600 transition text-center">
                 Back to Dashboard

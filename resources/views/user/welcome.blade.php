@@ -6,10 +6,67 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Quiz System Home Page</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ asset('images/quizify-favicon.png') }}">
+
     <!-- Tailwind CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
 
     {{-- @vite('resources/css/app.css') --}}
+
+    <style>
+        .text-effect-rainbow {
+            font-weight: 800;
+            animation: lightningModern 2.5s infinite linear;
+            letter-spacing: 1px;
+        }
+
+        @keyframes lightningModern {
+            0% {
+                color: #5eead4;
+                /* teal */
+                text-shadow:
+                    0 0 6px rgba(94, 234, 212, 0.8),
+                    0 0 12px rgba(94, 234, 212, 0.6);
+            }
+
+            25% {
+                color: #60a5fa;
+                /* blue */
+                text-shadow:
+                    0 0 6px rgba(96, 165, 250, 0.8),
+                    0 0 12px rgba(96, 165, 250, 0.6);
+            }
+
+            50% {
+                color: #a78bfa;
+                /* purple */
+                text-shadow:
+                    0 0 6px rgba(167, 139, 250, 0.8),
+                    0 0 12px rgba(167, 139, 250, 0.6);
+            }
+
+            75% {
+                color: #f472b6;
+                /* pink */
+                text-shadow:
+                    0 0 6px rgba(244, 114, 182, 0.8),
+                    0 0 12px rgba(244, 114, 182, 0.6);
+            }
+
+            100% {
+                color: #fb7185;
+                /* soft red */
+                text-shadow:
+                    0 0 6px rgba(251, 113, 133, 0.8),
+                    0 0 12px rgba(251, 113, 133, 0.6);
+            }
+        }
+    </style>
+
+
+
 </head>
 
 <body class="bg-green-100 text-gray-700">
@@ -43,9 +100,11 @@
             </div>
         @endif
 
-        <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold text-green-900 text-center leading-tight mb-6">
-            Check Your Skills
+        <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold text-center text-green-900 leading-tight mb-6 mt-2">
+            Check Your Skills From <span class="text-effect-rainbow">QUIZIFY</span>
         </h1>
+
+
 
         {{--  Search Box --}}
         <div class="w-full flex justify-center max-w-md">

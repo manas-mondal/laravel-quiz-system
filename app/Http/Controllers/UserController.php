@@ -420,6 +420,19 @@ class UserController extends Controller
          $resultData = McqRecord::with('mcq')->where('record_id', $record_id)->get();
          $correctAnswers = $resultData->where('is_correct', 1)->count();
          $totalQuestions = $resultData->count();
+
+         // Calculate percentage
+         $percentage = ($totalQuestions > 0) ? ($correctAnswers / $totalQuestions) * 100 : 0;
+
+         // Save score
+         $record->score=$percentage;
+         
+         // Generate certificate ID if eligible (FIRST TIME)
+        if($percentage >= 70 && empty($record->certificate_id)){
+            $record->certificate_id=Str::upper(Str::random(12));
+        }
+        $record->save();
+
          return view('user.quiz-result', compact('resultData','correctAnswers', 'totalQuestions', 'quiz_name'));
         }
 
@@ -468,5 +481,58 @@ class UserController extends Controller
                          ->paginate(8);
 
         return view('user.details', compact('records'));     
+    }
+
+    public function certificate($quiz_name){
+        $quiz_name = str_replace('-', ' ', $quiz_name);
+        $user = Session::get('user');
+
+        // Latest completed record for this quiz
+        $record = Record::where('user_id', $user->id)
+                        ->whereHas('quiz', function($q) use($quiz_name) {
+                            $q->where('name', $quiz_name);
+                        })
+                        ->where('status', 2) // Completed Quiz
+                        ->latest()
+                        ->first();
+
+        if (!$record) {
+            return back()->with('error', 'No completed attempt found. Please finish the quiz first.');
+        }
+
+        // Check minimum score
+        if ($record->score < 70) {
+            return back()->with('error', 'Minimum 70% required to view certificate.');
+        }
+
+        // Check if certificate exists
+        if (!$record->certificate_id) {
+            return back()->with('error', 'Certificate not generated. Please retake the quiz.');
+        }
+
+        return view('user.certificate', compact('user', 'record', 'quiz_name'));
+    }
+
+    public function verify_certificate_form(){
+        return view('user.verify-certificate');
+    }
+
+    public function verify_certificate(Request $request){
+        $request->validate([
+            'certificate_id'=>'required|string',
+        ]);
+
+        $certificate_id = $request->input('certificate_id');
+
+        // Find record with this certificate ID
+        $record = Record::where('certificate_id', $certificate_id)
+                        ->where('status', 2) // Completed Quiz
+                        ->first();
+
+        if (!$record) {
+            return view('user.verify-certificate-result', ['record' => null]);
+        }
+
+        return view('user.verify-certificate-result', compact('record'));
     }
 }

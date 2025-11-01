@@ -1,9 +1,17 @@
 <nav
     class="fixed top-0 left-0 right-0 z-50 px-4 sm:px-6 py-3 bg-white/90 shadow-md flex justify-between items-center transition-all duration-300">
     <!-- Logo / Brand -->
-    <div class="text-2xl sm:text-3xl text-green-900 font-bold cursor-pointer">
-        <a href="{{ route('welcome') }}">Quiz System</a>
+    {{-- <div class="text-2xl sm:text-3xl text-green-900 font-bold cursor-pointer">
+        <a href="{{ route('welcome') }}"><img src="{{ asset('images/quiz-logo.png') }}" alt=""></a>
+    </div> --}}
+    <!-- Logo / Brand -->
+    <div class="flex items-center">
+        <a href="{{ route('welcome') }}">
+            <img src="{{ asset('images/quiz-logo.png') }}" alt="Quiz System Logo"
+                class=" h-10 sm:h-12 w-auto object-contain cursor-pointer" />
+        </a>
     </div>
+
 
     <!-- Hamburger button (mobile only) -->
     <button id="menu-toggle"
@@ -21,8 +29,8 @@
             href="{{ route('welcome') }}">Home</a>
         <a class="{{ request()->routeIs('user.all.quizzes') ? 'text-white font-semibold py-0.5 px-4 bg-green-500 rounded-md shadow-md' : 'text-green-900 font-medium hover:text-blue-600 hover:font-bold transition-colors' }}"
             href="{{ route('user.all.quizzes') }}">Quizzes</a>
-        <a class="text-green-900 font-medium hover:text-blue-600 hover:font-bold transition-colors"
-            href="#">Blog</a>
+        <a class="{{ request()->routeIs('user.certificate.verify.form') ? 'text-white font-semibold py-0.5 px-4 bg-green-500 rounded-md shadow-md' : 'text-green-900 font-medium hover:text-blue-600 hover:font-bold transition-colors' }}"
+            href="{{ route('user.certificate.verify.form') }}">Verify Certificate</a>
 
         @if (session()->has('user'))
             <a class="{{ request()->routeIs('user.details') ? 'underline text-green-900 font-bold' : 'text-green-900 font-medium hover:text-blue-600 hover:font-bold transition-colors' }}"
@@ -66,9 +74,9 @@
             class="block {{ request()->routeIs('user.all.quizzes') ? 'text-white font-bold bg-green-500 text-center rounded-md px-4 py-3' : 'text-green-900 text-center font-semibold bg-green-100 rounded-xl px-4 py-3 hover:bg-green-200 hover:text-green-900 transition-all' }}">
             Quizzes
         </a>
-        <a href="#"
-            class="block text-green-900 text-center font-semibold bg-green-100 rounded-xl px-4 py-3 hover:bg-green-200 hover:text-green-900 transition-all">
-            Blog
+        <a href="{{ route('user.certificate.verify.form') }}"
+            class="block {{ request()->routeIs('user.certificate.verify.form') ? 'text-white font-bold bg-green-500 text-center rounded-md px-4 py-3' : 'text-green-900 text-center font-semibold bg-green-100 rounded-xl px-4 py-3 hover:bg-green-200 hover:text-green-900 transition-all' }}">
+            Verify Certificate
         </a>
 
         @if (session()->has('user'))

@@ -1,7 +1,7 @@
 <nav class="fixed top-0 left-0 right-0 z-50 p-4 bg-white shadow-md flex justify-between items-center">
     <!-- Brand -->
     <div class="text-2xl sm:text-3xl font-bold cursor-pointer">
-        <a href="{{ route('dashboard') }}">Quiz System</a>
+        <a href="{{ route('dashboard') }}">QUIZIFY</a>
     </div>
 
     <!-- Hamburger for Mobile -->
@@ -18,7 +18,7 @@
             href="{{ route('dashboard') }}">Dashboard</a>
 
         <a class="{{ request()->routeIs('admin.categories') ? 'text-blue-700 font-semibold' : 'text-gray-700 font-medium hover:text-blue-500' }}"
-            href="{{ route('admin.categories') }}">Categories</a>
+            href="{{ route('admin.categories') }}">Category</a>
 
         <a class="{{ request()->routeIs('admin.quiz.form') ? 'text-blue-700 font-semibold' : 'text-gray-700 font-medium hover:text-blue-500' }}"
             href="{{ route('admin.quiz.form') }}">Quiz</a>
@@ -53,7 +53,7 @@
 
         <a href="{{ route('admin.categories') }}"
             class="block text-center font-medium rounded-xl px-4 py-3 bg-blue-100 {{ request()->routeIs('admin.categories') ? 'text-blue-800 font-semibold bg-blue-300' : 'text-gray-700 hover:text-blue-500 hover:bg-blue-200' }}">
-            Categories
+            Category
         </a>
 
         <a href="{{ route('admin.quiz.form') }}"

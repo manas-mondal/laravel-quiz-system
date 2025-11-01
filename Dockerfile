@@ -4,8 +4,11 @@ FROM php:8.2-fpm
 # Install system dependencies & PHP extensions
 RUN apt-get update && apt-get install -y \
     git curl zip unzip libzip-dev libpng-dev libonig-dev libxml2-dev \
-  && docker-php-ext-install pdo_mysql mbstring bcmath sockets exif pcntl \
+    libfreetype6-dev libjpeg62-turbo-dev \
+  && docker-php-ext-configure gd --with-freetype --with-jpeg \
+  && docker-php-ext-install pdo_mysql mbstring bcmath sockets exif pcntl gd \
   && apt-get clean && rm -rf /var/lib/apt/lists/*
+
 
 # Bring Composer binary from official composer image
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer

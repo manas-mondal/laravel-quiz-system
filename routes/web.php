@@ -57,6 +57,7 @@ Route::middleware('user-auth')->group(function (){
     Route::get('/mcq/{id}/{quiz_name}',[UserController::class,'mcq'])->name('user.mcq');
     Route::post('/quiz-submit-next',[UserController::class,'quiz_submit_next'])->name('user.quiz.submit.next');
     Route::get('/user-details',[UserController::class,'user_details'])->name('user.details');
+    Route::get('/certificate/{quiz_name}',[UserController::class,'certificate'])->name('user.view.certificate');
 });
 
 // User email verification routes 
@@ -67,4 +68,9 @@ Route::get('/forgot-password',[UserController::class,'show_forgot_password_form'
 Route::post('/forgot-password',[UserController::class,'sent_reset_link_email'])->name('user.password.email');
 Route::get('/reset-password/{token}',[UserController::class,'show_reset_password_form'])->name('user.password.reset');
 Route::post('/reset-password',[UserController::class,'reset_password'])->name('user.password.update');
+
+// Certificate Verification Page (Form)
+Route::get('/verify-certificate',[UserController::class,'verify_certificate_form'])->name('user.certificate.verify.form');
+// Verify Certificate Result
+Route::post('/verify-certificate-result',[UserController::class,'verify_certificate'])->name('user.certificate.verify');
 
