@@ -6,6 +6,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit MCQ</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Smooth animations -->
+    <style>
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fadeUp {
+            animation: fadeUp .3s ease-out;
+        }
+    </style>
 </head>
 
 <body class="min-h-screen bg-gray-100">
@@ -15,7 +33,7 @@
     <!-- Alert Messages -->
     <div class="pt-24 px-4 py-5 max-w-lg mx-auto">
         @if (Session::has('error'))
-            <div class="flex items-center bg-red-200 border border-red-400 text-red-800 px-4 py-3 rounded-lg shadow relative"
+            <div class="flex items-center bg-red-200 border border-red-400 text-red-800 px-4 py-3 rounded-lg shadow relative animate-fadeUp"
                 role="alert">
                 <span class="flex-1">
                     <strong class="font-semibold">Error!</strong>
@@ -30,7 +48,7 @@
     </div>
 
     <!-- Edit Form Card -->
-    <div class="flex justify-center pb-10 px-4">
+    <div class="flex justify-center pb-10 px-4 animate-fadeUp">
         <div class="bg-white p-6 rounded-2xl shadow-md w-full max-w-lg">
 
             <h2 class="text-2xl font-semibold text-center text-gray-800 mb-6">Edit MCQ</h2>

@@ -11,6 +11,24 @@
 
     <!-- Tailwind CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fadeUp {
+            animation: fadeUp .3s ease-out;
+        }
+    </style>
 </head>
 
 <body class="bg-green-100 font-sans antialiased">
@@ -22,7 +40,7 @@
 
             <!-- Alerts -->
             @if (Session::has('success'))
-                <div class="bg-green-200 border border-green-400 text-green-800 px-4 py-3 rounded-lg shadow flex items-center justify-between"
+                <div class="bg-green-200 border border-green-400 text-green-800 px-4 py-3 rounded-lg shadow flex items-center justify-between animate-fadeUp"
                     role="alert">
                     <div>
                         <strong class="font-semibold">Success!</strong>
@@ -34,7 +52,7 @@
                     </button>
                 </div>
             @elseif (Session::has('error'))
-                <div class="bg-red-200 border border-red-400 text-red-800 px-4 py-3 rounded-lg shadow flex items-center justify-between"
+                <div class="bg-red-200 border border-red-400 text-red-800 px-4 py-3 rounded-lg shadow flex items-center justify-between animate-fadeUp"
                     role="alert">
                     <div>
                         <strong class="font-semibold">Error!</strong>
@@ -46,7 +64,7 @@
                     </button>
                 </div>
             @elseif (Session::has('info'))
-                <div class="bg-blue-200 border border-blue-400 text-blue-800 px-4 py-3 rounded-lg shadow flex items-center justify-between"
+                <div class="bg-blue-200 border border-blue-400 text-blue-800 px-4 py-3 rounded-lg shadow flex items-center justify-between animate-fadeUp"
                     role="alert">
                     <div>
                         <strong class="font-semibold">Info!</strong>
@@ -60,10 +78,10 @@
             @endif
 
             <!-- Login Card -->
-            <div class="bg-white py-8 px-6 shadow-lg rounded-3xl">
-                <h2 class="text-3xl font-bold text-center text-green-800 mb-6">User Login</h2>
+            <div class="bg-white py-8 px-6 shadow-lg rounded-3xl animate-fadeUp">
+                <h2 class="text-3xl font-bold text-center text-green-800 mb-6 animate-fadeUp">User Login</h2>
 
-                <form action="{{ route('user.login') }}" method="POST" class="space-y-5">
+                <form action="{{ route('user.login') }}" method="POST" class="space-y-5 animate-fadeUp">
                     @csrf
 
                     <!-- Email -->
@@ -98,7 +116,8 @@
 
                 <!-- Forgot Password -->
                 <div class="text-center mt-4">
-                    <a href="{{ route('user.password.request') }}" class="text-green-600 font-semibold hover:underline">
+                    <a href="{{ route('user.password.request') }}"
+                        class="text-green-600 font-semibold hover:underline animate-fadeUp">
                         Forgot Password?
                     </a>
                 </div>
@@ -107,7 +126,8 @@
                 <div class="text-center mt-4">
                     <p class="text-gray-600">
                         Don't have an account?
-                        <a href="{{ route('user.signup.form') }}" class="text-green-600 font-semibold hover:underline">
+                        <a href="{{ route('user.signup.form') }}"
+                            class="text-green-600 font-semibold hover:underline animate-fadeUp">
                             Create one here
                         </a>
                     </p>

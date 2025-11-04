@@ -11,6 +11,24 @@
 
     <!-- Tailwind CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fadeUp {
+            animation: fadeUp .3s ease-out;
+        }
+    </style>
 </head>
 
 <body class="bg-green-100 font-sans antialiased">
@@ -19,19 +37,19 @@
 
     <div class="flex flex-col items-center justify-center min-h-screen px-4 pt-20 pb-5">
 
-        <div class="bg-white w-full max-w-md p-6 rounded-2xl shadow-xl border border-yellow-500 mt-10">
+        <div class="bg-white w-full max-w-md p-6 rounded-2xl shadow-xl border border-yellow-500 mt-10 animate-fadeUp">
 
-            <h2 class="text-2xl font-bold text-center text-green-800 mb-4">
+            <h2 class="text-2xl font-bold text-center text-green-800 mb-4 animate-fadeUp">
                 Verify Certificate
             </h2>
 
             @if (session('error'))
-                <p class="bg-red-100 text-red-600 p-2 rounded mb-3 text-center">
+                <p class="bg-red-100 text-red-600 p-2 rounded mb-3 text-center animate-fadeUp">
                     {{ session('error') }}
                 </p>
             @endif
 
-            <form action="{{ route('user.certificate.verify') }}" method="POST" class="space-y-4">
+            <form action="{{ route('user.certificate.verify') }}" method="POST" class="space-y-4 animate-fadeUp">
                 @csrf
 
                 <label class="font-medium text-gray-700">
@@ -50,7 +68,7 @@
         </div>
 
         <a href="{{ route('welcome') }}"
-            class="mt-6 bg-gray-600 text-white px-6 py-2 rounded-xl shadow hover:bg-gray-700 transition">
+            class="mt-6 bg-gray-600 text-white px-6 py-2 rounded-xl shadow hover:bg-gray-700 transition animate-fadeUp">
             Back Home
         </a>
 

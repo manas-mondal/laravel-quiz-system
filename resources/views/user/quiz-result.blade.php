@@ -11,6 +11,24 @@
 
     <!-- Tailwind CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fadeUp {
+            animation: fadeUp .3s ease-out;
+        }
+    </style>
 </head>
 
 <body class="bg-green-100 font-sans antialiased">
@@ -20,7 +38,7 @@
     <div class="min-h-screen flex flex-col items-center pt-24 pb-10 px-4 sm:px-6 lg:px-8">
         <!-- Alerts -->
         @if (Session::has('success'))
-            <div class="flex items-center bg-green-200 border border-green-400 text-green-800 px-4 py-3 rounded-xl shadow max-w-lg w-full mb-6"
+            <div class="flex items-center bg-green-200 border border-green-400 text-green-800 px-4 py-3 rounded-xl shadow max-w-lg w-full mb-6 animate-fadeUp"
                 role="alert">
                 <div class="flex-1">
                     <strong class="font-semibold">Success!</strong>
@@ -32,7 +50,7 @@
                 </button>
             </div>
         @elseif (Session::has('error'))
-            <div class="flex items-center bg-red-200 border border-red-400 text-red-800 px-4 py-3 rounded-xl shadow max-w-lg w-full mb-6"
+            <div class="flex items-center bg-red-200 border border-red-400 text-red-800 px-4 py-3 rounded-xl shadow max-w-lg w-full mb-6 animate-fadeUp"
                 role="alert">
                 <div class="flex-1">
                     <strong class="font-semibold">Error!</strong>
@@ -46,7 +64,7 @@
         @endif
 
         <!-- Result Summary Card -->
-        <div class="bg-white p-8 rounded-3xl shadow-lg w-full max-w-2xl text-center">
+        <div class="bg-white p-8 rounded-3xl shadow-lg w-full max-w-2xl text-center animate-fadeUp">
             <h2 class="text-3xl font-bold text-green-800 mb-3">
                 Result for <span class="text-yellow-600">{{ $quiz_name }}</span>
             </h2>
@@ -57,7 +75,7 @@
         </div>
 
         <!-- Table Section -->
-        <div class="w-full max-w-5xl mt-10 shadow-md overflow-x-auto">
+        <div class="w-full max-w-5xl mt-10 shadow-md overflow-x-auto animate-fadeUp">
             <table class="min-w-full bg-white rounded-2xl shadow-md text-sm sm:text-base">
                 <thead>
                     <tr class="bg-green-200 text-green-800">
@@ -108,7 +126,7 @@
         </div>
 
         <!-- Action Buttons -->
-        <div class="mt-10 flex flex-col sm:flex-row gap-4">
+        <div class="mt-10 flex flex-col sm:flex-row gap-4 animate-fadeUp">
             {{-- Show certificate only if score >= 70% --}}
             @if (($correctAnswers / $totalQuestions) * 100 >= 70)
                 <a href="{{ route('user.view.certificate', ['quiz_name' => str_replace(' ', '-', $quiz_name)]) }}"

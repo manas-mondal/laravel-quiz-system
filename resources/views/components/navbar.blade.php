@@ -22,6 +22,8 @@
 
         <a class="{{ request()->routeIs('admin.quiz.form') ? 'text-blue-700 font-semibold' : 'text-gray-700 font-medium hover:text-blue-500' }}"
             href="{{ route('admin.quiz.form') }}">Quiz</a>
+        <a class="{{ request()->routeIs('admin.contact.queries') ? 'text-blue-700 font-semibold' : 'text-gray-700 font-medium hover:text-blue-500' }}"
+            href="{{ route('admin.contact.queries') }}">Contact Queries</a>
 
         <span class="text-gray-600 font-medium">Welcome {{ $admin->name }}</span>
 
@@ -47,25 +49,29 @@
 
         <!-- Mobile Menu Items -->
         <a href="{{ route('dashboard') }}"
-            class="block text-center font-medium rounded-xl px-4 py-3 bg-blue-100 {{ request()->routeIs('dashboard') ? 'text-blue-800 font-semibold bg-blue-300' : 'text-gray-700 hover:text-blue-500 hover:bg-blue-200' }}">
+            class="block text-center font-medium rounded-lg px-4 py-2 bg-blue-100 {{ request()->routeIs('dashboard') ? 'text-blue-800 font-semibold bg-blue-300' : 'text-gray-700 hover:text-blue-500 hover:bg-blue-200' }}">
             Dashboard
         </a>
 
         <a href="{{ route('admin.categories') }}"
-            class="block text-center font-medium rounded-xl px-4 py-3 bg-blue-100 {{ request()->routeIs('admin.categories') ? 'text-blue-800 font-semibold bg-blue-300' : 'text-gray-700 hover:text-blue-500 hover:bg-blue-200' }}">
+            class="block text-center font-medium rounded-lg px-4 py-2 bg-blue-100 {{ request()->routeIs('admin.categories') ? 'text-blue-800 font-semibold bg-blue-300' : 'text-gray-700 hover:text-blue-500 hover:bg-blue-200' }}">
             Category
         </a>
 
         <a href="{{ route('admin.quiz.form') }}"
-            class="block text-center font-medium rounded-xl px-4 py-3 bg-blue-100 {{ request()->routeIs('admin.quiz.form') ? 'text-blue-800 font-semibold bg-blue-300' : 'text-gray-700 hover:text-blue-500 hover:bg-blue-200' }} ">
+            class="block text-center font-medium rounded-lg px-4 py-2 bg-blue-100 {{ request()->routeIs('admin.quiz.form') ? 'text-blue-800 font-semibold bg-blue-300' : 'text-gray-700 hover:text-blue-500 hover:bg-blue-200' }} ">
             Quiz
+        </a>
+        <a href="{{ route('admin.contact.queries') }}"
+            class="block text-center font-medium rounded-lg px-4 py-2 bg-blue-100 {{ request()->routeIs('admin.contact.queries') ? 'text-blue-800 font-semibold bg-blue-300' : 'text-gray-700 hover:text-blue-500 hover:bg-blue-200' }} ">
+            Contact Queries
         </a>
 
         <span class="block text-center font-medium text-gray-600 ">Welcome
             {{ $admin->name }}</span>
 
         <a href="{{ route('admin.logout') }}"
-            class="block text-center font-medium rounded-xl px-4 py-3 bg-red-100 text-gray-700 hover:text-red-500 hover:bg-red-200">
+            class="block text-center font-medium rounded-lg px-4 py-2 bg-red-100 text-gray-700 hover:text-red-500 hover:bg-red-200">
             Logout
         </a>
     </div>

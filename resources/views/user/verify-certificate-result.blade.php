@@ -10,6 +10,24 @@
     <link rel="icon" type="image/png" href="{{ asset('images/quizify-favicon.png') }}">
 
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fadeUp {
+            animation: fadeUp .3s ease-out;
+        }
+    </style>
 </head>
 
 <body class="bg-green-50 font-sans antialiased">
@@ -20,14 +38,14 @@
         <div class="bg-white p-8 rounded-3xl shadow-2xl w-full max-w-xl text-center border border-green-200">
 
             @if ($record)
-                <div class="mb-6 animate__animated animate__fadeIn">
+                <div class="mb-6 animate__animated animate__fadeIn animate-fadeUp">
                     <h2 class="text-2xl sm:text-4xl font-extrabold text-green-700 drop-shadow">✅ Verified Successfully!
                     </h2>
                     <p class="text-gray-700 mt-3 text-sm sm:text-base">Your certificate details are verified.</p>
                 </div>
 
                 <div
-                    class="border border-green-300 p-6 overflow-x-auto rounded-2xl bg-green-100/60 shadow-inner text-left space-y-4">
+                    class="border border-green-300 p-6 overflow-x-auto rounded-2xl bg-green-100/60 shadow-inner text-left space-y-4 animate-fadeUp">
                     <p class="text-lg"><span class="font-bold text-green-800">Name:</span> {{ $record->user->name }}</p>
                     <p class="text-lg"><span class="font-bold text-green-800">Email:</span> {{ $record->user->email }}
                     </p>
@@ -49,18 +67,18 @@
                     @endauth
                 </div>
             @else
-                <div class="mb-6 animate__animated animate__shakeX">
+                <div class="mb-6 animate__animated animate__shakeX animate-fadeUp">
                     <h2 class="text-3xl sm:text-4xl font-extrabold text-red-600 drop-shadow">❌ Not Found!</h2>
                     <p class="text-gray-700 mt-3 text-sm sm:text-base">Please check the Certificate ID again.</p>
                 </div>
 
-                <div class="border border-red-300 p-6 rounded-2xl bg-red-100/60 shadow-inner">
+                <div class="border border-red-300 p-6 rounded-2xl bg-red-100/60 shadow-inner animate-fadeUp">
                     <p class="text-lg text-red-700 font-semibold">No matching record exists.</p>
                 </div>
             @endif
 
             <a href="{{ route('user.certificate.verify.form') }}"
-                class="inline-block mt-8 bg-green-600 hover:bg-green-700 text-white font-bold px-6 py-3 rounded-xl tracking-wide transition-transform duration-200 hover:scale-[1.03]">
+                class="inline-block mt-8 bg-green-600 hover:bg-green-700 text-white font-bold px-6 py-3 rounded-xl tracking-wide transition-transform duration-200 hover:scale-[1.03] animate-fadeUp">
                 Verify Another Certificate
             </a>
 

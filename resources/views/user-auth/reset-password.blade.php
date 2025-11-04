@@ -11,6 +11,24 @@
 
     <!-- Tailwind CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fadeUp {
+            animation: fadeUp .3s ease-out;
+        }
+    </style>
 </head>
 
 <body class="bg-green-100 font-sans antialiased">
@@ -22,7 +40,7 @@
 
             <!-- Success Alert -->
             @if (isset($success_message))
-                <div class="bg-green-200 border border-green-400 text-green-800 px-4 py-3 rounded-lg shadow flex items-center justify-between"
+                <div class="bg-green-200 border border-green-400 text-green-800 px-4 py-3 rounded-lg shadow flex items-center justify-between animate-fadeUp"
                     role="alert">
                     <div>
                         <strong class="font-semibold">Success!</strong>
@@ -36,10 +54,11 @@
             @endif
 
             <!-- Reset Password Card -->
-            <div class="bg-white py-8 px-6 shadow-lg rounded-3xl">
-                <h2 class="text-3xl font-extrabold text-center text-green-800 mb-6">Reset Your Password</h2>
+            <div class="bg-white py-8 px-6 shadow-lg rounded-3xl animate-fadeUp">
+                <h2 class="text-3xl font-extrabold text-center text-green-800 mb-6 animate-fadeUp">Reset Your Password
+                </h2>
 
-                <form action="{{ route('user.password.update') }}" method="POST" class="space-y-5">
+                <form action="{{ route('user.password.update') }}" method="POST" class="space-y-5 animate-fadeUp">
                     @csrf
                     <input type="hidden" name="token" value="{{ $token }}">
                     <input type="hidden" name="email" value="{{ $email }}">
@@ -69,7 +88,7 @@
                     <!-- Submit Button -->
                     <div>
                         <button type="submit"
-                            class="w-full py-3 bg-green-500 text-white font-semibold rounded-xl shadow-md hover:bg-green-600 focus:ring focus:ring-green-300 focus:ring-opacity-50 transition">
+                            class="w-full py-3 bg-green-500 text-white font-semibold rounded-xl shadow-md hover:bg-green-600 focus:ring focus:ring-green-300 focus:ring-opacity-50 transition animate-fadeUp">
                             Reset Password
                         </button>
                     </div>

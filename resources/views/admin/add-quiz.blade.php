@@ -6,6 +6,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Add Quiz</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Smooth animations -->
+    <style>
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fadeUp {
+            animation: fadeUp .3s ease-out;
+        }
+    </style>
 </head>
 
 <body class="bg-gray-100 min-h-screen">
@@ -15,7 +33,7 @@
     <div class="pt-24">
         <!-- ALERTS -->
         @if (Session::has('success'))
-            <div class="max-w-lg mx-auto px-4">
+            <div class="max-w-lg mx-auto px-4 animate-fadeUp">
                 <div class="flex items-center bg-green-100 border border-green-300 text-green-800 px-4 py-3 rounded-xl shadow-sm mb-5 animate-fadeIn"
                     role="alert">
                     <span class="flex-1">
@@ -28,7 +46,7 @@
                 </div>
             </div>
         @elseif (Session::has('error'))
-            <div class="max-w-lg mx-auto px-4">
+            <div class="max-w-lg mx-auto px-4 animate-fadeUp">
                 <div class="flex items-center bg-red-100 border border-red-300 text-red-800 px-4 py-3 rounded-xl shadow-sm mb-5 animate-fadeIn"
                     role="alert">
                     <span class="flex-1">
@@ -44,7 +62,7 @@
 
         @if (!Session::has('quizDetails'))
             <!-- ADD QUIZ FORM -->
-            <div class="flex justify-center pb-8 px-4">
+            <div class="flex justify-center pb-8 px-4 animate-fadeUp">
                 <div class="bg-white p-8 rounded-2xl shadow-md w-full max-w-md">
                     <h2 class="text-2xl text-center text-gray-800 mb-6 font-bold">Add Quiz</h2>
                     <form action="{{ route('admin.quiz.add') }}" method="POST" class="space-y-4">
@@ -78,7 +96,7 @@
             </div>
 
             <!-- QUIZ LIST TABLE -->
-            <div class="max-w-4xl mx-auto px-4 mb-16 mt-10">
+            <div class="max-w-4xl mx-auto px-4 mb-16 mt-10 animate-fadeUp">
                 <h1 class="text-xl font-bold mb-4 text-center sm:text-left">All Quiz List</h1>
                 <div class="overflow-x-auto bg-white rounded-xl shadow-md">
                     <table class="min-w-full text-left text-sm">
@@ -146,7 +164,7 @@
                 <div class="mt-3">{{ $quizzes->links() }}</div>
             </div>
         @else
-            <div class="bg-gray-100 flex  justify-center px-2 pb-5">
+            <div class="bg-gray-100 flex  justify-center px-2 pb-5 animate-fadeUp">
                 <div class="bg-white p-8 rounded-2xl shadow-md w-full max-w-md">
                     <div class="text-green-500 font-bold text-center"><span class="text-yellow-500">Quiz:</span>
                         {{ Session::get('quizDetails')->name }}

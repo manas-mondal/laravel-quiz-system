@@ -6,6 +6,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Category</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Smooth animations -->
+    <style>
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fadeUp {
+            animation: fadeUp .3s ease-out;
+        }
+    </style>
 </head>
 
 <body class="bg-gray-100">
@@ -14,7 +32,7 @@
     <!-- Alert Messages -->
     <div class="max-w-lg mx-auto pt-24 px-4">
         @if (Session::has('success'))
-            <div class="flex items-center bg-green-100 border border-green-300 text-green-800 px-4 py-3 rounded-xl shadow-sm mb-5 animate-fadeIn"
+            <div class="flex items-center bg-green-100 border border-green-300 text-green-800 px-4 py-3 rounded-xl shadow-sm mb-5 animate-fadeIn animate-fadeUp"
                 role="alert">
                 <span class="flex-1">
                     <strong class="font-semibold">Success:</strong> {{ Session::get('success') }}
@@ -25,7 +43,7 @@
                 </button>
             </div>
         @elseif (Session::has('error'))
-            <div class="flex items-center bg-red-100 border border-red-300 text-red-800 px-4 py-3 rounded-xl shadow-sm mb-5 animate-fadeIn"
+            <div class="flex items-center bg-red-100 border border-red-300 text-red-800 px-4 py-3 rounded-xl shadow-sm mb-5 animate-fadeIn animate-fadeUp"
                 role="alert">
                 <span class="flex-1">
                     <strong class="font-semibold">Error:</strong> {{ Session::get('error') }}
@@ -39,7 +57,7 @@
     </div>
 
     <!-- Edit Form -->
-    <div class="flex justify-center px-4 pb-12">
+    <div class="flex justify-center px-4 pb-12 animate-fadeUp">
         <div class="bg-white p-6 md:p-8 rounded-2xl shadow-md w-full max-w-md">
             <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">Edit Category</h2>
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Admin;
 use App\Models\Category;
+use App\Models\ContactMessage;
 use App\Models\Mcq;
 use App\Models\Quiz;
 use App\Models\User;
@@ -70,17 +71,14 @@ class AdminController extends Controller
     }
 
     public function delete_category($id){
-        $admin=Session::get('admin');
+        $category = Category::find($id);
 
-        $category=Category::find($id);
-
-        if($category){
+        if ($category) {
             $category->delete();
-
             return redirect()
                 ->route('admin.categories')
                 ->with('success', "Category " . $category->name . " deleted successfully");
-        }else{
+        } else {
             return redirect()
                 ->route('admin.categories')
                 ->with('error', "Category not found");
@@ -90,11 +88,11 @@ class AdminController extends Controller
     public function edit_category($id){
         $admin=Session::get('admin');
 
-        $category=Category::find($id);
+        $category = Category::find($id);
 
-        if($category){
-            return view('admin.edit-category',compact('admin','category'));
-        }else{
+        if ($category) {
+            return view('admin.edit-category', compact('admin','category'));
+        } else {
             return redirect()
                 ->route('admin.categories')
                 ->with('error', "Category not found");
@@ -105,7 +103,6 @@ class AdminController extends Controller
         $validation=$r->validate([
             'category_name'=>'required|min:3|unique:categories,name,'.$id
         ]);
-        $admin=Session::get('admin');
 
         $category=Category::find($id);
 
@@ -184,7 +181,6 @@ class AdminController extends Controller
 
     public function edit_quiz($id){
         $admin=Session::get('admin');
-
         $quiz=Quiz::find($id);
         $categories = Category::orderBy('created_at', 'desc')->get();
 
@@ -370,6 +366,13 @@ class AdminController extends Controller
                 ->back()
                 ->with('error', "MCQ not found");
         }
+    }
+
+    public function contact_queries(){
+        $admin=Session::get('admin');
+        $messages = ContactMessage::orderBy('created_at', 'desc')->paginate(8);
+
+        return view('admin.contact-queries', compact('admin', 'messages'));
     }
 
 }

@@ -12,6 +12,24 @@
 
     <!-- Tailwind CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fadeUp {
+            animation: fadeUp .3s ease-out;
+        }
+    </style>
 </head>
 
 <body class="bg-green-100">
@@ -21,7 +39,7 @@
 
         {{-- Success / Error Message --}}
         @if (Session::has('success'))
-            <div class="bg-green-200 w-full max-w-lg mb-5 border border-green-400 text-green-800 px-4 py-3 rounded-lg shadow flex items-center justify-between"
+            <div class="bg-green-200 w-full max-w-lg mb-5 border border-green-400 text-green-800 px-4 py-3 rounded-lg shadow flex items-center justify-between animate-fadeUp"
                 role="alert">
                 <div>
                     <strong class="font-semibold">Success!</strong>
@@ -33,7 +51,7 @@
                 </button>
             </div>
         @elseif (Session::has('error'))
-            <div class="bg-red-200 w-full max-w-lg mb-5 border border-red-400 text-red-800 px-4 py-3 rounded-lg shadow flex items-center justify-between"
+            <div class="bg-red-200 w-full max-w-lg mb-5 border border-red-400 text-red-800 px-4 py-3 rounded-lg shadow flex items-center justify-between animate-fadeUp"
                 role="alert">
                 <div>
                     <strong class="font-semibold">Error!</strong>
@@ -47,7 +65,8 @@
         @endif
 
         {{-- Quiz Info Card --}}
-        <div class="bg-white w-full max-w-lg p-6 sm:p-8 rounded-2xl shadow-md text-center transition transform">
+        <div
+            class="bg-white w-full max-w-lg p-6 sm:p-8 rounded-2xl shadow-md text-center transition transform animate-fadeUp">
             <h2 class="text-2xl sm:text-3xl font-bold text-green-800">{{ $quiz_name }}</h2>
             <p class="text-green-700 text-sm sm:text-base mt-2">
                 Question <strong>{{ Session::get('current_quiz')['current_mcq'] }}</strong>
@@ -56,7 +75,8 @@
         </div>
 
         {{-- Question Form --}}
-        <div class="bg-white w-full max-w-2xl p-6 sm:p-8 rounded-2xl shadow-md mt-6 mb-6 transition transform">
+        <div
+            class="bg-white w-full max-w-2xl p-6 sm:p-8 rounded-2xl shadow-md mt-6 mb-6 transition transform animate-fadeUp">
             <h3 class="text-base sm:text-lg md:text-xl font-semibold mb-6 text-green-700 leading-snug">
                 Q{{ Session::get('current_quiz')['current_mcq'] }}.
                 {{ $mcq->question }}
@@ -88,6 +108,11 @@
                             {{ old('option') == $key ? 'checked' : '' }}>
                         <span class="text-gray-700 text-sm sm:text-base">{{ $value }}</span>
                     </label>
+
+                    {{-- Per-option validation message --}}
+                    @error($key)
+                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                    @enderror
                 @endforeach
 
                 {{-- Submit Button --}}

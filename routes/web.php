@@ -17,21 +17,26 @@ Route::middleware('admin-auth')->group(function (){
     Route::get('/dashboard',[AdminController::class,'dashboard'])->name('dashboard');
     Route::get('/admin-categories',[AdminController::class,'categories'])->name('admin.categories');
     Route::post('/add-category',[AdminController::class,'add_category'])->name('admin.category.add');
-    Route::delete('/delete-category/{id}',[AdminController::class,'delete_category'])->name('admin.category.delete');
-    Route::get('/edit-category/{id}',[AdminController::class,'edit_category'])->name('admin.category.edit');
-    Route::put('/update-category/{id}',[AdminController::class,'update_category'])->name('admin.category.update');
+    Route::get('/contact-queries',[AdminController::class,'contact_queries'])->name('admin.contact.queries');
+
+    Route::middleware('checkAdmin')->group(function(){
+        Route::delete('/delete-category/{id}',[AdminController::class,'delete_category'])->name('admin.category.delete');
+        Route::get('/edit-category/{id}',[AdminController::class,'edit_category'])->name('admin.category.edit');
+        Route::put('/update-category/{id}',[AdminController::class,'update_category'])->name('admin.category.update');
+        Route::get('/edit-quiz/{id}', [AdminController::class, 'edit_quiz'])->name('admin.quiz.edit');
+        Route::put('/update-quiz/{id}', [AdminController::class, 'update_quiz'])->name('admin.quiz.update');
+        Route::delete('/delete-quiz/{id}', [AdminController::class, 'delete_quiz'])->name('admin.quiz.delete');
+        Route::get('/edit-mcq/{id}', [AdminController::class, 'edit_mcq'])->name('admin.mcq.edit');
+        Route::put('/update-mcq/{id}', [AdminController::class, 'update_mcq'])->name('admin.mcq.update');
+        Route::delete('/delete-mcq/{id}', [AdminController::class, 'delete_mcq'])->name('admin.mcq.delete');
+    });
+
     Route::get('/add-quiz', [AdminController::class, 'show_add_quiz_form'])->name('admin.quiz.form');
     Route::post('/add-quiz', [AdminController::class, 'add_quiz'])->name('admin.quiz.add');
-    Route::get('/edit-quiz/{id}', [AdminController::class, 'edit_quiz'])->name('admin.quiz.edit');
-    Route::put('/update-quiz/{id}', [AdminController::class, 'update_quiz'])->name('admin.quiz.update');
-    Route::delete('/delete-quiz/{id}', [AdminController::class, 'delete_quiz'])->name('admin.quiz.delete');
     Route::post('/add-mcqs', [AdminController::class, 'add_mcqs'])->name('admin.mcqs.add');
     Route::get('/cancel-quiz', [AdminController::class, 'cancel_quiz'])->name('admin.quiz.cancel');
     Route::get('/show-quiz/{id}/{quiz_name}', [AdminController::class, 'show_quiz'])->name('admin.quiz.show');
     Route::get('/quiz-list/{id}/{category}', [AdminController::class, 'quiz_list'])->name('admin.quiz.list');
-    Route::get('/edit-mcq/{id}', [AdminController::class, 'edit_mcq'])->name('admin.mcq.edit');
-    Route::put('/update-mcq/{id}', [AdminController::class, 'update_mcq'])->name('admin.mcq.update');
-    Route::delete('/delete-mcq/{id}', [AdminController::class, 'delete_mcq'])->name('admin.mcq.delete');
 });
 
 
@@ -41,6 +46,7 @@ Route::get('/',[UserController::class,'welcome'])->name('welcome');
 Route::get('/quizzes',[UserController::class,'all_quizzes'])->name('user.all.quizzes');
 Route::get('/user-quiz-list/{id}/{category}',[UserController::class,'quiz_list'])->name('user.quiz.list');
 Route::get('/start-quiz/{id}/{quiz_name}',[UserController::class,'start_quiz'])->name('user.quiz.start');
+Route::get('/contact-us',[UserController::class,'contact_us_form'])->name('user.contact.us.form');
 
 Route::middleware('guest-user')->group(function (){
     Route::get('/user-signup',[UserController::class,'signup_form'])->name('user.signup.form');
@@ -49,6 +55,13 @@ Route::middleware('guest-user')->group(function (){
     Route::get('/user-login', [UserController::class,'user_login_form'])->name('user.login.form');
     Route::post('/user-login', [UserController::class,'user_login'])->name('user.login');
     Route::get('/user-login-quiz', [UserController::class,'user_login_form_quiz'])->name('user.login.form.quiz');
+    Route::get('/user-login-contact',[UserController::class,'user_login_form_contact'])->name('user.login.form.contact');
+    Route::get('/user-signup-contact',[UserController::class,'signup_form_contact'])->name('user.signup.contact');
+    // Forgot password routes
+    Route::get('/forgot-password',[UserController::class,'show_forgot_password_form'])->name('user.password.request');
+    Route::post('/forgot-password',[UserController::class,'sent_reset_link_email'])->name('user.password.email');
+    Route::get('/reset-password/{token}',[UserController::class,'show_reset_password_form'])->name('user.password.reset');
+    Route::post('/reset-password',[UserController::class,'reset_password'])->name('user.password.update');
 });
 
 Route::get('/user-logout',[UserController::class,'user_logout'])->name('user.logout');
@@ -58,16 +71,11 @@ Route::middleware('user-auth')->group(function (){
     Route::post('/quiz-submit-next',[UserController::class,'quiz_submit_next'])->name('user.quiz.submit.next');
     Route::get('/user-details',[UserController::class,'user_details'])->name('user.details');
     Route::get('/certificate/{quiz_name}',[UserController::class,'certificate'])->name('user.view.certificate');
+    Route::post('/contact-us',[UserController::class,'contact_us_submit'])->name('user.contact.us.submit');
 });
 
 // User email verification routes 
 Route::get('/verify-user/{token}',[UserController::class,'verify_user'])->name('user.verify');
-
-// Forgot password routes
-Route::get('/forgot-password',[UserController::class,'show_forgot_password_form'])->name('user.password.request');
-Route::post('/forgot-password',[UserController::class,'sent_reset_link_email'])->name('user.password.email');
-Route::get('/reset-password/{token}',[UserController::class,'show_reset_password_form'])->name('user.password.reset');
-Route::post('/reset-password',[UserController::class,'reset_password'])->name('user.password.update');
 
 // Certificate Verification Page (Form)
 Route::get('/verify-certificate',[UserController::class,'verify_certificate_form'])->name('user.certificate.verify.form');

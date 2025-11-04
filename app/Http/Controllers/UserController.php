@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ContactUsMail;
 use App\Mail\ForgotPasswordMail;
 use App\Mail\VerifyUserMail;
 use App\Models\Category;
+use App\Models\ContactMessage;
 use App\Models\Mcq;
 use App\Models\McqRecord;
 use App\Models\PasswordResetToken;
@@ -64,7 +66,7 @@ class UserController extends Controller
     }
 
     public function signup_form_quiz(){
-        Session::put('quiz-url',url()->previous());
+        Session::put('back-url',url()->previous());
         return view('user-auth.signup');
     }
 
@@ -132,7 +134,7 @@ class UserController extends Controller
     }
 
     public function user_login_form_quiz(){
-        Session::put('quiz-url',url()->previous());
+        Session::put('back-url',url()->previous());
         return view('user-auth.login');  
     }
 
@@ -159,8 +161,8 @@ class UserController extends Controller
         Session::put('user',$user);
 
         // Redirect to previous quiz URL if exists
-        if (Session::has('quiz-url')) {
-            $url = Session::pull('quiz-url'); // pull = get + forget
+        if (Session::has('back-url')) {
+            $url = Session::pull('back-url'); // pull = get + forget
             return redirect($url)
             ->with('success', 'User logged in successfully');
         }
@@ -470,7 +472,7 @@ class UserController extends Controller
     public function user_details(){
         $user_id = Session::get('user')->id;
         $records = Record::where('user_id', $user_id)
-                         ->with('quiz','quiz.category') // Eager load quiz and its category
+                         ->with('quiz','quiz.category','quiz.mcqs') // Eager load quiz and its category
                          ->withCount([ 
                             'mcq_records as correct_answers' => function($query) {
                                 $query->where('is_correct', 1);
@@ -525,7 +527,8 @@ class UserController extends Controller
         $certificate_id = $request->input('certificate_id');
 
         // Find record with this certificate ID
-        $record = Record::where('certificate_id', $certificate_id)
+        $record = Record::with('user', 'quiz')
+                        ->where('certificate_id', $certificate_id)
                         ->where('status', 2) // Completed Quiz
                         ->first();
 
@@ -534,5 +537,47 @@ class UserController extends Controller
         }
 
         return view('user.verify-certificate-result', compact('record'));
+    }
+
+    public function contact_us_form(){
+        return view('user.contact-us');
+    }
+
+    public function contact_us_submit(Request $request){
+        $request->validate([
+            'name'=>'required|string|max:255',
+            'email'=>'required|email|max:255',
+            'message'=>'required|string|max:2000',
+        ]);
+
+        $msg= new ContactMessage();
+        $msg->name=$request->name;
+        $msg->email=$request->email;
+        $msg->message=$request->message;
+        $msg->save();
+
+        try{
+            Mail::to('manasmondal035@gmail.com')->send(new ContactUsMail($msg));
+        } catch (\Exception $e){
+             // Log the exception (optional)
+            Log::error('Contact email failed: '.$e->getMessage());
+
+            return redirect()
+            ->back()
+            ->with('error', 'Something went wrong! Please try again later.')
+            ->withInput();
+        }
+
+        return back()->with('success','Your message has been sent successfully. We will get back to you soon!');
+    }
+
+    public function user_login_form_contact(){
+        Session::put('back-url',url()->previous());
+        return view('user-auth.login');
+    }
+
+    public function signup_form_contact(){
+        Session::put('back-url',url()->previous());
+        return view('user-auth.signup');
     }
 }

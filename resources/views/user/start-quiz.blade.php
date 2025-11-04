@@ -12,6 +12,24 @@
 
     <!-- Tailwind CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fadeUp {
+            animation: fadeUp .3s ease-out;
+        }
+    </style>
 </head>
 
 <body class="bg-green-50 text-gray-800">
@@ -23,7 +41,7 @@
 
         <!-- Alert Messages -->
         @if (Session::has('success'))
-            <div class="flex items-center bg-green-200 border border-green-400 text-green-800 px-4 py-3 sm:px-5 sm:py-4 rounded-lg shadow relative w-full max-w-md mb-6 transition-all duration-200"
+            <div class="flex items-center bg-green-200 border border-green-400 text-green-800 px-4 py-3 sm:px-5 sm:py-4 rounded-lg shadow relative w-full max-w-md mb-6 transition-all duration-200 animate-fadeUp"
                 role="alert">
                 <span class="flex-1 text-sm sm:text-base leading-relaxed">
                     <strong class="font-semibold">Success!</strong>
@@ -35,7 +53,7 @@
                 </button>
             </div>
         @elseif (Session::has('error'))
-            <div class="flex items-center bg-red-200 border border-red-400 text-red-800 px-4 py-3 sm:px-5 sm:py-4 rounded-lg shadow relative w-full max-w-md mb-6 transition-all duration-200"
+            <div class="flex items-center bg-red-200 border border-red-400 text-red-800 px-4 py-3 sm:px-5 sm:py-4 rounded-lg shadow relative w-full max-w-md mb-6 transition-all duration-200 animate-fadeUp"
                 role="alert">
                 <span class="flex-1 text-sm sm:text-base leading-relaxed">
                     <strong class="font-semibold">Error!</strong>
@@ -49,20 +67,20 @@
         @endif
 
         <!-- Quiz Header Card -->
-        <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-md w-full text-center max-w-md">
+        <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-md w-full text-center max-w-md animate-fadeUp">
             <h2 class="text-xl sm:text-2xl font-bold text-green-800 tracking-wide">{{ $quiz_name }}</h2>
             <p class="text-gray-600 mt-2 text-sm sm:text-base">Get ready to test your knowledge!</p>
         </div>
 
         <!-- Premium Certificate Banner -->
         <div
-            class="bg-yellow-500 text-white font-semibold text-center mt-4 px-4 py-2 rounded-full shadow-md max-w-md w-full flex items-center justify-center gap-2 animate-pulse">
+            class="bg-yellow-500 text-white font-semibold text-center mt-4 px-4 py-2 rounded-full shadow-md max-w-md w-full flex items-center justify-center gap-2 animate-pulse animate-fadeUp">
             <img src="{{ asset('images/gold-badge.png') }}" class="h-5 w-5 block" alt="Badge">
             <p>Score <span class="font-bold">70%+</span> to earn a Verified Certificate 🏅</p>
         </div>
 
         <!-- Instructions Card -->
-        <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-md w-full max-w-md mt-6 mb-6">
+        <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-md w-full max-w-md mt-6 mb-6 animate-fadeUp">
             <h3 class="text-lg sm:text-xl font-semibold mb-4 text-green-700">Quiz Instructions:</h3>
             <ul class="list-disc list-inside text-gray-700 space-y-2 text-sm sm:text-base leading-relaxed">
                 <li>Total Questions: <span class="font-medium">{{ $mcqs->count() }}</span></li>
@@ -73,7 +91,7 @@
             </ul>
 
             <!-- Buttons Section -->
-            <div class="mt-8 text-center flex flex-col sm:flex-row sm:justify-center gap-4 sm:gap-6">
+            <div class="mt-8 text-center flex flex-col sm:flex-row sm:justify-center gap-4 sm:gap-6 animate-fadeUp">
                 @if (session()->has('user'))
                     <a href="{{ route('user.mcq', ['id' => Session('first_mcq')->id, str_replace(' ', '-', $quiz_name)]) }}"
                         class="inline-block w-full sm:w-auto bg-green-600 text-white font-medium text-sm sm:text-base md:text-lg px-6 py-3 rounded-full hover:bg-green-700 active:scale-95 transition-all shadow-md focus:ring-2 focus:ring-green-400">

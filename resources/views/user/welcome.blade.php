@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Quiz System Home Page</title>
+    <title>Quizify Home Page</title>
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="{{ asset('images/quizify-favicon.png') }}">
@@ -63,9 +63,23 @@
                     0 0 12px rgba(251, 113, 133, 0.6);
             }
         }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fadeUp {
+            animation: fadeUp .3s ease-out;
+        }
     </style>
-
-
 
 </head>
 
@@ -75,7 +89,7 @@
     <div class="pt-24 pb-8 min-h-screen flex flex-col items-center px-4 sm:px-6">
         {{--  Success / Error Messages --}}
         @if (Session::has('success'))
-            <div class="flex items-center bg-green-200 border border-green-400 text-green-800 px-4 py-3 rounded-lg shadow relative max-w-md w-full mb-4"
+            <div class="flex items-center bg-green-200 border border-green-400 text-green-800 px-4 py-3 rounded-lg shadow relative max-w-md w-full mb-4 animate-fadeUp"
                 role="alert">
                 <span class="flex-1">
                     <strong class="font-semibold">Success!</strong>
@@ -87,7 +101,7 @@
                 </button>
             </div>
         @elseif (Session::has('error'))
-            <div class="flex items-center bg-red-200 border border-red-400 text-red-800 px-4 py-3 rounded-lg shadow relative max-w-md w-full mb-4"
+            <div class="flex items-center bg-red-200 border border-red-400 text-red-800 px-4 py-3 rounded-lg shadow relative max-w-md w-full mb-4 animate-fadeUp"
                 role="alert">
                 <span class="flex-1">
                     <strong class="font-semibold">Error!</strong>
@@ -100,14 +114,15 @@
             </div>
         @endif
 
-        <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold text-center text-green-900 leading-tight mb-6 mt-2">
+        <h1
+            class="text-3xl sm:text-4xl md:text-5xl font-bold text-center text-green-900 leading-tight mb-6 mt-2 animate-fadeUp">
             Check Your Skills From <span class="text-effect-rainbow">QUIZIFY</span>
         </h1>
 
 
 
         {{--  Search Box --}}
-        <div class="w-full flex justify-center max-w-md">
+        <div class="w-full flex justify-center max-w-md animate-fadeUp">
             <div class="relative mt-6 w-full">
                 <form action="{{ route('welcome') }}" method="GET"
                     class="max-w-md mx-auto mb-6 relative flex items-center">
@@ -129,7 +144,7 @@
 
 
         {{--  Category Table --}}
-        <div class="w-full max-w-4xl overflow-x-auto mt-10">
+        <div class="w-full max-w-4xl overflow-x-auto mt-10 animate-fadeUp">
             <h2 class="text-lg sm:text-xl text-green-700 font-bold mb-4 text-center sm:text-left">Top Categories</h2>
             <table
                 class="min-w-full bg-white rounded-2xl shadow-md overflow-hidden text-sm sm:text-base text-left border border-green-100">

@@ -31,6 +31,8 @@
             href="{{ route('user.all.quizzes') }}">Quizzes</a>
         <a class="{{ request()->routeIs('user.certificate.verify.form') ? 'text-white font-semibold py-0.5 px-4 bg-green-500 rounded-md shadow-md' : 'text-green-900 font-medium hover:text-blue-600 hover:font-bold transition-colors' }}"
             href="{{ route('user.certificate.verify.form') }}">Verify Certificate</a>
+        <a class="{{ request()->routeIs('user.contact.us.form') ? 'text-white font-semibold py-0.5 px-4 bg-green-500 rounded-md shadow-md' : 'text-green-900 font-medium hover:text-blue-600 hover:font-bold transition-colors' }}"
+            href="{{ route('user.contact.us.form') }}">Contact Us</a>
 
         @if (session()->has('user'))
             <a class="{{ request()->routeIs('user.details') ? 'underline text-green-900 font-bold' : 'text-green-900 font-medium hover:text-blue-600 hover:font-bold transition-colors' }}"
@@ -53,7 +55,7 @@
 
     <!-- Off-canvas Right-side Menu (Mobile) -->
     <div id="menu"
-        class="fixed top-0 right-0 h-screen w-52 sm:w-60 bg-white shadow-2xl transform translate-x-full transition-transform duration-300 ease-in-out md:hidden flex flex-col p-6 space-y-3 z-50 rounded-l-2xl">
+        class="fixed top-0 right-0 h-screen w-52 sm:w-60 bg-white shadow-2xl transform translate-x-full transition-transform duration-300 ease-in-out md:hidden flex flex-col p-6 space-y-3 z-50 rounded-l-2xl overflow-y-auto">
 
         <!-- Close button -->
         <button id="menu-close"
@@ -67,16 +69,20 @@
 
         <!-- Links -->
         <a href="{{ route('welcome') }}"
-            class="block {{ request()->routeIs('welcome') ? 'text-white font-bold bg-green-500 text-center rounded-md px-4 py-3' : 'text-green-900 text-center font-semibold bg-green-100 rounded-xl px-4 py-3 hover:bg-green-200 hover:text-green-900 transition-all' }}">
+            class="block {{ request()->routeIs('welcome') ? 'text-white font-bold bg-green-500 text-center rounded-md px-4 py-2' : 'text-green-900 text-center font-semibold bg-green-100 rounded-xl px-4 py-2 hover:bg-green-200 hover:text-green-900 transition-all' }}">
             Home
         </a>
         <a href="{{ route('user.all.quizzes') }}"
-            class="block {{ request()->routeIs('user.all.quizzes') ? 'text-white font-bold bg-green-500 text-center rounded-md px-4 py-3' : 'text-green-900 text-center font-semibold bg-green-100 rounded-xl px-4 py-3 hover:bg-green-200 hover:text-green-900 transition-all' }}">
+            class="block {{ request()->routeIs('user.all.quizzes') ? 'text-white font-bold bg-green-500 text-center rounded-md px-4 py-2' : 'text-green-900 text-center font-semibold bg-green-100 rounded-xl px-4 py-2 hover:bg-green-200 hover:text-green-900 transition-all' }}">
             Quizzes
         </a>
         <a href="{{ route('user.certificate.verify.form') }}"
-            class="block {{ request()->routeIs('user.certificate.verify.form') ? 'text-white font-bold bg-green-500 text-center rounded-md px-4 py-3' : 'text-green-900 text-center font-semibold bg-green-100 rounded-xl px-4 py-3 hover:bg-green-200 hover:text-green-900 transition-all' }}">
+            class="block {{ request()->routeIs('user.certificate.verify.form') ? 'text-white font-bold bg-green-500 text-center rounded-md px-4 py-2' : 'text-green-900 text-center font-semibold bg-green-100 rounded-xl px-4 py-2 hover:bg-green-200 hover:text-green-900 transition-all' }}">
             Verify Certificate
+        </a>
+        <a href="{{ route('user.contact.us.form') }}"
+            class="block {{ request()->routeIs('user.contact.us.form') ? 'text-white font-bold bg-green-500 text-center rounded-md px-4 py-2' : 'text-green-900 text-center font-semibold bg-green-100 rounded-xl px-4 py-2 hover:bg-green-200 hover:text-green-900 transition-all' }}">
+            Contact Us
         </a>
 
         @if (session()->has('user'))
@@ -85,16 +91,16 @@
                 Welcome, {{ session()->get('user')->name }}
             </a>
             <a href="{{ route('user.logout') }}"
-                class="block text-red-900 text-center font-semibold bg-red-100 rounded-xl px-4 py-3 hover:bg-red-200 hover:text-red-900 transition-all">
+                class="block text-red-900 text-center font-semibold bg-red-100 rounded-xl px-4 py-2 hover:bg-red-200 hover:text-red-900 transition-all">
                 Logout
             </a>
         @else
             <a href="{{ route('user.signup.form') }}"
-                class="block {{ request()->routeIs('user.signup.form') ? 'text-white font-bold bg-green-500 text-center rounded-md px-4 py-3' : 'text-green-900 text-center font-semibold bg-green-100 rounded-xl px-4 py-3 hover:bg-green-200 hover:text-green-900 transition-all' }}">
+                class="block {{ request()->routeIs('user.signup.form') ? 'text-white font-bold bg-green-500 text-center rounded-md px-4 py-2' : 'text-green-900 text-center font-semibold bg-green-100 rounded-xl px-4 py-2 hover:bg-green-200 hover:text-green-900 transition-all' }}">
                 Sign Up
             </a>
             <a href="{{ route('user.login.form') }}"
-                class="block {{ request()->routeIs('user.login.form') ? 'text-white font-bold bg-green-500 text-center rounded-md px-4 py-3' : 'text-green-900 text-center font-semibold bg-green-100 rounded-xl px-4 py-3 hover:bg-green-200 hover:text-green-900 transition-all' }}">
+                class="block {{ request()->routeIs('user.login.form') ? 'text-white font-bold bg-green-500 text-center rounded-md px-4 py-2' : 'text-green-900 text-center font-semibold bg-green-100 rounded-xl px-4 py-2 hover:bg-green-200 hover:text-green-900 transition-all' }}">
                 Login
             </a>
         @endif

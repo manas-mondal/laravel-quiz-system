@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Password Reset - Laravel Quiz System</title>
+    <title>Password Reset - Quizify</title>
 </head>
 
 <body style="font-family: Arial, sans-serif; background-color: #f9fafb; margin:0; padding:0;">
@@ -18,7 +18,7 @@
                     <!-- Header -->
                     <tr>
                         <td align="center" style="padding-bottom: 20px;">
-                            <h1 style="margin:0; color:#22c55e;">Laravel Quiz System</h1>
+                            <h1 style="margin:0; color:#22c55e;">Quizify</h1>
                         </td>
                     </tr>
 
@@ -54,7 +54,7 @@
                     <!-- Footer -->
                     <tr>
                         <td style="color:#6b7280; font-size:14px; text-align:center; padding-top: 10px;">
-                            <p>Thanks,<br><strong>Laravel Quiz System Team</strong></p>
+                            <p>Thanks,<br><strong>Quizify Team</strong></p>
                             <hr style="border:none; border-top:1px solid #e5e7eb; margin:20px 0;">
                             <p style="font-size:12px; color:#9ca3af;">
                                 You’re receiving this email because a password reset was requested for your account.

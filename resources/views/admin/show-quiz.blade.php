@@ -6,6 +6,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin MCQ</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Smooth animations -->
+    <style>
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fadeUp {
+            animation: fadeUp .3s ease-out;
+        }
+    </style>
 </head>
 
 <body class="min-h-screen bg-gray-100">
@@ -15,7 +33,7 @@
     <!-- Alert Messages -->
     <div class="pt-24 px-4 max-w-lg mx-auto">
         @if (Session::has('success'))
-            <div class="flex items-center bg-green-200 border border-green-400 text-green-800 px-4 py-3 rounded-lg shadow relative"
+            <div class="flex items-center bg-green-200 border border-green-400 text-green-800 px-4 py-3 rounded-lg shadow relative animate-fadeUp"
                 role="alert">
                 <span class="flex-1">
                     <strong class="font-semibold">Success!</strong>
@@ -27,7 +45,7 @@
                 </button>
             </div>
         @elseif (Session::has('error'))
-            <div class="flex items-center bg-red-200 border border-red-400 text-red-800 px-4 py-3 rounded-lg shadow relative"
+            <div class="flex items-center bg-red-200 border border-red-400 text-red-800 px-4 py-3 rounded-lg shadow relative animate-fadeUp"
                 role="alert">
                 <span class="flex-1">
                     <strong class="font-semibold">Error!</strong>
@@ -42,14 +60,14 @@
     </div>
 
     <!-- Quiz Title Card -->
-    <div class="flex justify-center mt-6">
+    <div class="flex justify-center mt-6 animate-fadeUp">
         <div class="bg-white p-6 rounded-2xl shadow-md w-11/12 max-w-xl text-center">
             <h2 class="text-2xl font-semibold text-gray-800">Quiz: {{ $quiz_name }}</h2>
         </div>
     </div>
 
     <!-- Table Section -->
-    <div class="max-w-5xl mx-auto mt-10 mb-10 px-4">
+    <div class="max-w-5xl mx-auto mt-10 mb-10 px-4 animate-fadeUp">
         <div class="bg-white rounded-xl shadow-md overflow-hidden">
             <div class="overflow-x-auto">
                 <table class="min-w-full border-collapse">
