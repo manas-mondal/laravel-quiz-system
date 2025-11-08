@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Forgot Password</title>
+    <title>User Login</title>
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="{{ asset('images/quizify-favicon.png') }}">
@@ -63,19 +63,31 @@
                         ✕
                     </button>
                 </div>
+            @elseif (Session::has('info'))
+                <div class="bg-blue-200 border border-blue-400 text-blue-800 px-4 py-3 rounded-lg shadow flex items-center justify-between animate-fadeUp"
+                    role="alert">
+                    <div>
+                        <strong class="font-semibold">Info!</strong>
+                        <span class="block sm:inline">{{ Session::get('info') }}</span>
+                    </div>
+                    <button type="button" onclick="this.closest('div[role=alert]').remove()"
+                        class="ml-4 text-blue-700 hover:text-blue-900 focus:outline-none">
+                        ✕
+                    </button>
+                </div>
             @endif
 
-            <!-- Forgot Password Card -->
+            <!-- Login Card -->
             <div class="bg-white py-8 px-6 shadow-lg rounded-3xl animate-fadeUp">
-                <h2 class="text-3xl font-bold text-center text-green-800 mb-6 animate-fadeUp">Forgot Password</h2>
+                <h2 class="text-3xl font-bold text-center text-green-800 mb-6 animate-fadeUp">User Login</h2>
 
-                <form action="{{ route('user.password.email') }}" method="POST" class="space-y-5 animate-fadeUp">
+                <form action="{{ route('user.login') }}" method="POST" class="space-y-5 animate-fadeUp">
                     @csrf
 
-                    <!-- Email Input -->
+                    <!-- Email -->
                     <div>
-                        <label for="user_email" class="block text-sm font-medium text-gray-700">Enter Your Email</label>
-                        <input type="email" name="email" id="user_email" placeholder="Enter your registered email"
+                        <label for="user_email" class="block text-sm font-medium text-gray-700">User Email</label>
+                        <input type="email" name="email" id="user_email" placeholder="Enter your email"
                             value="{{ old('email') }}"
                             class="mt-1 block w-full px-4 py-3 border border-green-300 rounded-xl shadow-sm focus:border-green-500 focus:ring focus:ring-green-200 focus:ring-opacity-50 outline-none transition">
                         @error('email')
@@ -83,22 +95,43 @@
                         @enderror
                     </div>
 
-                    <!-- Submit Button -->
+                    <!-- Password -->
+                    <div>
+                        <label for="user_password" class="block text-sm font-medium text-gray-700">Password</label>
+                        <input type="password" name="password" id="user_password" placeholder="Enter your password"
+                            class="mt-1 block w-full px-4 py-3 border border-green-300 rounded-xl shadow-sm focus:border-green-500 focus:ring focus:ring-green-200 focus:ring-opacity-50 outline-none transition">
+                        @error('password')
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Submit -->
                     <div>
                         <button type="submit"
-                            class="w-full py-3 bg-green-500 text-white font-semibold rounded-xl shadow-md hover:bg-green-600 focus:ring focus:ring-green-300 focus:ring-opacity-50 transition animate-fadeUp">
-                            Send Reset Link
+                            class="w-full py-3 bg-green-500 text-white font-semibold rounded-xl shadow-md hover:bg-green-600 focus:ring focus:ring-green-300 focus:ring-opacity-50 transition">
+                            Login
                         </button>
                     </div>
                 </form>
 
-                <!-- Login Link -->
-                <p class="text-sm text-gray-600 mt-4 text-center animate-fadeUp">
-                    Remember your password?
-                    <a href="{{ route('user.login') }}" class="text-green-600 font-semibold hover:underline">
-                        Login
+                <!-- Forgot Password -->
+                <div class="text-center mt-4">
+                    <a href="{{ route('user.password.request') }}"
+                        class="text-green-600 font-semibold hover:underline animate-fadeUp">
+                        Forgot Password?
                     </a>
-                </p>
+                </div>
+
+                <!-- Signup Link -->
+                <div class="text-center mt-4">
+                    <p class="text-gray-600">
+                        Don't have an account?
+                        <a href="{{ route('user.signup.form') }}"
+                            class="text-green-600 font-semibold hover:underline animate-fadeUp">
+                            Create one here
+                        </a>
+                    </p>
+                </div>
             </div>
         </div>
     </div>

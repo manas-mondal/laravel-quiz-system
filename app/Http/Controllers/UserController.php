@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ContactUsMail;
 use App\Mail\ForgotPasswordMail;
 use App\Mail\VerifyUserMail;
 use App\Models\Category;
+use App\Models\ContactMessage;
 use App\Models\Mcq;
 use App\Models\McqRecord;
 use App\Models\PasswordResetToken;
@@ -13,6 +15,7 @@ use App\Models\Record;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
@@ -20,38 +23,51 @@ use Illuminate\Support\Str;
 class UserController extends Controller
 {
     public function welcome(Request $request){
-        $query=Category::withCount('quizzes');
+        $query=Category::withCount('quizzes')->orderBy('quizzes_count','desc');
 
         if($request->has('search')){
             $search=$request->input('search');
             $query->where('name','like',"%$search%");
         }
-        $categories=$query->paginate(5)->appends($request->only('search'));
-        return view('welcome',compact('categories'));
+        $categories=$query->paginate(8)->appends($request->only('search'));
+        return view('user.welcome',compact('categories'));
+    }
+
+    public function all_quizzes(Request $request){
+        $query=Quiz::withCount(['mcqs','records'])->with(['category','mcqs'])->orderByDesc('records_count');
+
+        if($request->has('search')){
+            $search=$request->input('search');
+            $query->where('name','like',"%$search%");
+        }
+        $quizzes=$query->paginate(8)->appends($request->only('search'));
+        return view('user.all-quizzes',compact('quizzes'));
     }
 
     public function quiz_list($id,$category){
-        $quizzes=Quiz::withCount('mcqs')->where('category_id',$id)->get();
-        return view('user-quiz-list',compact('id','category','quizzes'));
+        $category=str_replace('-',' ',$category);
+        $quizzes=Quiz::withCount('mcqs')->where('category_id',$id)->paginate(5);
+        return view('user.quiz-list',compact('id','category','quizzes'));
     }
 
     public function start_quiz($id,$quiz_name){
+        $quiz_name=str_replace('-',' ',$quiz_name);
         $mcqs=Mcq::where('quiz_id',$id)->get();
         if($mcqs->count()<1){
             return back()
             ->with('error','No MCQs found for this quiz. Please contact admin.');
         }
         Session::put('first_mcq',$mcqs->first());
-        return view('start-quiz',compact('quiz_name','mcqs'));
+        return view('user.start-quiz',compact('quiz_name','mcqs'));
     }
 
     public function signup_form(){
-        return view('user-signup');
+        return view('user-auth.signup');
     }
 
     public function signup_form_quiz(){
-        Session::put('quiz-url',url()->previous());
-        return view('user-signup');
+        Session::put('back-url',url()->previous());
+        return view('user-auth.signup');
     }
 
     public function signup(Request $request){
@@ -60,6 +76,14 @@ class UserController extends Controller
             'email'=>'required|email|unique:users,email',
             'password'=>'required|min:6|confirmed',
         ]);
+
+         // Check if email domain exists (MX record)
+        $domain = explode('@', $request->email)[1] ?? '';
+        if (!checkdnsrr($domain, 'MX')) {
+            return redirect()->route('user.signup.form')
+                ->with('error', 'Invalid email domain. Please enter a valid email address.')
+                ->withInput();
+        }
 
         $user=new User();
         $user->name=$request->name;
@@ -84,8 +108,18 @@ class UserController extends Controller
         // or use mass assignment with validated data
             // $user=User::create($request->only('name','email','password'));
 
-        // send verification email 
-        Mail::to($user->email)->send(new VerifyUserMail($user));
+        // send verification email synchronously
+        try{
+            Mail::to($user->email)->send(new VerifyUserMail($user));
+        } catch (\Exception $e){
+             // Log the exception (optional)
+            Log::error('Verification email failed for user ID '.$user->id.' - '.$e->getMessage());
+
+            return redirect()
+            ->route('user.signup.form')
+            ->with('error', 'Failed to send verification email. Please entre a valid email address or try again.')
+            ->withInput();
+        }
 
         // Do not log in until verified
         Session::forget('user');
@@ -96,12 +130,12 @@ class UserController extends Controller
     }
 
     public function user_login_form(){
-        return view('user-login');
+        return view('user-auth.login');
     }
 
     public function user_login_form_quiz(){
-        Session::put('quiz-url',url()->previous());
-        return view('user-login');  
+        Session::put('back-url',url()->previous());
+        return view('user-auth.login');  
     }
 
     public function user_login(Request $request){
@@ -127,8 +161,8 @@ class UserController extends Controller
         Session::put('user',$user);
 
         // Redirect to previous quiz URL if exists
-        if (Session::has('quiz-url')) {
-            $url = Session::pull('quiz-url'); // pull = get + forget
+        if (Session::has('back-url')) {
+            $url = Session::pull('back-url'); // pull = get + forget
             return redirect($url)
             ->with('success', 'User logged in successfully');
         }
@@ -156,7 +190,7 @@ class UserController extends Controller
         if($user->active == 2){
             return redirect()
             ->route('user.login.form')
-            ->with('success','Your email is already verified. Please login below.');
+            ->with('info','Your email is already verified. Please login below.');
         }
 
         $user->active=2; // mark as verified
@@ -261,6 +295,8 @@ class UserController extends Controller
     }
 
     public function mcq($id,$quiz_name){
+        $quiz_name=str_replace('-',' ',$quiz_name);
+
         // Ensure quiz session is active
         $firstMcq = Session::get('first_mcq');
         if (!$firstMcq) {
@@ -288,20 +324,19 @@ class UserController extends Controller
                         ->latest()
                         ->first();
 
-        if($record){
-            if($record->status == 2){
-                // Reset status to active again
-                $record->status = 1;
-                $record->save();
-            }
-        }else{
-            // No record found at all → create new one
-             $record = new Record();
-             $record->user_id = $userId;
-             $record->quiz_id = $quizId;
-             $record->status = 1;
-             $record->save();
-        }               
+        if ($record && $record->status == 1) {
+        // Continue existing incomplete attempt
+        $activeRecord = $record;
+        } else {
+        // Previous attempt completed or no record → create a new one
+        $activeRecord = new Record();
+        $activeRecord->user_id = $userId;
+        $activeRecord->quiz_id = $quizId;
+        $activeRecord->status = 1;
+        $activeRecord->save();
+        }
+
+        $record = $activeRecord;               
 
         //Set current_quiz session if not already set (or reset above)
         if (!Session::has('current_quiz')) {
@@ -322,7 +357,7 @@ class UserController extends Controller
                 ->skip($mcqNumber - 1)
                 ->firstOrFail();
 
-        return view('user-mcq', compact('mcq', 'quiz_name'));
+        return view('user.mcq', compact('mcq', 'quiz_name'));
                
     }
 
@@ -387,7 +422,20 @@ class UserController extends Controller
          $resultData = McqRecord::with('mcq')->where('record_id', $record_id)->get();
          $correctAnswers = $resultData->where('is_correct', 1)->count();
          $totalQuestions = $resultData->count();
-         return view('quiz-result', compact('resultData','correctAnswers', 'totalQuestions', 'quiz_name'));
+
+         // Calculate percentage
+         $percentage = ($totalQuestions > 0) ? ($correctAnswers / $totalQuestions) * 100 : 0;
+
+         // Save score
+         $record->score=$percentage;
+         
+         // Generate certificate ID if eligible (FIRST TIME)
+        if($percentage >= 70 && empty($record->certificate_id)){
+            $record->certificate_id=Str::upper(Str::random(12));
+        }
+        $record->save();
+
+         return view('user.quiz-result', compact('resultData','correctAnswers', 'totalQuestions', 'quiz_name'));
         }
 
         // Identify actual MCQ for current session number
@@ -424,15 +472,112 @@ class UserController extends Controller
     public function user_details(){
         $user_id = Session::get('user')->id;
         $records = Record::where('user_id', $user_id)
-                         ->with('quiz','quiz.category') // Eager load quiz and its category
+                         ->with('quiz','quiz.category','quiz.mcqs') // Eager load quiz and its category
                          ->withCount([ 
                             'mcq_records as correct_answers' => function($query) {
                                 $query->where('is_correct', 1);
                             },
                             'mcq_records as total_questions'
                          ])
-                         ->get();
+                         ->orderBy('created_at', 'desc')
+                         ->paginate(8);
 
-        return view('user-details', compact('records'));     
+        return view('user.details', compact('records'));     
+    }
+
+    public function certificate($quiz_name){
+        $quiz_name = str_replace('-', ' ', $quiz_name);
+        $user = Session::get('user');
+
+        // Latest completed record for this quiz
+        $record = Record::where('user_id', $user->id)
+                        ->whereHas('quiz', function($q) use($quiz_name) {
+                            $q->where('name', $quiz_name);
+                        })
+                        ->where('status', 2) // Completed Quiz
+                        ->latest()
+                        ->first();
+
+        if (!$record) {
+            return back()->with('error', 'No completed attempt found. Please finish the quiz first.');
+        }
+
+        // Check minimum score
+        if ($record->score < 70) {
+            return back()->with('error', 'Minimum 70% required to view certificate.');
+        }
+
+        // Check if certificate exists
+        if (!$record->certificate_id) {
+            return back()->with('error', 'Certificate not generated. Please retake the quiz.');
+        }
+
+        return view('user.certificate', compact('user', 'record', 'quiz_name'));
+    }
+
+    public function verify_certificate_form(){
+        return view('user.verify-certificate');
+    }
+
+    public function verify_certificate(Request $request){
+        $request->validate([
+            'certificate_id'=>'required|string',
+        ]);
+
+        $certificate_id = $request->input('certificate_id');
+
+        // Find record with this certificate ID
+        $record = Record::with('user', 'quiz')
+                        ->where('certificate_id', $certificate_id)
+                        ->where('status', 2) // Completed Quiz
+                        ->first();
+
+        if (!$record) {
+            return view('user.verify-certificate-result', ['record' => null]);
+        }
+
+        return view('user.verify-certificate-result', compact('record'));
+    }
+
+    public function contact_us_form(){
+        return view('user.contact-us');
+    }
+
+    public function contact_us_submit(Request $request){
+        $request->validate([
+            'name'=>'required|string|max:255',
+            'email'=>'required|email|max:255',
+            'message'=>'required|string|max:2000',
+        ]);
+
+        $msg= new ContactMessage();
+        $msg->name=$request->name;
+        $msg->email=$request->email;
+        $msg->message=$request->message;
+        $msg->save();
+
+        try{
+            Mail::to('manasmondal035@gmail.com')->send(new ContactUsMail($msg));
+        } catch (\Exception $e){
+             // Log the exception (optional)
+            Log::error('Contact email failed: '.$e->getMessage());
+
+            return redirect()
+            ->back()
+            ->with('error', 'Something went wrong! Please try again later.')
+            ->withInput();
+        }
+
+        return back()->with('success','Your message has been sent successfully. We will get back to you soon!');
+    }
+
+    public function user_login_form_contact(){
+        Session::put('back-url',url()->previous());
+        return view('user-auth.login');
+    }
+
+    public function signup_form_contact(){
+        Session::put('back-url',url()->previous());
+        return view('user-auth.signup');
     }
 }

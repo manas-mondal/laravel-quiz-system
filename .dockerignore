@@ -1,7 +1,39 @@
-node_modules
-vendor
-.git
+# Docker Build
+
+# Local environment files
 .env
-.DS_Store
+.env.*
+!.env.example
+
+# Git repo / metadata
+.git
+.gitignore
+
+# Node dependencies / builds
+node_modules
 npm-debug.log
-storage/*.key
+yarn-error.log
+/public/hot
+/public/storage
+/public/build
+
+# Laravel cache & logs
+/storage/*.key
+/storage/logs
+/storage/framework/sessions
+/storage/framework/views
+/storage/framework/cache/data
+
+# Composer dev files
+/vendor/bin
+/tests
+
+# IDE configs
+.idea
+.vscode
+.fleet
+/zed
+
+# System junk
+.DS_Store
+Thumbs.db

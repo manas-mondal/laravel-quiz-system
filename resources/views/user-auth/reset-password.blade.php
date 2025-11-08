@@ -4,67 +4,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Reset Password</title>
-    @vite('resources/css/app.css')
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ asset('images/quizify-favicon.png') }}">
+
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fadeUp {
+            animation: fadeUp .3s ease-out;
+        }
+    </style>
 </head>
 
-<body>
+<body class="bg-green-100 font-sans antialiased">
+
     <x-user-nav />
-    <div class="bg-green-100 flex flex-col items-center justify-center min-h-screen pt-24 pb-10">
-        @if (isset($success_message))
-            <div class="bg-green-200 border border-green-500 text-green-800 px-4 py-3 rounded relative max-w-md mx-auto mb-4"
-                role="alert">
-                <strong class="font-bold">Success!</strong>
-                <span class="block sm:inline pr-6">{{ $success_message }}</span>
-                <span class="absolute top-0 bottom-0 right-0 px-4 py-3 cursor-pointer"
-                    onclick="this.closest('div[role=alert]').remove()">
-                    <svg class="fill-current h-6 w-6 text-green-600" role="button" xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 20 20">
-                        <title>Close</title>
-                        <path
-                            d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z" />
-                    </svg>
-                </span>
+
+    <div class="flex items-center justify-center min-h-screen py-12 px-4 mt-12 sm:px-6 lg:px-8">
+        <div class="max-w-md w-full space-y-6">
+
+            <!-- Success Alert -->
+            @if (isset($success_message))
+                <div class="bg-green-200 border border-green-400 text-green-800 px-4 py-3 rounded-lg shadow flex items-center justify-between animate-fadeUp"
+                    role="alert">
+                    <div>
+                        <strong class="font-semibold">Success!</strong>
+                        <span class="block sm:inline">{{ $success_message }}</span>
+                    </div>
+                    <button type="button" onclick="this.closest('div[role=alert]').remove()"
+                        class="ml-4 text-green-700 hover:text-green-900 focus:outline-none">
+                        ✕
+                    </button>
+                </div>
+            @endif
+
+            <!-- Reset Password Card -->
+            <div class="bg-white py-8 px-6 shadow-lg rounded-3xl animate-fadeUp">
+                <h2 class="text-3xl font-extrabold text-center text-green-800 mb-6 animate-fadeUp">Reset Your Password
+                </h2>
+
+                <form action="{{ route('user.password.update') }}" method="POST" class="space-y-5 animate-fadeUp">
+                    @csrf
+                    <input type="hidden" name="token" value="{{ $token }}">
+                    <input type="hidden" name="email" value="{{ $email }}">
+
+                    <!-- New Password -->
+                    <div>
+                        <label for="user_password" class="block text-sm font-medium text-gray-700">New Password</label>
+                        <input type="password" name="password" id="user_password" placeholder="Enter new password"
+                            class="mt-1 block w-full px-4 py-3 border border-green-300 rounded-xl shadow-sm focus:border-green-500 focus:ring focus:ring-green-200 focus:ring-opacity-50 outline-none transition">
+                        @error('password')
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Confirm Password -->
+                    <div>
+                        <label for="password_confirmation" class="block text-sm font-medium text-gray-700">Confirm
+                            Password</label>
+                        <input type="password" name="password_confirmation" id="password_confirmation"
+                            placeholder="Confirm new password"
+                            class="mt-1 block w-full px-4 py-3 border border-green-300 rounded-xl shadow-sm focus:border-green-500 focus:ring focus:ring-green-200 focus:ring-opacity-50 outline-none transition">
+                        @error('password_confirmation')
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div>
+                        <button type="submit"
+                            class="w-full py-3 bg-green-500 text-white font-semibold rounded-xl shadow-md hover:bg-green-600 focus:ring focus:ring-green-300 focus:ring-opacity-50 transition animate-fadeUp">
+                            Reset Password
+                        </button>
+                    </div>
+                </form>
             </div>
-        @endif
-        <div class="bg-white p-8 rounded-2xl shadow-md w-full max-w-md">
-            <h2 class="text-2xl text-center font-medium text-green-800 mb-6">Reset Your Password</h2>
-            @error('user')
-                <div class="text-red-500">{{ $message }}</div>
-            @enderror
-            <form action="{{ route('user.password.update') }}" method="POST" class="space-y-4">
-                @csrf
-                <input type="hidden" name="token" value="{{ $token }}">
-                <input type="hidden" name="email" value="{{ $email }}">
-                <div>
-                    <label class="text-gray-600 mb-1" for="user_password">New Password</label>
-                    <input
-                        class="w-full px-4 py-2 border border-green-300 rounded-xl focus:border-green-500 focus:ring-2 focus:ring-green-200 outline-none transition"
-                        type="password" name="password" placeholder="Enter new password" id="user_password">
-                    @error('password')
-                        <div class="text-red-500">{{ $message }}</div>
-                    @enderror
-                </div>
-                <div>
-                    <label class="text-gray-600 mb-1" for="password_confirmation">Confirm Password</label>
-                    <input
-                        class="w-full px-4 py-2 border border-green-300 rounded-xl focus:border-green-500 focus:ring-2 focus:ring-green-200 outline-none transition"
-                        type="password" name="password_confirmation" placeholder="Confirm new password"
-                        id="password_confirmation">
-                    @error('password_confirmation')
-                        <div class="text-red-500">{{ $message }}</div>
-                    @enderror
-                </div>
-                <div>
-                    <button
-                        class="w-full bg-green-500 rounded-xl py-2 text-white hover:bg-green-600 hover:cursor-pointer transition"
-                        type="submit">Reset Password</button>
-                </div>
-            </form>
         </div>
     </div>
+
     <x-footer-user />
+
 </body>
 
 </html>

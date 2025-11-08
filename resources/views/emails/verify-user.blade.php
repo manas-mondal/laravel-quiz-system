@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Email Verification - Laravel Quiz System</title>
+    <title>Email Verification - Quizify</title>
 </head>
 
 <body style="font-family: Arial, sans-serif; background-color: #f9fafb; margin:0; padding:0;">
@@ -16,7 +16,7 @@
                     <!-- Header / Logo -->
                     <tr>
                         <td align="center" style="padding-bottom: 20px;">
-                            <h1 style="margin:0; color:#22c55e;">Laravel Quiz System</h1>
+                            <h1 style="margin:0; color:#22c55e;">Quizify</h1>
                         </td>
                     </tr>
 
@@ -42,7 +42,7 @@
                     <tr>
                         <td style="color:#6b7280; font-size:14px; text-align:center; padding-top: 20px;">
                             <p>If you did not create an account, no action is needed.</p>
-                            <p>Thanks,<br><strong>Laravel Quiz System Team</strong></p>
+                            <p>Thanks,<br><strong>Quizify</strong></p>
                         </td>
                     </tr>
 
