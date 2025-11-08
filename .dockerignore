@@ -1,18 +1,39 @@
-# Node & PHP dependencies
-node_modules
-vendor
+# Docker Build এর সময় যেসব জিনিস লাগবে না
 
-# Git metadata
-.git
-
-# Environment & config
+# Local environment files
 .env
-.DS_Store
-npm-debug.log
-storage/*.key
+.env.*
+!.env.example
 
-# Optional: Tests, docs, build artifacts
-tests
-docs
-# public/build
-# public/css/app.css
+# Git repo / metadata
+.git
+.gitignore
+
+# Node dependencies / builds
+node_modules
+npm-debug.log
+yarn-error.log
+/public/hot
+/public/storage
+/public/build
+
+# Laravel cache & logs
+/storage/*.key
+/storage/logs
+/storage/framework/sessions
+/storage/framework/views
+/storage/framework/cache/data
+
+# Composer dev files
+/vendor/bin
+/tests
+
+# IDE configs
+.idea
+.vscode
+.fleet
+/zed
+
+# System junk
+.DS_Store
+Thumbs.db
