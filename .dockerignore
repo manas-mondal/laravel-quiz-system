@@ -1,4 +1,4 @@
-# Docker Build এর সময় যেসব জিনিস লাগবে না
+# Docker Build
 
 # Local environment files
 .env
