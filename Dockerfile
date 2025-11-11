@@ -1,54 +1,63 @@
-# Dockerfile (php-fpm)
+# ----------------------------------------------------------
+# Base image: PHP 8.2 with FPM
+# ----------------------------------------------------------
 FROM php:8.2-fpm
 
-# -------------------------------
-# Install system dependencies & PHP extensions
-# -------------------------------
+# ----------------------------------------------------------
+# Install system dependencies including Nginx + Supervisor
+# ----------------------------------------------------------
 RUN apt-get update && apt-get install -y \
-    git curl zip unzip libzip-dev libpng-dev libonig-dev libxml2-dev \
+    nginx supervisor git curl zip unzip \
+    libzip-dev libpng-dev libonig-dev libxml2-dev \
     libfreetype6-dev libjpeg62-turbo-dev \
-  && docker-php-ext-configure gd --with-freetype --with-jpeg \
-  && docker-php-ext-install pdo_mysql mbstring bcmath sockets exif pcntl gd \
-  && apt-get clean && rm -rf /var/lib/apt/lists/*
+    libssl-dev \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install pdo_mysql mbstring bcmath sockets exif pcntl gd \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# -------------------------------
-# Install Composer
-# -------------------------------
+# ----------------------------------------------------------
+# Install Composer globally
+# ----------------------------------------------------------
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# -------------------------------
-# Set working directory
-# -------------------------------
+# ----------------------------------------------------------
+# Working directory
+# ----------------------------------------------------------
 WORKDIR /var/www/html
 
-# -------------------------------
-# Copy all project files
-# -------------------------------
+# ----------------------------------------------------------
+# Copy project files
+# ----------------------------------------------------------
 COPY . .
 
-# -------------------------------
-# Create storage/cache dirs & set permissions
-# -------------------------------
+# ----------------------------------------------------------
+# Install PHP dependencies for production
+# ----------------------------------------------------------
+RUN composer install --no-dev --optimize-autoloader --no-interaction
+
+# ----------------------------------------------------------
+# Fix permissions for Laravel
+# ----------------------------------------------------------
 RUN mkdir -p storage/framework storage/logs bootstrap/cache \
-    && chown -R www-data:www-data storage bootstrap/cache \
+    && chown -R www-data:www-data /var/www/html \
     && chmod -R 775 storage bootstrap/cache
 
-# -------------------------------
-# Expose PHP-FPM port
-# -------------------------------
-EXPOSE 9000
+# ----------------------------------------------------------
+# Copy Nginx config
+# ----------------------------------------------------------
+COPY docker/nginx/default.conf /etc/nginx/conf.d/default.conf
 
-# -------------------------------
-# Match www-data UID/GID with host (avoid permission issues)
-# -------------------------------
-RUN usermod -u 1000 www-data && groupmod -g 1000 www-data
+# ----------------------------------------------------------
+# Copy Supervisord config
+# ----------------------------------------------------------
+COPY docker/supervisord/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-# -------------------------------
-# Run as non-root user
-# -------------------------------
-USER www-data
+# ----------------------------------------------------------
+# Expose port 80 (Nginx)
+# ----------------------------------------------------------
+EXPOSE 80
 
-# -------------------------------
-# Default command: php-fpm
-# -------------------------------
-CMD ["php-fpm"]
+# ----------------------------------------------------------
+# Start Supervisord (runs Nginx + PHP-FPM)
+# ----------------------------------------------------------
+CMD ["/usr/bin/supervisord"]

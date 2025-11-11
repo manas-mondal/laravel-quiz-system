@@ -1,0 +1,26 @@
+# Keep EB away from local compose files
+docker-compose.yml
+docker-compose.override.yml
+local-docker/
+
+# VCS & IDE
+.git*
+.github/
+.vscode/
+.idea/
+.fleet/
+.zed/
+
+# Node artifacts
+node_modules/
+public/hot
+public/build
+
+# Dev/test stuff
+tests/
+vendor/bin
+
+# Env files (keep only production)
+.env
+.env.*
+!.env.production
