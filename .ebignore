@@ -16,10 +16,6 @@ node_modules/
 public/hot
 public/build
 
-# Dev/test stuff
-tests/
-vendor/bin
-
 # Env files (keep only production)
 .env
 .env.*

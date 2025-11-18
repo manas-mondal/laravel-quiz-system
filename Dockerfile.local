@@ -22,9 +22,14 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 WORKDIR /var/www/html
 
 # -------------------------------
-# Copy all project files
+# Copy project files
 # -------------------------------
 COPY . .
+
+# -------------------------------
+# Install PHP dependencies (Production)
+# -------------------------------
+RUN composer install --no-dev --optimize-autoloader --no-interaction --no-progress
 
 # -------------------------------
 # Create storage/cache dirs & set permissions
@@ -34,14 +39,15 @@ RUN mkdir -p storage/framework storage/logs bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
 
 # -------------------------------
+# Cache Laravel config & routes (optional but improves perf)
+# -------------------------------
+RUN php artisan config:cache || true
+RUN php artisan route:cache || true
+
+# -------------------------------
 # Expose PHP-FPM port
 # -------------------------------
 EXPOSE 9000
-
-# -------------------------------
-# Match www-data UID/GID with host (avoid permission issues)
-# -------------------------------
-RUN usermod -u 1000 www-data && groupmod -g 1000 www-data
 
 # -------------------------------
 # Run as non-root user
@@ -49,6 +55,6 @@ RUN usermod -u 1000 www-data && groupmod -g 1000 www-data
 USER www-data
 
 # -------------------------------
-# Default command: php-fpm
+# Default command
 # -------------------------------
 CMD ["php-fpm"]
