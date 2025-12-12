@@ -1,39 +1,62 @@
-# Docker Build
-
-# Local environment files
+# ----------------------------------------
+# Ignore LOCAL environment only
+# ----------------------------------------
 .env
-.env.*
-!.env.example
+.env.example
+.env.testing
+.env.backup
+.env.local
+.env.dev
+.env.staging
+!.env.production
 
-# Git repo / metadata
+
+# ----------------------------------------
+# Ignore LOCAL Docker files
+# ----------------------------------------
+docker-compose.yml
+docker-compose.override.yml
+Dockerfile.local
+docker/local/
+phpmyadmin/
+
+
+# ----------------------------------------
+# Ignore Git & IDE & system junk
+# ----------------------------------------
 .git
 .gitignore
+.vscode
+.idea
+.fleet
+.zed
+.DS_Store
+Thumbs.db
 
-# Node dependencies / builds
+
+# ----------------------------------------
+# Ignore Node build artifacts (production will rebuild)
+# ----------------------------------------
 node_modules
 npm-debug.log
 yarn-error.log
 /public/hot
-/public/storage
 /public/build
 
-# Laravel cache & logs
-/storage/*.key
+
+# ----------------------------------------
+# Ignore Laravel dev/test files
+# ----------------------------------------
+/tests
+/vendor/bin
+.phpunit.result.cache
+.phpunit.cache
+
+
+# ----------------------------------------
+# Ignore Laravel runtime cache that will regenerate
+# ----------------------------------------
 /storage/logs
 /storage/framework/sessions
-/storage/framework/views
 /storage/framework/cache/data
-
-# Composer dev files
-/vendor/bin
-/tests
-
-# IDE configs
-.idea
-.vscode
-.fleet
-/zed
-
-# System junk
-.DS_Store
-Thumbs.db
+/storage/framework/views

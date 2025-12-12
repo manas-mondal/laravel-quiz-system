@@ -1,22 +1,61 @@
-# Keep EB away from local compose files
+# ----------------------------------------------------------
+# Ignore Local Docker & Development Setup
+# ----------------------------------------------------------
 docker-compose.yml
 docker-compose.override.yml
-local-docker/
+docker/local/
+Dockerfile.local
+phpmyadmin/
 
-# VCS & IDE
-.git*
+# ----------------------------------------------------------
+# Version Control & IDE Files
+# ----------------------------------------------------------
+.git/
+.gitignore
 .github/
 .vscode/
 .idea/
 .fleet/
 .zed/
+.DS_Store
+Thumbs.db
 
-# Node artifacts
+# ----------------------------------------------------------
+# Node Related Files
+# ----------------------------------------------------------
 node_modules/
+npm-debug.log
+yarn-error.log
+
+# Vite hot reload & build artifacts
 public/hot
 public/build
 
-# Env files (keep only production)
+# ----------------------------------------------------------
+# Env files (Production env already set in EB console)
+# ----------------------------------------------------------
 .env
 .env.*
 !.env.production
+
+# ----------------------------------------------------------
+# Laravel Cache & Runtime (regenerates automatically)
+# ----------------------------------------------------------
+storage/logs
+storage/framework/cache/data
+storage/framework/sessions
+storage/framework/views
+
+# ----------------------------------------------------------
+# Laravel Tests, Dev tools, PHPUnit junk
+# ----------------------------------------------------------
+tests/
+.phpunit.cache
+.phpunit.result.cache
+vendor/bin/
+
+# ----------------------------------------------------------
+# Extra OS junk files
+# ----------------------------------------------------------
+*.swp
+*.swo

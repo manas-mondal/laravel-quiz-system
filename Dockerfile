@@ -11,9 +11,9 @@ RUN apt-get update && apt-get install -y \
     libzip-dev libpng-dev libonig-dev libxml2-dev \
     libfreetype6-dev libjpeg62-turbo-dev \
     libssl-dev \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install pdo_mysql mbstring bcmath sockets exif pcntl gd \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
+ && docker-php-ext-configure gd --with-freetype --with-jpeg \
+ && docker-php-ext-install pdo_mysql mbstring bcmath sockets exif pcntl gd \
+ && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # ----------------------------------------------------------
 # Install Composer globally
@@ -26,38 +26,48 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 WORKDIR /var/www/html
 
 # ----------------------------------------------------------
-# Copy project files
+# Copy project
 # ----------------------------------------------------------
 COPY . .
 
 # ----------------------------------------------------------
-# Install PHP dependencies for production
+# Install Dependencies
 # ----------------------------------------------------------
-RUN composer install --no-dev --optimize-autoloader --no-interaction
-
-# ----------------------------------------------------------
-# Fix permissions for Laravel
-# ----------------------------------------------------------
-RUN mkdir -p storage/framework storage/logs bootstrap/cache \
+RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts \
+    && mkdir -p storage/framework storage/logs bootstrap/cache \
     && chown -R www-data:www-data /var/www/html \
     && chmod -R 775 storage bootstrap/cache
 
 # ----------------------------------------------------------
-# Copy Nginx config
+# Ensure Dev Providers Are Removed From Autoload (VERY IMPORTANT)
 # ----------------------------------------------------------
-COPY docker/nginx/default.conf /etc/nginx/conf.d/default.conf
+RUN composer dump-autoload --no-dev
+
+ # ----------------------------------------------------------
+ # Fix Laravel storage framework structure
+ # ----------------------------------------------------------
+RUN mkdir -p storage/framework/cache/data \
+    storage/framework/sessions \
+    storage/framework/views \
+ && chmod -R 777 storage \
+ && chmod -R 777 bootstrap/cache
+
 
 # ----------------------------------------------------------
-# Copy Supervisord config
+# Copy Nginx + Supervisor configuration
 # ----------------------------------------------------------
-COPY docker/supervisord/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY docker/prod/nginx/default.conf /etc/nginx/conf.d/default.conf
+COPY docker/prod/supervisord/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+# Remove default nginx site
+RUN rm -f /etc/nginx/sites-enabled/default
 
 # ----------------------------------------------------------
-# Expose port 80 (Nginx)
+# Expose port
 # ----------------------------------------------------------
 EXPOSE 80
 
 # ----------------------------------------------------------
-# Start Supervisord (runs Nginx + PHP-FPM)
+# Start Supervisord
 # ----------------------------------------------------------
 CMD ["/usr/bin/supervisord"]

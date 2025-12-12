@@ -1,60 +1,40 @@
-# Dockerfile (php-fpm)
+# --------------------------------------------
+# Local Development Dockerfile (PHP-FPM only)
+# --------------------------------------------
+
 FROM php:8.2-fpm
 
-# -------------------------------
-# Install system dependencies & PHP extensions
-# -------------------------------
+# --------------------------------------------
+# Install system dependencies
+# --------------------------------------------
 RUN apt-get update && apt-get install -y \
     git curl zip unzip libzip-dev libpng-dev libonig-dev libxml2-dev \
     libfreetype6-dev libjpeg62-turbo-dev \
-  && docker-php-ext-configure gd --with-freetype --with-jpeg \
-  && docker-php-ext-install pdo_mysql mbstring bcmath sockets exif pcntl gd \
-  && apt-get clean && rm -rf /var/lib/apt/lists/*
+ && docker-php-ext-configure gd --with-freetype --with-jpeg \
+ && docker-php-ext-install pdo_mysql mbstring bcmath sockets exif pcntl gd \
+ && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# -------------------------------
+# --------------------------------------------
 # Install Composer
-# -------------------------------
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+# --------------------------------------------
+RUN curl -sS https://getcomposer.org/installer | php -- \
+    --install-dir=/usr/local/bin --filename=composer
 
-# -------------------------------
+# --------------------------------------------
 # Set working directory
-# -------------------------------
+# --------------------------------------------
 WORKDIR /var/www/html
 
-# -------------------------------
-# Copy project files
-# -------------------------------
-COPY . .
+# --------------------------------------------
+# No COPY here (Local volume mount will override everything)
+# --------------------------------------------
 
-# -------------------------------
-# Install PHP dependencies (Production)
-# -------------------------------
-RUN composer install --no-dev --optimize-autoloader --no-interaction --no-progress
-
-# -------------------------------
-# Create storage/cache dirs & set permissions
-# -------------------------------
-RUN mkdir -p storage/framework storage/logs bootstrap/cache \
-    && chown -R www-data:www-data storage bootstrap/cache \
-    && chmod -R 775 storage bootstrap/cache
-
-# -------------------------------
-# Cache Laravel config & routes (optional but improves perf)
-# -------------------------------
-RUN php artisan config:cache || true
-RUN php artisan route:cache || true
-
-# -------------------------------
+# --------------------------------------------
 # Expose PHP-FPM port
-# -------------------------------
+# --------------------------------------------
 EXPOSE 9000
 
-# -------------------------------
-# Run as non-root user
-# -------------------------------
-USER www-data
-
-# -------------------------------
+# --------------------------------------------
 # Default command
-# -------------------------------
+# --------------------------------------------
 CMD ["php-fpm"]
