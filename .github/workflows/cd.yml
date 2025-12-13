@@ -35,6 +35,12 @@ jobs:
       - name: Verify EB CLI
         run: eb --version
 
+      - name: Initialize Elastic Beanstalk
+        run: |
+          eb init quizify \
+            --platform docker \
+            --region ${{ secrets.AWS_REGION }}
+
       - name: Deploy to Elastic Beanstalk
         run: |
           eb deploy quizify-env
