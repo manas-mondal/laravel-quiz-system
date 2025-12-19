@@ -447,7 +447,7 @@ class UserController extends Controller
         // Check if user is re-answering an older question
         if($mcq->id != $expected_mcq_id){
             return back()
-            ->with('error','Please answer the questions in order.')
+            ->with('warning','Please answer the questions in order.')
             ->withInput();
         }
 
@@ -464,6 +464,8 @@ class UserController extends Controller
 
         // Update session for next question
         Session::put('current_quiz.current_mcq',$next_mcq_number);
+
+        $quiz_name = str_replace(' ', '-', $quiz_name); // Format quiz name for URL
 
         return redirect()
         ->route('user.mcq',[$next_mcq->id,$quiz_name]);

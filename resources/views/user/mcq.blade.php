@@ -62,6 +62,18 @@
                     ✕
                 </button>
             </div>
+        @elseif (Session::has('warning'))
+            <div class="bg-yellow-200 w-full max-w-lg mb-5 border border-yellow-400 text-yellow-800 px-4 py-3 rounded-lg shadow flex items-center justify-between animate-fadeUp"
+                role="alert">
+                <div>
+                    <strong class="font-semibold">Warning!</strong>
+                    <span class="block sm:inline">{{ Session::get('warning') }}</span>
+                </div>
+                <button type="button" onclick="this.closest('div[role=alert]').remove()"
+                    class="ml-4 text-yellow-700 hover:text-yellow-900 focus:outline-none">
+                    ✕
+                </button>
+            </div>
         @endif
 
         {{-- Quiz Info Card --}}
