@@ -1,6 +1,17 @@
 # QUIZIFY — Production-Ready Quiz Platform
 
-QUIZIFY is a **live, production-deployed quiz platform** that demonstrates end‑to‑end engineering capability — from application design and role‑based workflows to AWS infrastructure, CI/CD automation, and verifiable digital certificates.
+<!-- STATUS BADGES -->
+
+![CI Status](https://github.com/manas-mondal/laravel-quiz-system/actions/workflows/ci.yml/badge.svg)
+![CD Deploy](https://github.com/manas-mondal/laravel-quiz-system/actions/workflows/cd.yml/badge.svg?branch=main)
+![License: MIT](https://img.shields.io/github/license/manas-mondal/laravel-quiz-system)
+![Laravel](https://img.shields.io/badge/Laravel-12.x-orange)
+![PHP](https://img.shields.io/badge/PHP-8.2-blue)
+![Dockerized](https://img.shields.io/badge/Containerized-Docker-blue)
+![Platform: AWS](https://img.shields.io/badge/Platform-AWS%20EB-FF9900?logo=amazonaws&logoColor=white)
+[![Live](https://img.shields.io/badge/Live-quizify.space-0a61c3)](https://www.quizify.space/)
+
+> A full‑stack quiz platform demonstrating production‑grade Laravel engineering, AWS deployment, cost‑optimized architecture, and verifiable digital certificates.
 
 🔗 **Live Application:** [https://www.quizify.space/](https://www.quizify.space/)
 
@@ -8,19 +19,19 @@ QUIZIFY is a **live, production-deployed quiz platform** that demonstrates end�
 
 ## 🎯 Purpose
 
-This project was built to:
+QUIZIFY was built to:
 
 -   showcase **real-world production deployment experience**
--   demonstrate **clean architecture, DevOps workflows & documentation discipline**
+-   demonstrate **application architecture, DevOps workflows & documentation discipline**
 -   provide a **platform for technical interviews & portfolio validation**
 
-QUIZIFY is not a demo — it is **running in production**, backed by AWS, using a deployment flow that can scale as the project grows.
+QUIZIFY is not a demo — it is **running in production**, backed by AWS, using a deployment flow that scales with maturity.
 
 ---
 
 ## 🧭 Documentation Index
 
-Full documentation is organized into versioned technical sections inside [`docs/`](docs/):
+Complete technical documentation lives in [`docs/`](docs/), organized by topic:
 
 ### 📑 Core Documentation
 
@@ -49,7 +60,7 @@ Full documentation is organized into versioned technical sections inside [`docs/
 
 -   **13 — Executive Summary** — [docs/13-executive-summary.md](docs/13-executive-summary.md)
 
-> **Tip:** Sections 05 → 12 highlight practical production decisions, trade-offs, and maturity.
+> **Tip:** Sections 05 → 12 explain why the architecture looks the way it does.
 
 ---
 
@@ -63,7 +74,7 @@ Full documentation is organized into versioned technical sections inside [`docs/
 | Local Dev          | Docker Compose (multi‑container)                                     |
 | Production Runtime | Single container (NGINX + PHP‑FPM + Supervisor) on Elastic Beanstalk |
 | Database           | MySQL — Local (Docker) / Production (AWS RDS)                        |
-| CI/CD              | GitHub Actions — CI validation + CD deployment with manual approval  |
+| CI/CD              | GitHub Actions — CI validation + CD deploy w/ manual approval        |
 | Certificates       | Dynamic rendering with public verification URLs                      |
 
 ---
@@ -72,67 +83,55 @@ Full documentation is organized into versioned technical sections inside [`docs/
 
 -   user authentication + email verification
 -   role-based access (**user / creator / admin**)
--   quiz attempts with stored results and scoring
--   **digital certificate generation & public verification**
+-   quiz attempts with stored results & scoring
+-   **digital certificate generation & verification**
 -   admin panel for content lifecycle management
+
+> Certificate verification flow detailed here:
+> **05 — Production Architecture** → [docs/05-production-architecture.md](docs/05-production-architecture.md)
 
 ---
 
 ## 🏗 Architectural Highlights
 
--   **Session-backed quiz flow** preserves attempt state safely
--   **Dynamic certificate rendering** avoids file storage overhead
--   **Single-container runtime** simplifies production & aligns with free-tier constraints
--   **Manual migration workflow** protects imported production schema until stabilization
--   **Blueprint for scaling**: load balancer, autoscaling & S3 integration planned
-
-> Full architectural reasoning is detailed in:
-> **05 — Production Architecture** → [docs/05-production-architecture.md](docs/05-production-architecture.md)
+-   **Session-backed quiz flow** preserves attempt state
+-   **Dynamic certificate rendering** avoids file retention complexity
+-   **Single-container production runtime** simplifies AWS operations
+-   **Manual migration workflow** protects imported schema until stabilization
+-   **Clear maturity roadmap** toward HA, autoscaling & S3
 
 ---
 
-## 🚀 Deployment Lifecycle Summary
+## 🚀 Deployment Lifecycle Overview
 
 ```text
 Code → Pull Request → CI validation → Merge to main → Manual approval → CD deploy → Manual migrations → Smoke tests
 ```
 
-> Ensures **safe releases** while maintaining production stability under imported schema constraints.
+> Deployment risks reduced by: controlled releases, restricted approval, and manual migrations.
 
 ---
 
 ## 📌 Status
 
 -   **Live in production** — yes
--   **Scaling ready** — staged roadmap defined
--   **CI enabled** — yes (tests + validation)
--   **CD partially automated** — deploy gated by approval
--   **Manual migrations** — safety-first until schema fully stabilized
+-   **Role support** — user / creator / admin
+-   **CI enabled** — yes
+-   **CD partially automated** — approval required
+-   **Scaling awareness** — roadmap defined
 
 ---
 
-## 🔮 Future Roadmap (High-Level)
+## 💼 Executive Snapshot
 
--   ingress hardening (Cloudflare-only entry)
--   SSM-based access replacing SSH
--   ALB + multi-instance scaling (zero-downtime)
--   S3 asset storage + CloudFront CDN
--   automated migrations with pre-deploy snapshots
-
-> See **12 — Future Improvements** for prioritization details.
-
----
-
-## 💼 IExecutive Overview
-
-QUIZIFY is a **real deployed product** showing:
+QUIZIFY is a **production-deployed Laravel platform** demonstrating:
 
 -   practical AWS deployment experience
--   CI/CD discipline with controlled production workflows
--   awareness of **scaling, cost & security trade-offs**
--   complete documentation demonstrating engineering rigor
+-   controlled production workflows with CI/CD
+-   deliberate trade-offs in cost, scaling & security
+-   thorough documentation showing engineering maturity
 
-If you review only one document first, start here:
+If you read **only one document**, start here:
 
 ➡️ **13 — Executive Summary** — [docs/13-executive-summary.md](docs/13-executive-summary.md)
 
@@ -141,7 +140,7 @@ If you review only one document first, start here:
 ## 📥 Local Development (Quick Start)
 
 ```bash
-git clone https://github.com/yourname/quizify.git
+git clone https://github.com/manas-mondal/laravel-quiz-system
 cd quizify
 cp .env.example .env
 # start multi-container environment
@@ -150,20 +149,26 @@ make up
 make key
 ```
 
-> Full setup steps: **01 — Development Environment**
+Full setup steps here:
+
+> **01 — Development Environment** → [docs/01-development-environment.md](docs/01-development-environment.md)
 
 ---
 
 ## 🤝 Contribution & Licensing
 
-This repository currently reflects **solo development mode** and is optimized for **showcase purposes**.
-External contributions may be reviewed later depending on roadmap maturity.
+This repository currently reflects **solo development mode** and prioritizes controlled growth.
+External contributions may open later as roadmap matures.
+
+Usage permissions defined in:
+
+> **[LICENSE](LICENSE)**
 
 ---
 
 ## 📫 Contact
 
-For interview or collaboration inquiries:
+For collaboration or interview inquiries:
 
 > **Email:** [manasmondal035@gmail.com](mailto:manasmondal035@gmail.com)
 
