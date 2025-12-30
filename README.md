@@ -49,7 +49,7 @@ Full documentation is organized into versioned technical sections inside [`docs/
 
 -   **13 — Executive Summary** — [docs/13-executive-summary.md](docs/13-executive-summary.md)
 
-> **Tip:** Sections 05 → 12 demonstrate interview‑ready understanding of real production trade‑offs.
+> **Tip:** Sections 05 → 12 highlight practical production decisions, trade-offs, and maturity.
 
 ---
 
