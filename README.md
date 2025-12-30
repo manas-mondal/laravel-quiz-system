@@ -1,61 +1,172 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# QUIZIFY — Production-Ready Quiz Platform
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+QUIZIFY is a **live, production-deployed quiz platform** that demonstrates end‑to‑end engineering capability — from application design and role‑based workflows to AWS infrastructure, CI/CD automation, and verifiable digital certificates.
 
-## About Laravel
+🔗 **Live Application:** [https://www.quizify.space/](https://www.quizify.space/)
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 🎯 Purpose
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+This project was built to:
 
-## Learning Laravel
+-   showcase **real-world production deployment experience**
+-   demonstrate **clean architecture, DevOps workflows & documentation discipline**
+-   provide a **platform for technical interviews & portfolio validation**
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+QUIZIFY is not a demo — it is **running in production**, backed by AWS, using a deployment flow that can scale as the project grows.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+---
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 🧭 Documentation Index
 
-## Laravel Sponsors
+Full documentation is organized into versioned technical sections inside [`docs/`](docs/):
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### 📑 Core Documentation
 
-### Premium Partners
+-   **00 — Project Overview** — [docs/00-project-overview.md](docs/00-project-overview.md)
+-   **01 — Development Environment** — [docs/01-development-environment.md](docs/01-development-environment.md)
+-   **02 — Application Architecture** — [docs/02-application-architecture.md](docs/02-application-architecture.md)
+-   **02.1 — Database Schema** — [docs/02.1-database-schema.md](docs/02.1-database-schema.md)
+-   **03 — Local Docker Architecture** — [docs/03-local-docker-architecture.md](docs/03-local-docker-architecture.md)
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### 🚀 Delivery & Cloud
 
-## Contributing
+-   **04 — Git Branching & CI Workflow** — [docs/04-git-branching-ci-workflow.md](docs/04-git-branching-ci-workflow.md)
+-   **05 — Production Architecture** — [docs/05-production-architecture.md](docs/05-production-architecture.md)
+-   **06 — AWS Infrastructure** — [docs/06-aws-infrastructure.md](docs/06-aws-infrastructure.md)
+-   **07 — Deployment Strategy** — [docs/07-deployment-strategy.md](docs/07-deployment-strategy.md)
+-   **08 — CI/CD Pipeline** — [docs/08-ci-cd-pipeline.md](docs/08-ci-cd-pipeline.md)
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 🔐 Reliability & Growth
 
-## Code of Conduct
+-   **09 — Security & Secrets** — [docs/09-security-and-secrets.md](docs/09-security-and-secrets.md)
+-   **10 — Cost Optimization** — [docs/10-cost-optimization.md](docs/10-cost-optimization.md)
+-   **11 — Known Limitations** — [docs/11-known-limitations.md](docs/11-known-limitations.md)
+-   **12 — Future Improvements** — [docs/12-future-improvements.md](docs/12-future-improvements.md)
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 📝 Summary
 
-## Security Vulnerabilities
+-   **13 — Executive Summary** — [docs/13-executive-summary.md](docs/13-executive-summary.md)
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+> **Tip:** Sections 05 → 12 demonstrate interview‑ready understanding of real production trade‑offs.
 
-## License
+---
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## ⚙️ Technology Overview
+
+| Category           | Tooling                                                              |
+| ------------------ | -------------------------------------------------------------------- |
+| Framework          | Laravel 12 (MVC)                                                     |
+| Language           | PHP 8.2                                                              |
+| Frontend           | Blade, Tailwind via CDN                                              |
+| Local Dev          | Docker Compose (multi‑container)                                     |
+| Production Runtime | Single container (NGINX + PHP‑FPM + Supervisor) on Elastic Beanstalk |
+| Database           | MySQL — Local (Docker) / Production (AWS RDS)                        |
+| CI/CD              | GitHub Actions — CI validation + CD deployment with manual approval  |
+| Certificates       | Dynamic rendering with public verification URLs                      |
+
+---
+
+## 🧪 Key Functional Features
+
+-   user authentication + email verification
+-   role-based access (**user / creator / admin**)
+-   quiz attempts with stored results and scoring
+-   **digital certificate generation & public verification**
+-   admin panel for content lifecycle management
+
+---
+
+## 🏗 Architectural Highlights
+
+-   **Session-backed quiz flow** preserves attempt state safely
+-   **Dynamic certificate rendering** avoids file storage overhead
+-   **Single-container runtime** simplifies production & aligns with free-tier constraints
+-   **Manual migration workflow** protects imported production schema until stabilization
+-   **Blueprint for scaling**: load balancer, autoscaling & S3 integration planned
+
+> Full architectural reasoning is detailed in:
+> **05 — Production Architecture** → [docs/05-production-architecture.md](docs/05-production-architecture.md)
+
+---
+
+## 🚀 Deployment Lifecycle Summary
+
+```text
+Code → Pull Request → CI validation → Merge to main → Manual approval → CD deploy → Manual migrations → Smoke tests
+```
+
+> Ensures **safe releases** while maintaining production stability under imported schema constraints.
+
+---
+
+## 📌 Status
+
+-   **Live in production** — yes
+-   **Scaling ready** — staged roadmap defined
+-   **CI enabled** — yes (tests + validation)
+-   **CD partially automated** — deploy gated by approval
+-   **Manual migrations** — safety-first until schema fully stabilized
+
+---
+
+## 🔮 Future Roadmap (High-Level)
+
+-   ingress hardening (Cloudflare-only entry)
+-   SSM-based access replacing SSH
+-   ALB + multi-instance scaling (zero-downtime)
+-   S3 asset storage + CloudFront CDN
+-   automated migrations with pre-deploy snapshots
+
+> See **12 — Future Improvements** for prioritization details.
+
+---
+
+## 💼 IExecutive Overview
+
+QUIZIFY is a **real deployed product** showing:
+
+-   practical AWS deployment experience
+-   CI/CD discipline with controlled production workflows
+-   awareness of **scaling, cost & security trade-offs**
+-   complete documentation demonstrating engineering rigor
+
+If you review only one document first, start here:
+
+➡️ **13 — Executive Summary** — [docs/13-executive-summary.md](docs/13-executive-summary.md)
+
+---
+
+## 📥 Local Development (Quick Start)
+
+```bash
+git clone https://github.com/yourname/quizify.git
+cd quizify
+cp .env.example .env
+# start multi-container environment
+make up
+# generate app key
+make key
+```
+
+> Full setup steps: **01 — Development Environment**
+
+---
+
+## 🤝 Contribution & Licensing
+
+This repository currently reflects **solo development mode** and is optimized for **showcase purposes**.
+External contributions may be reviewed later depending on roadmap maturity.
+
+---
+
+## 📫 Contact
+
+For interview or collaboration inquiries:
+
+> **Email:** [manasmondal035@gmail.com](mailto:manasmondal035@gmail.com)
+
+---
+
+**END — README.md**
