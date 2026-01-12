@@ -15,6 +15,9 @@
 
 🔗 **Live Application:** [https://www.quizify.space/](https://www.quizify.space/)
 
+🎥 **Full Project Walkthrough (YouTube):**  
+https://youtu.be/I-iupeU_kzg
+
 ---
 
 ## 🎯 Purpose

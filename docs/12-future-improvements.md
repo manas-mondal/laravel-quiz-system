@@ -24,6 +24,7 @@ _Improvements in this domain enhance core platform readiness for availability an
 -   Introduce **blue-green deployments** for safer releases
 -   **Restrict direct EB ingress**, enforcing Cloudflare-only traffic
 -   Migrate SSH-based access to **AWS SSM Session Manager**
+-   Upgrade Elastic Beanstalk platform runtime from **Amazon Linux 2 to Amazon Linux 2023 (AL2023)** as part of scheduled platform maintenance.
 
 ### 3.2 Deployment & Operations
 

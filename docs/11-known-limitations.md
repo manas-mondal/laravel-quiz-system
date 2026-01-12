@@ -29,6 +29,7 @@ These are **not architectural mistakes**; they are **transparent and deliberate 
 -   **Direct access to the EB endpoint remains technically possible**, allowing Cloudflare bypass until ingress is fully restricted.
 -   **Log streaming and retention via CloudWatch are not yet configured**, making log access primarily instance-based.
 -   **Operational access occasionally requires SSH**; transition to AWS SSM Session Manager is planned.
+-   **Elastic Beanstalk currently runs on an Amazon Linux 2–based platform**, which is aligned with AWS support at the time of deployment; migration to Amazon Linux 2023 (AL2023) is planned as part of ongoing platform maintenance.
 
 ---
 
