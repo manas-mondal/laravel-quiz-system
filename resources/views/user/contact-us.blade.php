@@ -171,18 +171,24 @@
 
             <!-- Social Icons -->
             <div class="flex justify-center gap-6 mb-10 animate-fadeUp">
-                <a href="#" class="text-green-700 hover:text-green-900 transition" title="Facebook">
-                    <i class="fab fa-facebook text-2xl"></i>
-                </a>
-                <a href="#" class="text-green-700 hover:text-green-900 transition" title="Instagram">
-                    <i class="fab fa-instagram text-2xl"></i>
-                </a>
-                <a href="#" class="text-green-700 hover:text-green-900 transition" title="LinkedIn">
+
+                <a href="https://www.linkedin.com/posts/manas-mondal-7989a2306_laravel-aws-docker-activity-7416365322108096512-wxu1?utm_source=share&utm_medium=member_desktop&rcm=ACoAAE4Zx-QBO2oV_ff6YJHYEfsPt4UZXV4dUso"
+                    target="_blank" class="text-green-700 hover:text-green-900 transition"
+                    title="View project announcement on LinkedIn">
                     <i class="fab fa-linkedin text-2xl"></i>
                 </a>
-                <a href="#" class="text-green-700 hover:text-green-900 transition" title="YouTube">
+
+                <a href="https://github.com/manas-mondal/laravel-quiz-system" target="_blank"
+                    class="text-green-700 hover:text-green-900 transition" title="Browse project source code">
+                    <i class="fab fa-github text-2xl"></i>
+                </a>
+
+                <a href="https://youtu.be/I-iupeU_kzg?si=wlaIK2Y6ZTqBh7O8" target="_blank"
+                    class="text-green-700 hover:text-green-900 transition"
+                    title="Watch full project walkthrough on YouTube">
                     <i class="fab fa-youtube text-2xl"></i>
                 </a>
+
             </div>
 
             <!-- Google Map -->
